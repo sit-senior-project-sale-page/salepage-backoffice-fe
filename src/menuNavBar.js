@@ -65,12 +65,12 @@ export default [
     isDesktopNoLabel: true,
     isToggleLightDark: true,
   },
-  {
-    icon: mdiGithub,
-    label: "GitHub",
-    isDesktopNoLabel: true,
-    href: "https://github.com/justboil/admin-one-vue-tailwind",
-  },
+  // {
+  //   icon: mdiGithub,
+  //   label: "GitHub",
+  //   isDesktopNoLabel: true,
+  //   href: "https://github.com/justboil/admin-one-vue-tailwind",
+  // },
   {
     icon: mdiLogout,
     label: "Log out",

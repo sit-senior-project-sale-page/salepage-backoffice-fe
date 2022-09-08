@@ -1,7 +1,6 @@
 import {
   mdiAccountCircle,
   mdiMonitor,
-  mdiGithub,
   mdiLock,
   mdiAlertCircle,
   mdiSquareEditOutline,
@@ -9,7 +8,7 @@ import {
   mdiViewList,
   mdiTelevisionGuide,
   mdiResponsive,
-  mdiPalette,
+  mdiDatabase,
 } from "@mdi/js";
 
 export default [
@@ -19,13 +18,23 @@ export default [
     label: "Dashboard",
   },
   {
-    to: "/tables",
-    label: "Tables",
+    to: "/sites",
+    label: "My Site",
+    icon: mdiDatabase,
+  },
+  {
+    to: "/products",
+    label: "My Product",
+    icon: mdiViewList,
+  },
+  {
+    to: "/orders",
+    label: "My Order",
     icon: mdiTable,
   },
   {
-    to: "/forms",
-    label: "Forms",
+    to: "/create-site",
+    label: "Create Site",
     icon: mdiSquareEditOutline,
   },
   {
@@ -37,11 +46,6 @@ export default [
     to: "/responsive",
     label: "Responsive",
     icon: mdiResponsive,
-  },
-  {
-    to: "/",
-    label: "Styles",
-    icon: mdiPalette,
   },
   {
     to: "/profile",
@@ -69,11 +73,5 @@ export default [
         label: "Item Two",
       },
     ],
-  },
-  {
-    href: "https://github.com/justboil/admin-one-vue-tailwind",
-    label: "GitHub",
-    icon: mdiGithub,
-    target: "_blank",
   },
 ];

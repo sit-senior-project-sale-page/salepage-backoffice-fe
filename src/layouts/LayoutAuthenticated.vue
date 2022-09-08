@@ -85,26 +85,18 @@ const menuClick = (event, item) => {
         >
           <BaseIcon :path="mdiMenu" size="24" />
         </NavBarItemPlain>
-        <NavBarItemPlain use-margin>
+        <!-- <NavBarItemPlain use-margin>
           <FormControl
             placeholder="Search (ctrl+k)"
             ctrl-k-focus
             transparent
             borderless
           />
-        </NavBarItemPlain>
+        </NavBarItemPlain> -->
       </NavBar>
       <AsideMenu :menu="menuAside" @menu-click="menuClick" />
       <slot />
-      <FooterBar>
-        Get more with
-        <a
-          href="https://tailwind-vue.justboil.me/"
-          target="_blank"
-          class="text-blue-600"
-          >Premium version</a
-        >
-      </FooterBar>
+      <FooterBar> เว็บสร้างเพจสำหรับขายสินค้า </FooterBar>
     </div>
   </div>
 </template>

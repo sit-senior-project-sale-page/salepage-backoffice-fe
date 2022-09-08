@@ -25,13 +25,22 @@ import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.
 import SectionBannerStarOnGitHub from "@/components/SectionBannerStarOnGitHub.vue";
 
 const chartData = ref(null);
+let noti = ref(true);
+
+const notiValue = computed(() => noti.value);
 
 const fillChartData = () => {
   chartData.value = chartConfig.sampleChartData();
 };
 
+const loop = () => {
+  noti.value = !noti.value;
+  console.log(noti.value);
+};
+
 onMounted(() => {
   fillChartData();
+  // setInterval(loop, 2000);
 });
 
 const mainStore = useMainStore();
@@ -114,7 +123,7 @@ const transactionBarItems = computed(() => mainStore.history);
         </div>
       </div>
 
-      <SectionBannerStarOnGitHub class="mt-6 mb-6" />
+      <!-- <SectionBannerStarOnGitHub class="mt-6 mb-6" /> -->
 
       <SectionTitleLineWithButton :icon="mdiChartPie" title="Trends overview">
         <BaseButton
@@ -132,7 +141,11 @@ const transactionBarItems = computed(() => mainStore.history);
 
       <SectionTitleLineWithButton :icon="mdiAccountMultiple" title="Clients" />
 
-      <NotificationBar color="info" :icon="mdiMonitorCellphone">
+      <NotificationBar
+        v-show="notiValue"
+        color="info"
+        :icon="mdiMonitorCellphone"
+      >
         <b>Responsive table.</b> Collapses on mobile
       </NotificationBar>
 

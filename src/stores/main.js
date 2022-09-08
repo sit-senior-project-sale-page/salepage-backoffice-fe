@@ -14,6 +14,9 @@ export const useMainStore = defineStore("main", {
     /* Sample data (commonly used) */
     clients: [],
     history: [],
+    site: [],
+    product: [],
+    productsOption: [],
   }),
   actions: {
     setUser(payload) {
@@ -29,14 +32,44 @@ export const useMainStore = defineStore("main", {
     },
 
     fetch(sampleDataKey) {
-      axios
-        .get(`data-sources/${sampleDataKey}.json`)
+      const httpService = axios.create({
+        baseURL: "http://127.0.0.1:12130/",
+        // headers: {
+        //   "Content-type": "application/json",
+        // },
+      });
+
+      httpService
+        .get(`${sampleDataKey}`)
         .then((r) => {
+          console.log(r.data);
+          console.log(r.data.data);
           if (r.data && r.data.data) {
             this[sampleDataKey] = r.data.data;
           }
         })
         .catch((error) => {
+          console.log(error);
+          alert(error.message);
+        });
+    },
+
+    post(sampleDataKey, data) {
+      const httpService = axios.create({
+        baseURL: "http://127.0.0.1:12130/",
+        // headers: {
+        //   "Content-type": "application/json",
+        // },
+      });
+
+      httpService
+        .post(`${sampleDataKey}`, data)
+        .then((r) => {
+          console.log(r.data);
+          console.log(r.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
           alert(error.message);
         });
     },

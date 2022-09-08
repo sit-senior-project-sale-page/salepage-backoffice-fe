@@ -1,22 +1,33 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useMainStore } from "@/stores/main";
-import { mdiEye, mdiTrashCan } from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import UserAvatar from "@/components/UserAvatar.vue";
 
-defineProps({
+const props = defineProps({
   checkable: Boolean,
+  dataFetch: { type: String, required: true },
 });
 
-const mainStore = useMainStore();
-mainStore.fetch("site");
+console.log(props.dataFetch);
 
-const items = computed(() => mainStore.clients);
+const mainStore = useMainStore();
+mainStore.fetch(props.dataFetch);
+
+// const items = computed(() => mainStore.clients);
+
+const items = computed(() => mainStore[props.dataFetch]);
+const keyItems = ref(Object.keys(items.value));
+console.log("keyItems", keyItems.value);
+watch(
+  () => items.value,
+  () => {
+    keyItems.value = Object.keys(items.value[0]);
+  }
+);
 
 const isModalActive = ref(false);
 
@@ -103,13 +114,9 @@ const checked = (isChecked, client) => {
     <thead>
       <tr>
         <th v-if="checkable" />
-        <th />
-        <th>Name</th>
-        <th>Company</th>
-        <th>City</th>
-        <th>Progress</th>
-        <th>Created</th>
-        <th />
+        <th v-for="(column, index) in keyItems" :key="index">
+          {{ column.toLocaleUpperCase() }}
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -118,52 +125,8 @@ const checked = (isChecked, client) => {
           v-if="checkable"
           @checked="checked($event, client)"
         />
-        <td class="border-b-0 lg:w-6 before:hidden">
-          <UserAvatar
-            :username="client.name"
-            class="w-24 h-24 mx-auto lg:w-6 lg:h-6"
-          />
-        </td>
-        <td data-label="Name">
-          {{ client.name }}
-        </td>
-        <td data-label="Company">
-          {{ client.company }}
-        </td>
-        <td data-label="City">
-          {{ client.city }}
-        </td>
-        <td data-label="Progress" class="lg:w-32">
-          <progress
-            class="flex w-2/5 self-center lg:w-full"
-            max="100"
-            :value="client.progress"
-          >
-            {{ client.progress }}
-          </progress>
-        </td>
-        <td data-label="Created" class="lg:w-1 whitespace-nowrap">
-          <small
-            class="text-gray-500 dark:text-slate-400"
-            :title="client.created"
-            >{{ client.created }}</small
-          >
-        </td>
-        <td class="before:hidden lg:w-1 whitespace-nowrap">
-          <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <BaseButton
-              color="info"
-              :icon="mdiEye"
-              small
-              @click="isModalActive = true"
-            />
-            <BaseButton
-              color="danger"
-              :icon="mdiTrashCan"
-              small
-              @click="isModalDangerActive = true"
-            />
-          </BaseButtons>
+        <td v-for="(column, indexColumn) in keyItems" :key="indexColumn">
+          {{ client[column] ?? "ไม่มีข้อมูล" }}
         </td>
       </tr>
     </tbody>

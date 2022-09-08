@@ -35,8 +35,8 @@ const value = computed({
 });
 
 const confirmCancel = (mode) => {
-  value.value = false;
   emit(mode);
+  value.value = false;
 };
 
 const confirm = () => confirmCancel("confirm");

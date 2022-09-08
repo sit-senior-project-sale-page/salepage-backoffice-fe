@@ -22,11 +22,43 @@ const routes = [
   },
   {
     meta: {
+      title: "Sites",
+    },
+    path: "/sites",
+    name: "sites",
+    component: () => import("@/views/TablesView.vue"),
+  },
+  {
+    meta: {
+      title: "Products",
+    },
+    path: "/products",
+    name: "products",
+    component: () => import("@/views/TablesView.vue"),
+  },
+  {
+    meta: {
+      title: "Orders",
+    },
+    path: "/orders",
+    name: "orders",
+    component: () => import("@/views/TablesView.vue"),
+  },
+  {
+    meta: {
       title: "Forms",
     },
     path: "/forms",
     name: "forms",
     component: () => import("@/views/FormsView.vue"),
+  },
+  {
+    meta: {
+      title: "Create Site",
+    },
+    path: "/create-site",
+    name: "create-site",
+    component: () => import("@/views/CreateSite.vue"),
   },
   {
     meta: {
@@ -56,7 +88,7 @@ const routes = [
     meta: {
       title: "Login",
     },
-    path: "/login",
+    path: "/",
     name: "login",
     component: () => import("@/views/LoginView.vue"),
   },
