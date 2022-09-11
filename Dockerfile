@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-FROM node:14.17-alpine3.10 as build 
+FROM node:14.18-alpine as build 
 RUN printenv
 WORKDIR /app
 COPY ./package.json ./
