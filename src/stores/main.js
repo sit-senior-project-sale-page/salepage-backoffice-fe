@@ -17,6 +17,7 @@ export const useMainStore = defineStore("main", {
     site: [],
     product: [],
     productsOption: [],
+    order: [],
   }),
   actions: {
     setUser(payload) {
@@ -33,7 +34,7 @@ export const useMainStore = defineStore("main", {
 
     fetch(sampleDataKey) {
       const httpService = axios.create({
-        baseURL: "http://127.0.0.1:12130/",
+        baseURL: import.meta.env.VITE_API_BASE_URL,
         // headers: {
         //   "Content-type": "application/json",
         // },
@@ -56,7 +57,7 @@ export const useMainStore = defineStore("main", {
 
     post(sampleDataKey, data) {
       const httpService = axios.create({
-        baseURL: "http://127.0.0.1:12130/",
+        baseURL: import.meta.env.VITE_API_BASE_URL,
         // headers: {
         //   "Content-type": "application/json",
         // },
@@ -76,7 +77,7 @@ export const useMainStore = defineStore("main", {
 
     postFormData(sampleDataKey, data) {
       const httpService = axios.create({
-        baseURL: "http://127.0.0.1:12130/",
+        baseURL: import.meta.env.VITE_API_BASE_URL,
         headers: {
           "Content-type": "application/json",
         },

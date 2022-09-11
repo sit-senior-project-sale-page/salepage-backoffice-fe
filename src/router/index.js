@@ -26,7 +26,7 @@ const routes = [
     },
     path: "/sites",
     name: "sites",
-    component: () => import("@/views/TablesView.vue"),
+    component: () => import("@/views/SiteView.vue"),
   },
   {
     meta: {
@@ -34,7 +34,7 @@ const routes = [
     },
     path: "/products",
     name: "products",
-    component: () => import("@/views/TablesView.vue"),
+    component: () => import("@/views/ProductView.vue"),
   },
   {
     meta: {
@@ -42,7 +42,7 @@ const routes = [
     },
     path: "/orders",
     name: "orders",
-    component: () => import("@/views/TablesView.vue"),
+    component: () => import("@/views/OrderView.vue"),
   },
   {
     meta: {

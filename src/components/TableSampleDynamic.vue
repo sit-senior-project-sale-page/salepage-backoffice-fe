@@ -12,7 +12,7 @@ const props = defineProps({
   dataFetch: { type: String, required: true },
 });
 
-console.log(props.dataFetch);
+console.log("props.dataFetch", props.dataFetch);
 
 const mainStore = useMainStore();
 mainStore.fetch(props.dataFetch);
