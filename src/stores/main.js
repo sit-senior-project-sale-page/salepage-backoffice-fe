@@ -62,7 +62,7 @@ export const useMainStore = defineStore("main", {
         // },
       });
 
-      httpService
+      return httpService
         .post(`${sampleDataKey}`, data)
         .then((r) => {
           console.log(r.data);
@@ -72,6 +72,17 @@ export const useMainStore = defineStore("main", {
           console.log(error);
           alert(error.message);
         });
+    },
+
+    postFormData(sampleDataKey, data) {
+      const httpService = axios.create({
+        baseURL: "http://127.0.0.1:12130/",
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+
+      return httpService.post(`${sampleDataKey}`, data);
     },
   },
 });

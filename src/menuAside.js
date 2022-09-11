@@ -37,41 +37,41 @@ export default [
     label: "Create Site",
     icon: mdiSquareEditOutline,
   },
-  {
-    to: "/ui",
-    label: "UI",
-    icon: mdiTelevisionGuide,
-  },
-  {
-    to: "/responsive",
-    label: "Responsive",
-    icon: mdiResponsive,
-  },
-  {
-    to: "/profile",
-    label: "Profile",
-    icon: mdiAccountCircle,
-  },
-  {
-    to: "/login",
-    label: "Login",
-    icon: mdiLock,
-  },
-  {
-    to: "/error",
-    label: "Error",
-    icon: mdiAlertCircle,
-  },
-  {
-    label: "Dropdown",
-    icon: mdiViewList,
-    menu: [
-      {
-        label: "Item One",
-      },
-      {
-        label: "Item Two",
-      },
-    ],
-  },
+  // {
+  //   to: "/ui",
+  //   label: "UI",
+  //   icon: mdiTelevisionGuide,
+  // },
+  // {
+  //   to: "/responsive",
+  //   label: "Responsive",
+  //   icon: mdiResponsive,
+  // },
+  // {
+  //   to: "/profile",
+  //   label: "Profile",
+  //   icon: mdiAccountCircle,
+  // },
+  // {
+  //   to: "/login",
+  //   label: "Login",
+  //   icon: mdiLock,
+  // },
+  // {
+  //   to: "/error",
+  //   label: "Error",
+  //   icon: mdiAlertCircle,
+  // },
+  // {
+  //   label: "Dropdown",
+  //   icon: mdiViewList,
+  //   menu: [
+  //     {
+  //       label: "Item One",
+  //     },
+  //     {
+  //       label: "Item Two",
+  //     },
+  //   ],
+  // },
 ];

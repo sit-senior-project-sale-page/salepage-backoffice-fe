@@ -24,23 +24,17 @@ import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import TableList from "@/components/TableList.vue";
 
-// const selectOptions = [
-//   { id: 1, label: "Business development" },
-//   { id: 2, label: "Marketing" },
-//   { id: 3, label: "Sales" },
-// ];
-
 const mainStore = useMainStore();
 
 const initProductOptionData = {
   name: "",
-  quantity: null,
-  price: null,
-  discountPrice: null,
+  price: 0,
+  discountPrice: 0,
 };
 let productOption = reactive({ ...initProductOptionData });
 
-const form = reactive({
+const imagePreviewURL = ref("");
+const initProduct = {
   memberId: 1,
   domain: "",
   shortLink: "",
@@ -52,7 +46,12 @@ const form = reactive({
     discountCode: "",
     productOption: [],
   },
+};
+const form = reactive({
+  ...initProduct,
 });
+
+const fileProduct = ref();
 
 const customElementsForm = reactive({
   checkbox: ["lorem"],
@@ -61,9 +60,34 @@ const customElementsForm = reactive({
   file: null,
 });
 
-const submit = () => {
-  console.log("form", form);
-  mainStore.post("site", { ...form });
+const deleteProductOption = (event, index) => {
+  form.product.productOption.splice(index, 1);
+};
+
+const reset = () => {
+  Object.assign(form, { ...initProduct });
+};
+
+const submit = async () => {
+  if (!form.domain) {
+    alert("โปรดกรอกโดเมนเว็ยไซต์");
+  } else if (!form.product.name) {
+    alert("โปรดกรอกชื่อสินค้า");
+  } else if (!form.product.detail) {
+    alert("โปรดกรอกรายละเอียดสินค้า");
+  } else {
+    const formData = new FormData();
+    formData.append("file", fileProduct.value);
+    formData.append("site", JSON.stringify({ ...form }));
+    const response = await mainStore.postFormData("site", formData);
+    console.log(response);
+    if (response.data.isSuccess) {
+      alert("เพิ่มเว็บไซต์สำเร็จ");
+      Object.assign(form, initProduct);
+    } else {
+      alert("เพิ่มเว็บไซต์ไม่สำเร็จ");
+    }
+  }
 };
 
 const addProductOption = () => {
@@ -72,19 +96,20 @@ const addProductOption = () => {
   Object.assign(productOption, initProductOptionData);
 };
 
+const onFileChange = (e) => {
+  e.preventDefault();
+  var files = e.target.files || e.dataTransfer.files;
+  if (!files.length) return;
+  if (files) {
+    imagePreviewURL.value = URL.createObjectURL(files[0]);
+    URL.revokeObjectURL(files);
+  } else {
+    imagePreviewURL.value = "";
+  }
+  fileProduct.value = files[0];
+};
+
 const modalOneActive = ref(false);
-
-// const formStatusWithHeader = ref(false);
-
-// const formStatusCurrent = ref(0);
-
-// const formStatusOptions = ["info", "success", "danger", "warning"];
-
-// const formStatusSubmit = () => {
-//   formStatusCurrent.value = formStatusOptions[formStatusCurrent.value + 1]
-//     ? formStatusCurrent.value + 1
-//     : 0;
-// };
 </script>
 
 <template>
@@ -141,10 +166,6 @@ const modalOneActive = ref(false);
           />
         </FormField>
 
-        <!-- <FormField label="Dropdown">
-          <FormControl v-model="form.department" :options="selectOptions" />
-        </FormField> -->
-
         <BaseDivider />
 
         <FormField
@@ -159,8 +180,20 @@ const modalOneActive = ref(false);
         </FormField>
 
         <FormField label="ภาพสินค้า">
-          <FormFilePicker v-model="customElementsForm.file" label="Upload" />
+          <FormFilePicker
+            v-model="customElementsForm.file"
+            label="Upload"
+            @change="onFileChange($event)"
+          />
         </FormField>
+
+        <FormField label="ภาพสินค้า">
+          <img
+            v-if="imagePreviewURL"
+            :src="imagePreviewURL"
+            alt
+            class="w-30 h-30"
+        /></FormField>
 
         <CardBoxModal
           v-model="modalOneActive"
@@ -174,12 +207,6 @@ const modalOneActive = ref(false);
               v-model="productOption.name"
               :icon="mdiDomain"
               placeholder="ชื่อตัวเลือกสินค้า"
-            />
-            <FormControl
-              v-model="productOption.quantity"
-              :icon="mdiLink"
-              placeholder="จำนวนสินค้า"
-              type="number"
             />
 
             <FormControl
@@ -213,6 +240,7 @@ const modalOneActive = ref(false);
             <TableList
               v-if="form.product.productOption.length > 0"
               :data-table="form.product.productOption"
+              @menu-delete-data="deleteProductOption"
             />
           </CardBox>
         </FormField>
@@ -225,7 +253,13 @@ const modalOneActive = ref(false);
               label="Submit"
               @click="submit"
             />
-            <BaseButton type="reset" color="info" outline label="Reset" />
+            <BaseButton
+              type="reset"
+              color="info"
+              outline
+              label="Reset"
+              @click="reset"
+            />
           </BaseButtons>
         </template>
       </CardBox>

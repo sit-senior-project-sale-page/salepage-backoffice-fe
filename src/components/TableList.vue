@@ -11,6 +11,12 @@ const props = defineProps({
   dataTable: { type: Array },
 });
 
+const emit = defineEmits(["menu-delete-data"]);
+
+const deleteData = (event, index) => {
+  emit("menu-delete-data", event, index);
+};
+
 const { dataTable } = toRefs(props);
 const items = ref(dataTable.value);
 const keyItems = ref(
@@ -112,16 +118,29 @@ const checked = (isChecked, client) => {
         <th v-for="(column, index) in keyItems" :key="index">
           {{ column.toUpperCase() }}
         </th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="client in itemsPaginated" :key="client.id">
+      <tr
+        v-for="(client, indexColumnClient) in itemsPaginated"
+        :key="client.name"
+      >
         <TableCheckboxCell
           v-if="checkable"
           @checked="checked($event, client)"
         />
         <td v-for="(column, indexColumn) in keyItems" :key="indexColumn">
           {{ client[column] ?? "ไม่มีข้อมูล" }}
+        </td>
+        <td>
+          <BaseButton
+            type="reset"
+            color="danger"
+            outline
+            label="Delete"
+            @click="deleteData($event, indexColumnClient)"
+          />
         </td>
       </tr>
     </tbody>
