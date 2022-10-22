@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/HomeView.vue";
 import { useAuthStore } from "@/stores/auth.js";
+import { fetchWrapper } from "../helpers/fetch-wrapper";
 const routes = [
   {
     // Document title tag
@@ -115,12 +116,17 @@ router.beforeEach(async (to) => {
   const publicPages = ["/login"];
   const authRequired = !publicPages.includes(to.path);
   const auth = useAuthStore();
-  console.log(
-    "🚀 ~ file: index.js ~ line 118 ~ router.beforeEach ~ auth",
-    auth
-  );
 
-  if (authRequired && !auth.accessToken && !auth.user) {
+  if (!auth.user && auth.accessToken) {
+    const profile = await fetchWrapper.get(`user/profile`);
+    localStorage.setItem("user", JSON.stringify(profile.data));
+  }
+
+  if (auth.user && !auth.accessToken) {
+    localStorage.removeItem("user");
+  }
+
+  if (authRequired && !auth.accessToken) {
     auth.returnUrl = to.fullPath;
     return "/login";
   }
