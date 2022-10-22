@@ -1,66 +1,79 @@
 <script setup>
-import { reactive } from "vue";
-import { useRouter } from "vue-router";
-import { mdiAccount, mdiAsterisk } from "@mdi/js";
+import * as Yup from "yup";
 import SectionFullScreen from "@/components/SectionFullScreen.vue";
 import CardBox from "@/components/CardBox.vue";
-import FormCheckRadio from "@/components/FormCheckRadio.vue";
 import FormField from "@/components/FormField.vue";
-import FormControl from "@/components/FormControl.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import LayoutGuest from "@/layouts/LayoutGuest.vue";
-
-const form = reactive({
-  login: "john.doe",
-  pass: "highly-secure-password-fYjUw-",
-  remember: true,
+import { Form, Field } from "vee-validate";
+import { useAuthStore } from "@/stores/auth.js";
+import Swal from "sweetalert2";
+const schema = Yup.object().shape({
+  username: Yup.string().required("โปรดกรอก Username"),
+  password: Yup.string().required("โปรดกรอก Password"),
 });
 
-const router = useRouter();
+function onSubmit(values, { setErrors }) {
+  const authStore = useAuthStore();
+  const { username, password } = values;
 
-const submit = () => {
-  router.push("/dashboard");
-};
+  return authStore.login(username, password).catch((error) => {
+    Swal.fire({
+      title: "Error",
+      text: error,
+      icon: "error",
+    });
+    setErrors({ apiError: error });
+  });
+}
 </script>
 
 <template>
   <LayoutGuest>
-    <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
-      <CardBox :class="cardClass" is-form @submit.prevent="submit">
-        <FormField label="Login" help="Please enter your login">
-          <FormControl
-            v-model="form.login"
-            :icon="mdiAccount"
-            name="login"
-            autocomplete="username"
-          />
-        </FormField>
+    <SectionFullScreen v-slot="{}" bg="purplePink">
+      <Form
+        v-slot="{ errors, isSubmitting }"
+        :validation-schema="schema"
+        @submit="onSubmit"
+      >
+        <CardBox>
+          <FormField>
+            <label>Username</label>
+            <Field
+              placeholder="username"
+              name="username"
+              type="text"
+              class="form-control"
+              :class="{ 'is-invalid': errors.username }"
+            />
+            <div class="text-red-500">{{ errors.username }}</div>
+          </FormField>
 
-        <FormField label="Password" help="Please enter your password">
-          <FormControl
-            v-model="form.pass"
-            :icon="mdiAsterisk"
-            type="password"
-            name="password"
-            autocomplete="current-password"
-          />
-        </FormField>
+          <FormField>
+            <label>Password</label>
+            <Field
+              placeholder="password"
+              name="password"
+              type="password"
+              class="form-control"
+              :class="{ 'is-invalid': errors.password }"
+            />
+            <div class="text-red-500">{{ errors.password }}</div>
+          </FormField>
 
-        <FormCheckRadio
-          v-model="form.remember"
-          name="remember"
-          label="Remember"
-          :input-value="true"
-        />
-
-        <template #footer>
-          <BaseButtons>
-            <BaseButton type="submit" color="info" label="Login" />
-            <BaseButton to="/dashboard" color="info" outline label="Back" />
-          </BaseButtons>
-        </template>
-      </CardBox>
+          <template #footer>
+            <BaseButtons>
+              <BaseButton
+                type="submit"
+                color="info"
+                label="Login"
+                :disabled="isSubmitting"
+              />
+            </BaseButtons>
+          </template>
+        </CardBox>
+      </Form>
     </SectionFullScreen>
   </LayoutGuest>
 </template>

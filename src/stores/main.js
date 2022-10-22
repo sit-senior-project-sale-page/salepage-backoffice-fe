@@ -1,4 +1,6 @@
 import { defineStore } from "pinia";
+import { fetchWrapper } from "@/helpers";
+import Swal from "sweetalert2";
 import axios from "axios";
 
 export const useMainStore = defineStore("main", {
@@ -6,9 +8,7 @@ export const useMainStore = defineStore("main", {
     /* User */
     userName: null,
     userEmail: null,
-    userAvatar: null,
 
-    /* Field focus with ctrl+k (to register only once) */
     isFieldFocusRegistered: false,
 
     /* Sample data (commonly used) */
@@ -27,63 +27,72 @@ export const useMainStore = defineStore("main", {
       if (payload.email) {
         this.userEmail = payload.email;
       }
-      if (payload.avatar) {
-        this.userAvatar = payload.avatar;
+    },
+
+    async fetch(url) {
+      const data = await fetchWrapper.get(url);
+      if (data.data && data.data) {
+        this[url] = data.data;
       }
+      // httpService
+      //   .get(`${url}`)
+      //   .then((r) => {
+      //     console.log(r.data);
+      //     console.log(r.data.data);
+      //     if (r.data && r.data.data) {
+      //       this[url] = r.data.data;
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //     Swal.fire({
+      //       title: "Error",
+      //       text: error,
+      //       icon: "error",
+      //     });
+      //   });
     },
 
-    fetch(sampleDataKey) {
+    post(url, data) {
       const httpService = axios.create({
         baseURL: import.meta.env.VITE_API_BASE_URL,
-        // headers: {
-        //   "Content-type": "application/json",
-        // },
-      });
-
-      httpService
-        .get(`${sampleDataKey}`)
-        .then((r) => {
-          console.log(r.data);
-          console.log(r.data.data);
-          if (r.data && r.data.data) {
-            this[sampleDataKey] = r.data.data;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          alert(error.message);
-        });
-    },
-
-    post(sampleDataKey, data) {
-      const httpService = axios.create({
-        baseURL: import.meta.env.VITE_API_BASE_URL,
-        // headers: {
-        //   "Content-type": "application/json",
-        // },
       });
 
       return httpService
-        .post(`${sampleDataKey}`, data)
+        .post(`${url}`, data)
         .then((r) => {
           console.log(r.data);
           console.log(r.data.data);
         })
         .catch((error) => {
           console.log(error);
-          alert(error.message);
+          Swal.fire({
+            title: "ERROR",
+            text: error,
+            icon: "error",
+          });
         });
     },
 
-    postFormData(sampleDataKey, data) {
+    postFormData(url, data) {
       const httpService = axios.create({
         baseURL: import.meta.env.VITE_API_BASE_URL,
-        headers: {
-          "Content-type": "application/json",
-        },
       });
 
-      return httpService.post(`${sampleDataKey}`, data);
+      return httpService
+        .post(`${url}`, data)
+        .then((r) => {
+          console.log(r.data);
+          console.log(r.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          Swal.fire({
+            title: "Error",
+            text: error,
+            icon: "error",
+          });
+        });
     },
   },
 });

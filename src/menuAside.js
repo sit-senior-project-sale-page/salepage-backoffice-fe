@@ -13,7 +13,7 @@ import {
 
 export default [
   {
-    to: "/dashboard",
+    to: "/",
     icon: mdiMonitor,
     label: "Dashboard",
   },
@@ -37,11 +37,11 @@ export default [
     label: "Create Site",
     icon: mdiSquareEditOutline,
   },
-  // {
-  //   to: "/ui",
-  //   label: "UI",
-  //   icon: mdiTelevisionGuide,
-  // },
+  {
+    to: "/ui",
+    label: "UI",
+    icon: mdiTelevisionGuide,
+  },
   // {
   //   to: "/responsive",
   //   label: "Responsive",

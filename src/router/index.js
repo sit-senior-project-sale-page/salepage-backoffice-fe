@@ -1,6 +1,6 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/HomeView.vue";
-
+import { useAuthStore } from "@/stores/auth.js";
 const routes = [
   {
     // Document title tag
@@ -8,7 +8,7 @@ const routes = [
     meta: {
       title: "Dashboard",
     },
-    path: "/dashboard",
+    path: "/",
     name: "dashboard",
     component: Home,
   },
@@ -88,7 +88,7 @@ const routes = [
     meta: {
       title: "Login",
     },
-    path: "/",
+    path: "/login",
     name: "login",
     component: () => import("@/views/LoginView.vue"),
   },
@@ -103,11 +103,27 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
     return savedPosition || { top: 0 };
   },
+});
+
+router.beforeEach(async (to) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ["/login"];
+  const authRequired = !publicPages.includes(to.path);
+  const auth = useAuthStore();
+  console.log(
+    "🚀 ~ file: index.js ~ line 118 ~ router.beforeEach ~ auth",
+    auth
+  );
+
+  if (authRequired && !auth.accessToken && !auth.user) {
+    auth.returnUrl = to.fullPath;
+    return "/login";
+  }
 });
 
 export default router;

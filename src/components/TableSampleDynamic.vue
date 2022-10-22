@@ -115,7 +115,7 @@ const checked = (isChecked, client) => {
       <tr>
         <th v-if="checkable" />
         <th v-for="(column, index) in keyItems" :key="index">
-          {{ column.toLocaleUpperCase() }}
+          <div class="capitalize">{{ column }}</div>
         </th>
       </tr>
     </thead>

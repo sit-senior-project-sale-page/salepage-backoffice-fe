@@ -12,6 +12,7 @@ import NavBar from "@/components/NavBar.vue";
 import NavBarItemPlain from "@/components/NavBarItemPlain.vue";
 import AsideMenu from "@/components/AsideMenu.vue";
 import FooterBar from "@/components/FooterBar.vue";
+import { useAuthStore } from "@/stores/auth.js";
 
 useMainStore().setUser({
   name: "John Doe",
@@ -26,6 +27,8 @@ const styleStore = useStyleStore();
 
 const layoutStore = useLayoutStore();
 
+const { auth, logout } = useAuthStore();
+
 const router = useRouter();
 
 router.beforeEach(() => {
@@ -39,7 +42,7 @@ const menuClick = (event, item) => {
   }
 
   if (item.isLogout) {
-    //
+    logout();
   }
 };
 </script>
