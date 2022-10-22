@@ -30,50 +30,60 @@ function onSubmit(values, { setErrors }) {
 </script>
 
 <template>
-  <LayoutGuest>
-    <SectionFullScreen v-slot="{}" bg="purplePink">
+  <div>
+    <div class="px-8 w-screen py-6 absolute">
+      <img src="/public/upforsale.png" class="h-14 md:h-20 mx-auto md:mx-0" />
+    </div>
+    <SectionFullScreen v-slot="{}">
       <Form
         v-slot="{ errors, isSubmitting }"
         :validation-schema="schema"
         @submit="onSubmit"
+        class="p-8 sm:p-12 flex flex-col text-left rounded-2xl w-full mx-5 sm:mx-auto my-auto box"
+        style="background-color: #142e46"
       >
-        <CardBox>
-          <FormField>
-            <label>Username</label>
-            <Field
-              placeholder="username"
-              name="username"
-              type="text"
-              class="form-control"
-              :class="{ 'is-invalid': errors.username }"
-            />
-            <div class="text-red-500">{{ errors.username }}</div>
-          </FormField>
-
-          <FormField>
-            <label>Password</label>
-            <Field
-              placeholder="password"
-              name="password"
-              type="password"
-              class="form-control"
-              :class="{ 'is-invalid': errors.password }"
-            />
-            <div class="text-red-500">{{ errors.password }}</div>
-          </FormField>
-
-          <template #footer>
-            <BaseButtons>
-              <BaseButton
-                type="submit"
-                color="info"
-                label="Login"
-                :disabled="isSubmitting"
-              />
-            </BaseButtons>
-          </template>
-        </CardBox>
+        <div class="text-2xl sm:text-3xl font-bold text-white">Admin</div>
+        <div style="height: 70px" class="mt-8">
+          <Field
+            placeholder="username"
+            name="username"
+            type="text"
+            class="bg-gray-100 rounded-md w-full p-2 sm:p-3 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-300 focus:shadow-outline focus:shadow ring-offset-2 text-sm"
+            :class="{ 'is-invalid': errors.username }"
+          />
+          <div class="text-red-500">{{ errors.username }}</div>
+        </div>
+        <div style="height: 70px" class="mt-2">
+          <Field
+            placeholder="password"
+            name="password"
+            type="password"
+            class="bg-gray-100 rounded-md w-full p-2 sm:p-3 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-300 focus:shadow-outline focus:shadow ring-offset-2 text-sm"
+            :class="{ 'is-invalid': errors.password }"
+          />
+          <div class="text-red-500">{{ errors.password }}</div>
+        </div>
+        <div class="mt-3">
+          <BaseButton
+            style="background-color: #ffb730"
+            class="p-3 sm:p-4 text-white rounded-md w-full font-medium border-none"
+            type="submit"
+            label="signin"
+            :disabled="isSubmitting"
+          />
+        </div>
       </Form>
     </SectionFullScreen>
-  </LayoutGuest>
+  </div>
 </template>
+
+<style scoped>
+@media (min-width: 450px) {
+  .box {
+    width: 425px;
+  }
+}
+.bg {
+  background-color: #0f385f !important;
+}
+</style>
