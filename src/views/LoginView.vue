@@ -42,7 +42,7 @@ function onSubmit(values, { setErrors }) {
         style="background-color: #142e46"
         @submit="onSubmit"
       >
-        <div class="text-2xl sm:text-3xl font-bold text-white">Admin</div>
+        <div class="text-2xl sm:text-3xl font-bold text-white">Sign in</div>
         <div style="height: 70px" class="mt-8">
           <Field
             placeholder="username"

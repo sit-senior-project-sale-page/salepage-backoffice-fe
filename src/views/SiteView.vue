@@ -15,12 +15,12 @@ import TableSampleDynamic from "../components/TableSampleDynamic.vue";
       color="white"
       class="mx-auto section rounded-lg"
     >
-      <CardBox class="mb-6">
+      <CardBox class="mb-6 pb-12">
         <div class="text-center font-semibold text-lg pb-8">My SalePage</div>
-        <div class="grid md:grid-cols-3 gap-y-8">
+        <div class="grid md:grid-cols-3 gap-y-8" >
           <div>
             <div
-              class="h-40 w-40 rounded-lg mx-auto mb-3"
+              class="h-40 w-40 rounded-lg mx-auto mb-3 cursor-pointer"
               :style="{
                 'background-image': `url(${img})`,
                 backgroundSize: 'cover',
@@ -28,11 +28,12 @@ import TableSampleDynamic from "../components/TableSampleDynamic.vue";
                 'background-position': 'center',
               }"
             ></div>
-            <div class="font-medium text-center">Midnight Guest</div> 
+            <div class="font-medium text-center cursor-pointer">Midnight Guest</div> 
           </div>
+
           <div>
             <div
-              class="h-40 w-40 rounded-lg mx-auto mb-3"
+              class="h-40 w-40 rounded-lg mx-auto mb-3 cursor-pointer"
               :style="{
                 'background-image': `url(${img})`,
                 backgroundSize: 'cover',
@@ -40,10 +41,10 @@ import TableSampleDynamic from "../components/TableSampleDynamic.vue";
                 'background-position': 'center',
               }"
             ></div>
-            <div class="font-medium text-center">Midnight Guest</div> 
+            <div class="font-medium text-center cursor-pointer">Midnight Guest</div> 
           </div><div>
             <div
-              class="h-40 w-40 rounded-lg mx-auto mb-3"
+              class="h-40 w-40 rounded-lg mx-auto mb-3 cursor-pointer"
               :style="{
                 'background-image': `url(${img})`,
                 backgroundSize: 'cover',
@@ -51,10 +52,10 @@ import TableSampleDynamic from "../components/TableSampleDynamic.vue";
                 'background-position': 'center',
               }"
             ></div>
-            <div class="font-medium text-center">Midnight Guest</div> 
+            <div class="font-medium text-center cursor-pointer">Midnight Guest</div> 
           </div><div>
             <div
-              class="h-40 w-40 rounded-lg mx-auto mb-3"
+              class="h-40 w-40 rounded-lg mx-auto mb-3 cursor-pointer"
               :style="{
                 'background-image': `url(${img})`,
                 backgroundSize: 'cover',
@@ -62,10 +63,10 @@ import TableSampleDynamic from "../components/TableSampleDynamic.vue";
                 'background-position': 'center',
               }"
             ></div>
-            <div class="font-medium text-center">Midnight Guest</div> 
+            <div class="font-medium text-center cursor-pointer">Midnight Guest</div> 
           </div><div>
             <div
-              class="h-40 w-40 rounded-lg mx-auto mb-3"
+              class="h-40 w-40 rounded-lg mx-auto mb-3 cursor-pointer"
               :style="{
                 'background-image': `url(${img})`,
                 backgroundSize: 'cover',
@@ -73,8 +74,9 @@ import TableSampleDynamic from "../components/TableSampleDynamic.vue";
                 'background-position': 'center',
               }"
             ></div>
-            <div class="font-medium text-center">Midnight Guest</div> 
+            <div class="font-medium text-center cursor-pointer">Midnight Guest</div> 
           </div>
+          
         </div>
       </CardBox>
       <!-- <TableSampleDynamic data-fetch="site" /> -->

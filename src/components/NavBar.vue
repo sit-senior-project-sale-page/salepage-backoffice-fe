@@ -27,7 +27,7 @@ const isMenuNavBarActive = ref(false);
     class="top-0 inset-x-0 fixed bg-gray-50 h-14 z-30 transition-position w-screen lg:w-auto dark:bg-slate-800"
   >
     <div class="flex lg:items-stretch" :class="containerMaxW">
-      <div class="absolute text-center w-screen py-3 logo -z-10"><img src="/upforsale.png" class="h-10 mx-auto" /></div>
+      <div class="absolute text-center w-screen py-2 logo -z-10"><img src="/upforsale.png" class="h-10 mx-auto" /></div>
       <div class="flex flex-1 items-stretch h-14">
         <slot />
       </div>

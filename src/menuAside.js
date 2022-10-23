@@ -29,7 +29,7 @@ export default [
   // },
   {
     to: "/orders",
-    label: "My Order",
+    label: "Orders",
     icon: mdiTable,
   },
   {
