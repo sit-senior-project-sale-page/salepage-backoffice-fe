@@ -17,8 +17,53 @@ import TableSampleDynamic from "../components/TableSampleDynamic.vue";
     >
       <CardBox class="mb-6">
         <div class="text-center font-semibold text-lg pb-8">My SalePage</div>
-        <div class="grid md:grid-cols-3">
+        <div class="grid md:grid-cols-3 gap-y-8">
           <div>
+            <div
+              class="h-40 w-40 rounded-lg mx-auto mb-3"
+              :style="{
+                'background-image': `url(${img})`,
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                'background-position': 'center',
+              }"
+            ></div>
+            <div class="font-medium text-center">Midnight Guest</div> 
+          </div>
+          <div>
+            <div
+              class="h-40 w-40 rounded-lg mx-auto mb-3"
+              :style="{
+                'background-image': `url(${img})`,
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                'background-position': 'center',
+              }"
+            ></div>
+            <div class="font-medium text-center">Midnight Guest</div> 
+          </div><div>
+            <div
+              class="h-40 w-40 rounded-lg mx-auto mb-3"
+              :style="{
+                'background-image': `url(${img})`,
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                'background-position': 'center',
+              }"
+            ></div>
+            <div class="font-medium text-center">Midnight Guest</div> 
+          </div><div>
+            <div
+              class="h-40 w-40 rounded-lg mx-auto mb-3"
+              :style="{
+                'background-image': `url(${img})`,
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                'background-position': 'center',
+              }"
+            ></div>
+            <div class="font-medium text-center">Midnight Guest</div> 
+          </div><div>
             <div
               class="h-40 w-40 rounded-lg mx-auto mb-3"
               :style="{

@@ -99,7 +99,7 @@ const menuClick = (event, item) => {
       </NavBar>
       <AsideMenu :menu="menuAside" @menu-click="menuClick" />
       <slot />
-      <FooterBar> เว็บสร้างเพจสำหรับขายสินค้า </FooterBar>
+      <!-- <FooterBar> เว็บสร้างเพจสำหรับขายสินค้า </FooterBar> -->
     </div>
   </div>
 </template>
