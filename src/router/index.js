@@ -57,8 +57,8 @@ const routes = [
     meta: {
       title: "Create Site",
     },
-    path: "/create-site",
-    name: "create-site",
+    path: "/create-salepage",
+    name: "create-salepage",
     component: () => import("@/views/CreateSite.vue"),
   },
   {

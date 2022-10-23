@@ -22,19 +22,19 @@ export default [
     label: "My SalePage",
     icon: mdiDatabase,
   },
-  {
-    to: "/products",
-    label: "My Product",
-    icon: mdiViewList,
-  },
+  // {
+  //   to: "/products",
+  //   label: "My Product",
+  //   icon: mdiViewList,
+  // },
   {
     to: "/orders",
     label: "My Order",
     icon: mdiTable,
   },
   {
-    to: "/create-site",
-    label: "Create Site",
+    to: "/create-salepage",
+    label: "Create SalePage",
     icon: mdiSquareEditOutline,
   },
   // {

@@ -27,6 +27,7 @@ const isMenuNavBarActive = ref(false);
     class="top-0 inset-x-0 fixed bg-gray-50 h-14 z-30 transition-position w-screen lg:w-auto dark:bg-slate-800"
   >
     <div class="flex lg:items-stretch" :class="containerMaxW">
+      <div class="absolute text-center w-screen py-3 logo -z-10"><img src="/upforsale.png" class="h-10 mx-auto" /></div>
       <div class="flex flex-1 items-stretch h-14">
         <slot />
       </div>
@@ -49,3 +50,13 @@ const isMenuNavBarActive = ref(false);
     </div>
   </nav>
 </template>
+<style scoped>
+.logo {
+    opacity: 1;
+  }
+@media (min-width: 1280px) {
+  .logo {
+    opacity: 0;
+  }
+}
+</style>
