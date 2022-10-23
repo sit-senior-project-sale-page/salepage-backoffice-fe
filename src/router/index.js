@@ -3,16 +3,16 @@ import Home from "@/views/HomeView.vue";
 import { useAuthStore } from "@/stores/auth.js";
 import { fetchWrapper } from "../helpers/fetch-wrapper";
 const routes = [
-  {
-    // Document title tag
-    // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
-    meta: {
-      title: "Dashboard",
-    },
-    path: "/",
-    name: "dashboard",
-    component: Home,
-  },
+  // {
+  //   // Document title tag
+  //   // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
+  //   meta: {
+  //     title: "Dashboard",
+  //   },
+  //   path: "/",
+  //   name: "dashboard",
+  //   component: Home,
+  // },
   {
     meta: {
       title: "Tables",
@@ -25,7 +25,7 @@ const routes = [
     meta: {
       title: "Sites",
     },
-    path: "/sites",
+    path: "/",
     name: "sites",
     component: () => import("@/views/SiteView.vue"),
   },

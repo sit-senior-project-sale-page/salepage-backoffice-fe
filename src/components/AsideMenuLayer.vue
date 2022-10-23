@@ -42,13 +42,15 @@ const menuClick = (event, item) => {
       class="flex-1 flex flex-col overflow-hidden dark:bg-slate-900"
     >
       <div
-        :class="styleStore.asideBrandStyle"
-        class="flex flex-row h-14 items-center justify-between dark:bg-slate-900"
+        :class="
+          styleStore.lightMode
+            ? 'aside-scrollbars-[slate]'
+            : styleStore.asideScrollbarsStyle
+        "
+        class="flex flex-row h-14 items-center justify-between dark:bg-slate-900 my-5"
       >
-        <div
-          class="text-center flex-1 lg:text-left lg:pl-6 xl:text-center xl:pl-0"
-        >
-          <b class="font-black uppercase">up-for-sale</b>
+        <div class="text-center flex-1 pt-2 lg:pl-6 xl:pl-0">
+          <img src="/upforsale.png" class="h-14 mx-auto logo" />
         </div>
         <button
           class="hidden lg:inline-block xl:hidden p-3"
@@ -59,7 +61,7 @@ const menuClick = (event, item) => {
       </div>
       <div
         :class="
-          styleStore.darkMode
+          styleStore.lightMode
             ? 'aside-scrollbars-[slate]'
             : styleStore.asideScrollbarsStyle
         "
@@ -74,3 +76,13 @@ const menuClick = (event, item) => {
     </div>
   </aside>
 </template>
+<style scoped>
+.logo {
+    opacity: 0;
+  }
+@media (min-width: 1280px) {
+  .logo {
+    opacity: 1;
+  }
+}
+</style>

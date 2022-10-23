@@ -12,14 +12,14 @@ import {
 } from "@mdi/js";
 
 export default [
+  // {
+  //   to: "/",
+  //   icon: mdiMonitor,
+  //   label: "Dashboard",
+  // },
   {
     to: "/",
-    icon: mdiMonitor,
-    label: "Dashboard",
-  },
-  {
-    to: "/sites",
-    label: "My Site",
+    label: "My SalePage",
     icon: mdiDatabase,
   },
   {
@@ -37,11 +37,11 @@ export default [
     label: "Create Site",
     icon: mdiSquareEditOutline,
   },
-  {
-    to: "/ui",
-    label: "UI",
-    icon: mdiTelevisionGuide,
-  },
+  // {
+  //   to: "/ui",
+  //   label: "UI",
+  //   icon: mdiTelevisionGuide,
+  // },
   // {
   //   to: "/responsive",
   //   label: "Responsive",

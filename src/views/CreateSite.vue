@@ -117,11 +117,8 @@ const modalOneActive = ref(false);
   <LayoutAuthenticated>
     <SectionMain form @submit.prevent="submit" class="mx-auto section">
       <CardBox>
-        <div class="grid grid-cols-3 mb-10">
-          <div class="pl-5">
-            <div class="cursor-pointer text-blue-500">Back</div>
-          </div>
-          <div class="text-center font-semibold text-lg">Create SalePage</div>
+        <div class="text-center font-semibold text-lg pb-8">
+          Create SalePage
         </div>
         <FormField label="Website name">
           <FormControl
@@ -206,7 +203,7 @@ const modalOneActive = ref(false);
           </div>
 
           <FormFilePicker
-          color="contrast"
+            color="contrast"
             v-model="customElementsForm.file"
             label="upload file"
             @change="onFileChange($event)"
