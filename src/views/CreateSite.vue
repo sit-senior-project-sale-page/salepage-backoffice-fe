@@ -27,9 +27,9 @@ import TableList from "@/components/TableList.vue";
 const mainStore = useMainStore();
 
 const initProductOptionData = {
-  name: "",
-  price: 0,
-  discountPrice: 0,
+  name: null,
+  price: null,
+  discountPrice: null,
 };
 let productOption = reactive({ ...initProductOptionData });
 
@@ -115,63 +115,112 @@ const modalOneActive = ref(false);
 
 <template>
   <LayoutAuthenticated>
-    <SectionMain form @submit.prevent="submit">
-      <SectionTitleLineWithButton
-        :icon="mdiBallotOutline"
-        title="Create Site"
-        main
-      >
-      </SectionTitleLineWithButton>
+    <SectionMain form @submit.prevent="submit" class="mx-auto section">
       <CardBox>
-        <FormField label="ข้อมูลเว็บไซต์">
+        <div class="grid grid-cols-3 mb-10">
+          <div class="pl-5">
+            <div class="cursor-pointer text-blue-500">Back</div>
+          </div>
+          <div class="text-center font-semibold text-lg">Create SalePage</div>
+        </div>
+        <FormField label="Website name">
           <FormControl
             v-model="form.domain"
             :icon="mdiDomain"
             placeholder="xxxx.dmr.co.th"
           />
-          <FormControl
-            v-model="form.shortLink"
-            :icon="mdiLink"
-            placeholder="Short Link"
-          />
         </FormField>
 
-        <FormField label="ข้อมูลการติดต่อ">
-          <FormControl
-            v-model="form.lineAccountId"
-            :icon="mdiAccount"
-            placeholder="Line ID"
-          />
-          <FormControl
-            v-model="form.messengerAccountId"
-            type="shortLink"
-            :icon="mdiAccount"
-            placeholder="Facebook Messager ID"
-          />
-        </FormField>
-      </CardBox>
-
-      <SectionTitleLineWithButton :icon="mdiWarehouse" title="Create Product">
-      </SectionTitleLineWithButton>
-      <CardBox>
-        <FormField label="ข้อมูลสินค้า">
+        <FormField label="Product">
           <FormControl
             v-model="form.product.name"
             :icon="mdiRenameBox"
-            placeholder="ชื่อสินค้า"
+            placeholder="Product name"
           />
           <FormControl
             v-model="form.product.discountCode"
             :icon="mdiCards"
-            placeholder="โค้ดส่วนลด"
+            placeholder="Discount code"
           />
         </FormField>
 
+        <div class="space-y-5">
+          <div class="font-bold flex">
+            <div class="mt-auto">Product Photos</div>
+          </div>
+
+          <div
+            class="w-full flex space-x-5 rounded-lg overflow-auto"
+            v-if="imagePreviewURL"
+          >
+            <!-- <div v-for="productimage in productimages" :key="productimage">
+            <div>{{productimage}}</div>
+          </div> -->
+            <img
+              v-if="imagePreviewURL"
+              :src="imagePreviewURL"
+              alt
+              class="w-36 h-36 object-cover rounded-lg"
+            />
+            <img
+              v-if="imagePreviewURL"
+              :src="imagePreviewURL"
+              alt
+              class="w-36 h-36 object-cover rounded-lg"
+            />
+            <img
+              v-if="imagePreviewURL"
+              :src="imagePreviewURL"
+              alt
+              class="w-36 h-36 object-cover rounded-lg"
+            />
+            <img
+              v-if="imagePreviewURL"
+              :src="imagePreviewURL"
+              alt
+              class="w-36 h-36 object-cover rounded-lg"
+            />
+            <img
+              v-if="imagePreviewURL"
+              :src="imagePreviewURL"
+              alt
+              class="w-36 h-36 object-cover rounded-lg"
+            />
+            <img
+              v-if="imagePreviewURL"
+              :src="imagePreviewURL"
+              alt
+              class="w-36 h-36 object-cover rounded-lg"
+            />
+            <!-- <img
+            :src="productimages[0].name"
+            alt
+            class="w-36 h-36 object-cover rounded-lg"
+          /> -->
+            <!-- <img
+            v-for="productimage in productimages" :key="productimage"
+            :src="productimage"
+            alt
+            class="w-36 h-36 object-cover rounded-lg"
+          /> -->
+          </div>
+
+          <FormFilePicker
+          color="contrast"
+            v-model="customElementsForm.file"
+            label="upload file"
+            @change="onFileChange($event)"
+          />
+        </div>
         <BaseDivider />
 
         <FormField
-          label="รายละเอียดสินค้า"
-          help="Your detail. Max 255 characters"
+          label="Product detail"
+          :help="
+            'Your product detail ' +
+            form.product.detail.length +
+            '/255 characters'
+          "
         >
           <FormControl
             v-model="form.product.detail"
@@ -180,90 +229,109 @@ const modalOneActive = ref(false);
           />
         </FormField>
 
-        <FormField label="ภาพสินค้า">
-          <FormFilePicker
-            v-model="customElementsForm.file"
-            label="Upload"
-            @change="onFileChange($event)"
-          />
-        </FormField>
-
-        <FormField label="ภาพสินค้า">
-          <img
-            v-if="imagePreviewURL"
-            :src="imagePreviewURL"
-            alt
-            class="w-30 h-30"
-        /></FormField>
-
         <CardBoxModal
           v-model="modalOneActive"
-          title="Please confirm action"
+          title="Product option"
           button-label="Confirm"
           has-cancel
           @confirm="addProductOption"
         >
-          <FormField label="ชื่อตัวเลือกสินค้า">
+          <FormField>
             <FormControl
               v-model="productOption.name"
               :icon="mdiDomain"
-              placeholder="ชื่อตัวเลือกสินค้า"
+              placeholder="option name"
             />
 
             <FormControl
               v-model="productOption.price"
               :icon="mdiAccount"
-              placeholder="ราคา"
+              placeholder="price"
               type="number"
             />
             <FormControl
               v-model="productOption.discountPrice"
               :icon="mdiAccount"
-              placeholder="ราคาส่วนลด (ถ้ามี)"
+              placeholder="discounted price (optional)"
               type="number"
             />
           </FormField>
         </CardBoxModal>
 
-        <FormField label="ตัวเลือกสินค้า">
+        <div class="space-y-3">
+          <div class="font-bold">Product options</div>
+          <TableList
+            v-if="form.product.productOption.length > 0"
+            :data-table="form.product.productOption"
+            @menu-delete-data="deleteProductOption"
+          />
           <BaseButton
-            label="เพิ่มตัวเลือกสินค้า"
-            color="info"
+            label="Add product options"
+            color="contrast"
             @click="modalOneActive = true"
           />
-        </FormField>
+        </div>
+        <!-- <TableList
+            v-if="form.product.productOption.length > 0"
+            :data-table="form.product.productOption"
+            @menu-delete-data="deleteProductOption"
+          /> -->
 
-        <FormField label="ตัวเลือกสินค้า">
+        <!-- <FormField label="Product options">
           <CardBox>
             <CardBoxComponentEmpty
               v-if="form.product.productOption.length === 0"
             />
-            <TableList
-              v-if="form.product.productOption.length > 0"
-              :data-table="form.product.productOption"
-              @menu-delete-data="deleteProductOption"
-            />
           </CardBox>
-        </FormField>
-
-        <template #footer>
-          <BaseButtons>
-            <BaseButton
-              type="submit"
-              color="info"
-              label="Submit"
-              @click="submit"
-            />
-            <BaseButton
+        </FormField> -->
+        <div class="w-full flex justify-end text-">
+          <BaseButton
+            type="submit"
+            color="info"
+            label="Submit"
+            @click="submit"
+          />
+        </div>
+        <!-- <BaseButtons>
+          <BaseButton
               type="reset"
               color="info"
               outline
               label="Reset"
               @click="reset"
             />
-          </BaseButtons>
-        </template>
+        </BaseButtons> -->
       </CardBox>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
+
+<script>
+export default {
+  // computed: {
+  //   character: function(){
+  //     return form.product.detail.length
+  //   }
+  // },
+  // data() {
+  //   return {
+  //     productimages: [],
+  //     productimage:''
+  //   };
+  // },
+  // methods: {
+  //   selectimage() {
+  //     this.productimage = imagePreviewURL
+  //     this.productimages.push(this.productimage)
+  //     console.log(this.productimages);
+  //   },
+  // },
+};
+</script>
+<style scoped>
+@media (min-width: 900px) {
+  .section {
+    width: 860px;
+  }
+}
+</style>
