@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "@/views/HomeView.vue";
 import { useAuthStore } from "@/stores/auth.js";
 import { fetchWrapper } from "../helpers/fetch-wrapper";
 const routes = [

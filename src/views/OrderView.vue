@@ -7,60 +7,39 @@ import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.
 import TableSampleDynamic from "../components/TableSampleDynamic.vue";
 import OrderDetail from "../components/OrderDetail.vue";
 import OrderCard from "../components/OrderCard.vue";
+import { ref } from "vue";
+import CardBoxModal from "@/components/CardBoxModal.vue";
+
+const modalOneActive = ref(false);
 </script>
 
 <template>
   <LayoutAuthenticated>
     <SectionMain
       form
-      @submit.prevent="submit"
       color="white"
       class="mx-auto section rounded-lg"
+      @submit.prevent="submit"
     >
       <CardBox class="mb-6">
-        <div class="text-center font-semibold text-lg pb-8">
-          Orders
-        </div>
-<!-- <div class="grid col2" data-fetch="order" v-for="order in order" :key="order"> -->
+        <div class="text-center font-semibold text-lg pb-8">Orders</div>
+        <!-- <div class="grid col2" data-fetch="order" v-for="order in order" :key="order"> -->
         <div class="grid col2">
-          <OrderCard @click="test"/>
+          <OrderCard @click="modalOneActive = true" />
         </div>
 
         <!-- <TableSampleDynamic checkable data-fetch="order" /> -->
       </CardBox>
     </SectionMain>
 
-    <SectionMain id="orderdetail" class="detail hidden z-20 pt-24" style="background-color: rgba(0, 0, 0, 0.6);">
-      <div class="detail -z-1" @click="test"></div>
-      <OrderDetail/>
-    </SectionMain>
-    
+    <CardBoxModal v-model="modalOneActive" button-label="Confirm">
+      <div class="rounded-lg overflow-hidden mx-2">
+        <OrderDetail />
+      </div>
+    </CardBoxModal>
   </LayoutAuthenticated>
 </template>
-<script>
-export default {
-  data() {
-    return {
-      toggle: false,
-    }
-  },
-  methods: {
-    test(){
-      if (this.toggle==true){
-        this.toggle = false
-        document.getElementById('orderdetail').classList.add('hidden')
-        console.log('1');
-      } else {
-        this.toggle = true
-        document.getElementById('orderdetail').classList.remove('hidden')
-        console.log('2');
-      }
-      console.log('3');
-      
-    }
-  },
-}
-</script>
+
 <style scoped>
 @media (min-width: 768px) {
   .card {
@@ -75,7 +54,7 @@ export default {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-.detail{
+.detail {
   position: absolute;
   top: 0px;
   height: 100vh;
@@ -83,8 +62,7 @@ export default {
   overflow: auto;
 }
 @media (min-width: 1280px) {
-  .detail{
-    
+  .detail {
   }
 }
 </style>
