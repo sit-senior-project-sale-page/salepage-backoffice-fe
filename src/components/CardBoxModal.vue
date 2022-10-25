@@ -72,7 +72,7 @@ window.addEventListener("keydown", (e) => {
         <slot />
       </div>
 
-      <template #footer>
+      <!-- <template #footer>
         <BaseButtons>
           <BaseButton :label="buttonLabel" :color="button" @click="confirm" />
           <BaseButton
@@ -83,7 +83,7 @@ window.addEventListener("keydown", (e) => {
             @click="cancel"
           />
         </BaseButtons>
-      </template>
+      </template> -->
     </CardBox>
   </OverlayLayer>
 </template>
