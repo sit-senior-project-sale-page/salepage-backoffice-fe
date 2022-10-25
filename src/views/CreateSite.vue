@@ -78,7 +78,7 @@ const submit = async () => {
     alert("โปรดกรอกรายละเอียดสินค้า");
   } else {
     const formData = new FormData();
-    formData.append("file", fileProduct.value);
+    formData.append("product", fileProduct.value);
     formData.append("site", JSON.stringify({ ...form }));
     const response = await mainStore.postFormData("site", formData);
     console.log(response);
@@ -115,7 +115,7 @@ const modalOneActive = ref(false);
 
 <template>
   <LayoutAuthenticated>
-    <SectionMain form @submit.prevent="submit" class="mx-auto section">
+    <SectionMain form class="mx-auto section" @submit.prevent="submit">
       <CardBox>
         <div class="text-center font-semibold text-lg pb-8">
           Create SalePage
@@ -124,7 +124,7 @@ const modalOneActive = ref(false);
           <FormControl
             v-model="form.domain"
             :icon="mdiDomain"
-            placeholder="xxxx.dmr.co.th"
+            placeholder="xxxx.upforsale.shop"
           />
         </FormField>
 
@@ -147,8 +147,8 @@ const modalOneActive = ref(false);
           </div>
 
           <div
-            class="w-full flex space-x-5 rounded-lg overflow-auto"
             v-if="imagePreviewURL"
+            class="w-full flex space-x-5 rounded-lg overflow-auto"
           >
             <!-- <div v-for="productimage in productimages" :key="productimage">
             <div>{{productimage}}</div>
@@ -203,8 +203,8 @@ const modalOneActive = ref(false);
           </div>
 
           <FormFilePicker
-            color="contrast"
             v-model="customElementsForm.file"
+            color="contrast"
             label="upload file"
             @change="onFileChange($event)"
           />
@@ -268,6 +268,7 @@ const modalOneActive = ref(false);
             @click="modalOneActive = true"
           />
         </div>
+
         <!-- <TableList
             v-if="form.product.productOption.length > 0"
             :data-table="form.product.productOption"

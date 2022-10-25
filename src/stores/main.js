@@ -1,7 +1,5 @@
 import { defineStore } from "pinia";
 import { fetchWrapper } from "@/helpers";
-import Swal from "sweetalert2";
-import axios from "axios";
 
 export const useMainStore = defineStore("main", {
   state: () => ({
@@ -29,70 +27,22 @@ export const useMainStore = defineStore("main", {
       }
     },
 
-    async fetch(url) {
+    error() {},
+
+    async fetch(state, url) {
       const data = await fetchWrapper.get(url);
-      if (data.data && data.data) {
-        this[url] = data.data;
+      console.log("🚀 ~ file: main.js ~ line 34 ~ fetch ~ data", data.data);
+      if (data.data) {
+        this[state] = data.data;
       }
-      // httpService
-      //   .get(`${url}`)
-      //   .then((r) => {
-      //     console.log(r.data);
-      //     console.log(r.data.data);
-      //     if (r.data && r.data.data) {
-      //       this[url] = r.data.data;
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     Swal.fire({
-      //       title: "Error",
-      //       text: error,
-      //       icon: "error",
-      //     });
-      //   });
     },
 
-    post(url, data) {
-      const httpService = axios.create({
-        baseURL: import.meta.env.VITE_API_BASE_URL,
-      });
-
-      return httpService
-        .post(`${url}`, data)
-        .then((r) => {
-          console.log(r.data);
-          console.log(r.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-          Swal.fire({
-            title: "ERROR",
-            text: error,
-            icon: "error",
-          });
-        });
+    async post(url, data) {
+      return await fetchWrapper.post(url, data);
     },
 
-    postFormData(url, data) {
-      const httpService = axios.create({
-        baseURL: import.meta.env.VITE_API_BASE_URL,
-      });
-
-      return httpService
-        .post(`${url}`, data)
-        .then((r) => {
-          console.log(r.data);
-          console.log(r.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-          Swal.fire({
-            title: "Error",
-            text: error,
-            icon: "error",
-          });
-        });
+    async postFormData(url, data) {
+      return await fetchWrapper.post(url, data);
     },
   },
 });

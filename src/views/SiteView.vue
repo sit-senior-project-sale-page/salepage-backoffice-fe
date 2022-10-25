@@ -1,22 +1,34 @@
 <script setup>
-import { mdiTableBorder } from "@mdi/js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBox from "@/components/CardBox.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import TableSampleDynamic from "../components/TableSampleDynamic.vue";
-import { reactive, ref, computed } from "vue";
+import { ref, computed } from "vue";
+import Swal from "sweetalert2";
 
 import { useMainStore } from "@/stores/main";
 
-const img = ref(
-  "https://cf.shopee.co.th/file/f4b555ec1103020de76771be403c4bcc"
-);
-
 const mainStore = useMainStore();
-mainStore.fetch("site");
+mainStore
+  .fetch(
+    "site",
+    `site?${new URLSearchParams({
+      search: "product",
+    })}`
+  )
+  .catch((error) => {
+    Swal.fire({
+      title: "Error",
+      text: error,
+      icon: "error",
+    });
+  });
 
 const sites = computed(() => mainStore.site);
+
+const previewProductImage = (image) => {
+  return "data:image/png;base64," + image;
+};
 </script>
 
 <template>
@@ -32,9 +44,14 @@ const sites = computed(() => mainStore.site);
         <div class="grid md:grid-cols-3 gap-y-8">
           <div v-for="site in sites" :key="site.id">
             <div class="h-40 w-40 rounded-lg mx-auto mb-3 overflow-hidden">
-              <img :src="img" class="hover:scale-110 transition-all" />
+              <img
+                :src="previewProductImage(site.Product.ProductImage[0].data)"
+                class="hover:scale-110 transition-all"
+              />
             </div>
-            <div class="font-medium text-center">{{ site.domain }}</div>
+            <div class="font-medium text-center capitalize">
+              {{ site.domain }}
+            </div>
           </div>
         </div>
       </CardBox>
