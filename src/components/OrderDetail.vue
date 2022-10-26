@@ -87,7 +87,7 @@
     </div>
     <div class="w-full my-5" style="height: 1px; background-color: #e2e2e2" />
     <button
-      class="rounded-lg text-white p-3 w-full text-center my-5"
+      class="rounded-md text-white p-3 w-full text-center my-5"
       style="background-color: #ffc24c"
     >
       send customer receipt
