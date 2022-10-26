@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import { fetchWrapper } from "@/helpers";
+import { fetchWrapper, authHeader } from "@/helpers";
+import axios from "axios";
 
 export const useMainStore = defineStore("main", {
   state: () => ({
@@ -27,8 +28,6 @@ export const useMainStore = defineStore("main", {
       }
     },
 
-    error() {},
-
     async fetch(state, url) {
       const data = await fetchWrapper.get(url);
       console.log("🚀 ~ file: main.js ~ line 34 ~ fetch ~ data", data.data);
@@ -41,8 +40,16 @@ export const useMainStore = defineStore("main", {
       return await fetchWrapper.post(url, data);
     },
 
-    async postFormData(url, data) {
-      return await fetchWrapper.post(url, data);
+    postFormData(sampleDataKey, data) {
+      const httpService = axios.create({
+        baseURL: import.meta.env.VITE_API_BASE_URL,
+        headers: {
+          "Content-type": "application/json",
+          ...authHeader(),
+        },
+      });
+
+      return httpService.post(`${sampleDataKey}`, data);
     },
   },
 });

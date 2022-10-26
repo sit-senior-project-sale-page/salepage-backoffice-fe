@@ -1,15 +1,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useMainStore } from "@/stores/main";
-import {
-  mdiBallotOutline,
-  mdiAccount,
-  mdiDomain,
-  mdiLink,
-  mdiWarehouse,
-  mdiRenameBox,
-  mdiCards,
-} from "@mdi/js";
+import { mdiAccount, mdiDomain, mdiRenameBox, mdiCards } from "@mdi/js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBox from "@/components/CardBox.vue";
 import CardBoxModal from "@/components/CardBoxModal.vue";
@@ -24,6 +16,10 @@ import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import TableList from "@/components/TableList.vue";
 
+import { Form, Field } from "vee-validate";
+import Swal from "sweetalert2";
+import * as Yup from "yup";
+
 const mainStore = useMainStore();
 
 const initProductOptionData = {
@@ -33,11 +29,11 @@ const initProductOptionData = {
 };
 let productOption = reactive({ ...initProductOptionData });
 
-const imagePreviewURL = ref("");
+const imagePreviewURL = ref([]);
+const imagePreviewOptionURL = ref([]);
+
 const initProduct = {
-  memberId: 1,
   domain: "",
-  shortLink: "",
   lineAccountId: "",
   messengerAccountId: "",
   product: {
@@ -52,7 +48,8 @@ const form = reactive({
   ...initProduct,
 });
 
-const fileProduct = ref();
+const fileProduct = ref([]);
+const fileProductOption = ref([]);
 
 const customElementsForm = reactive({
   checkbox: ["lorem"],
@@ -70,44 +67,105 @@ const reset = () => {
 };
 
 const submit = async () => {
+  console.log(
+    "🚀 ~ file: CreateSite.vue ~ line 78 ~ submit ~ form",
+    JSON.stringify(form)
+  );
+
+  console.log(
+    "🚀 ~ file: CreateSite.vue ~ line 77 ~ submit ~ fileProduct",
+    fileProduct.value
+  );
+  console.log(
+    "🚀 ~ file: CreateSite.vue ~ line 78 ~ submit ~ fileProductOption",
+    fileProductOption.value
+  );
   if (!form.domain) {
-    alert("โปรดกรอกโดเมนเว็ยไซต์");
+    Swal.fire({
+      title: "ข้อมูลไม่ครบ",
+      text: "โปรดกรอกโดเมนเว็ยไซต์",
+      icon: "warning",
+      toast: true,
+      position: "top-right",
+    });
   } else if (!form.product.name) {
-    alert("โปรดกรอกชื่อสินค้า");
+    Swal.fire({
+      title: "ข้อมูลไม่ครบ",
+      text: "โปรดกรอกชื่อสินค้า",
+      icon: "warning",
+      toast: true,
+      position: "top-right",
+    });
   } else if (!form.product.detail) {
-    alert("โปรดกรอกรายละเอียดสินค้า");
+    Swal.fire({
+      title: "ข้อมูลไม่ครบ",
+      text: "โปรดกรอกรายละเอียดสินค้า",
+      icon: "warning",
+      toast: true,
+      position: "top-right",
+    });
   } else {
     const formData = new FormData();
-    formData.append("product", fileProduct.value);
+    for (let index = 0; index < fileProduct.value.length; index++) {
+      const fp = fileProduct.value[index];
+      console.log("🚀 ~ file: CreateSite.vue ~ line 111 ~ submit ~ fp", fp);
+      formData.append("product", fp);
+    }
+
+    for (let index = 0; index < fileProductOption.value.length; index++) {
+      const fpo = fileProductOption.value[index];
+      console.log("🚀 ~ file: CreateSite.vue ~ line 116 ~ submit ~ fp", fpo);
+
+      formData.append("productOption", fpo);
+    }
     formData.append("site", JSON.stringify({ ...form }));
     const response = await mainStore.postFormData("site", formData);
     console.log(response);
-    if (response.data.isSuccess) {
-      alert("เพิ่มเว็บไซต์สำเร็จ");
+    if (response) {
+      Swal.fire({
+        title: "Success",
+        text: "เพิ่มเว็บไซต์สำเร็จ",
+        icon: "success",
+        toast: true,
+        position: "top-right",
+      });
       Object.assign(form, initProduct);
     } else {
-      alert("เพิ่มเว็บไซต์ไม่สำเร็จ");
+      Swal.fire({
+        title: "Error",
+        text: "เพิ่มเว็บไซต์ไม่สำเร็จ",
+        icon: "error",
+        toast: true,
+        position: "top-right",
+      });
     }
   }
 };
 
 const addProductOption = () => {
-  const productOptionData = { ...productOption };
+  const productOptionData = {
+    ...productOption,
+  };
+
   form.product.productOption.push(productOptionData);
   Object.assign(productOption, initProductOptionData);
 };
 
-const onFileChange = (e) => {
+const onFileChange = (e, type) => {
   e.preventDefault();
+
   var files = e.target.files || e.dataTransfer.files;
   if (!files.length) return;
   if (files) {
-    imagePreviewURL.value = URL.createObjectURL(files[0]);
+    if (type) {
+      imagePreviewURL.value.push(URL.createObjectURL(files[0]));
+      fileProduct.value.push(files[0]);
+    } else {
+      imagePreviewOptionURL.value.push(URL.createObjectURL(files[0]));
+      fileProductOption.value.push(files[0]);
+    }
     URL.revokeObjectURL(files);
-  } else {
-    imagePreviewURL.value = "";
   }
-  fileProduct.value = files[0];
 };
 
 const modalOneActive = ref(false);
@@ -120,6 +178,7 @@ const modalOneActive = ref(false);
         <div class="text-center font-semibold text-lg pb-8">
           Create SalePage
         </div>
+
         <FormField label="Website name">
           <FormControl
             v-model="form.domain"
@@ -150,45 +209,14 @@ const modalOneActive = ref(false);
             v-if="imagePreviewURL"
             class="w-full flex space-x-5 rounded-lg overflow-auto"
           >
-            <!-- <div v-for="productimage in productimages" :key="productimage">
-            <div>{{productimage}}</div>
-          </div> -->
-            <img
-              v-if="imagePreviewURL"
-              :src="imagePreviewURL"
-              alt
-              class="w-36 h-36 object-cover rounded-lg"
-            />
-            <img
-              v-if="imagePreviewURL"
-              :src="imagePreviewURL"
-              alt
-              class="w-36 h-36 object-cover rounded-lg"
-            />
-            <img
-              v-if="imagePreviewURL"
-              :src="imagePreviewURL"
-              alt
-              class="w-36 h-36 object-cover rounded-lg"
-            />
-            <img
-              v-if="imagePreviewURL"
-              :src="imagePreviewURL"
-              alt
-              class="w-36 h-36 object-cover rounded-lg"
-            />
-            <img
-              v-if="imagePreviewURL"
-              :src="imagePreviewURL"
-              alt
-              class="w-36 h-36 object-cover rounded-lg"
-            />
-            <img
-              v-if="imagePreviewURL"
-              :src="imagePreviewURL"
-              alt
-              class="w-36 h-36 object-cover rounded-lg"
-            />
+            <div v-for="productimage in imagePreviewURL" :key="productimage">
+              <img
+                :src="productimage"
+                alt
+                class="w-36 h-36 object-cover rounded-lg"
+              />
+            </div>
+
             <!-- <img
             :src="productimages[0].name"
             alt
@@ -206,7 +234,7 @@ const modalOneActive = ref(false);
             v-model="customElementsForm.file"
             color="contrast"
             label="upload file"
-            @change="onFileChange($event)"
+            @change="onFileChange($event, true)"
           />
         </div>
         <BaseDivider />
@@ -252,22 +280,98 @@ const modalOneActive = ref(false);
               placeholder="discounted price (optional)"
               type="number"
             />
+
+            <FormFilePicker
+              v-model="customElementsForm.file"
+              color="contrast"
+              label="upload file"
+              @change="onFileChange($event)"
+            />
           </FormField>
         </CardBoxModal>
 
         <div class="space-y-3">
           <div class="font-bold">Product options</div>
-          <TableList
+          <!-- <TableList
             v-if="form.product.productOption.length > 0"
             :data-table="form.product.productOption"
             @menu-delete-data="deleteProductOption"
-          />
+          /> -->
+
+          <div class="w-full overflow-x-auto relative shadow-md sm:rounded-lg">
+            <table class="text-sm text-left text-gray-500 dark:text-gray-400">
+              <tbody>
+                <tr
+                  v-for="(productOption, index) in form.product.productOption"
+                  :key="productOption.name"
+                  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                >
+                  <!-- image -->
+                  <td class="p-4 w-32">
+                    <img
+                      :src="imagePreviewOptionURL[index]"
+                      :alt="productOption.name"
+                      class="w-24 h-24 object-cover rounded-lg"
+                    />
+                  </td>
+
+                  <!-- product option name -->
+                  <td
+                    class="py-4 px-6 font-semibold text-gray-900 dark:text-white"
+                  >
+                    {{ productOption.name }}
+                  </td>
+
+                  <!-- price -->
+                  <td
+                    class="py-4 px-6 font-semibold text-gray-900 dark:text-white"
+                  >
+                    {{ productOption.price }}
+                  </td>
+
+                  <!-- discount code -->
+                  <td
+                    class="py-4 px-6 font-semibold text-gray-900 dark:text-white"
+                  >
+                    {{ productOption.discountPrice ?? "ไม่มีลดราคา" }}
+                  </td>
+
+                  <!-- button remove  -->
+                  <td class="py-4 px-6">
+                    <a
+                      href="#"
+                      class="font-medium text-red-600 dark:text-red-500 hover:underline"
+                      @click="deleteProductOption(index)"
+                      >Remove</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
           <BaseButton
             label="Add product options"
             color="contrast"
             @click="modalOneActive = true"
           />
         </div>
+
+        <!-- <div
+          v-if="imagePreviewOptionURL"
+          class="w-full mt-3 flex space-x-5 rounded-lg overflow-auto"
+        >
+          <div
+            v-for="productOptionimage in imagePreviewOptionURL"
+            :key="productOptionimage"
+          >
+            <img
+              :src="productOptionimage"
+              alt
+              class="w-36 h-36 object-cover rounded-lg"
+            />
+          </div>
+        </div> -->
 
         <!-- <TableList
             v-if="form.product.productOption.length > 0"

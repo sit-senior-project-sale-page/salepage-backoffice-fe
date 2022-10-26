@@ -17,7 +17,7 @@ function request(method) {
     };
     if (body) {
       requestOptions.headers["Content-Type"] = "application/json";
-      requestOptions.body = JSON.stringify(body);
+      requestOptions.body = body;
     }
     return fetch(`${baseUrl}/${url}`, requestOptions).then(handleResponse);
   };
@@ -25,7 +25,7 @@ function request(method) {
 
 // helper functions
 
-function authHeader() {
+export function authHeader() {
   // return auth header with jwt if user is logged in and request is to the api url
   const { user, accessToken } = useAuthStore();
 
