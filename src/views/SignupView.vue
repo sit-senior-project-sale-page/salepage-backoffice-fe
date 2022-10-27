@@ -1,5 +1,5 @@
 <template>
-  <div class="px-8 w-screen py-6 absolute">
+  <div class="px-8 py-6 absolute">
     <img src="/upforsale.png" class="h-14 md:h-20 mx-auto md:mx-0" />
   </div>
   <div class="flex flex-col pt-32 md:pt-24 mb-44 text-center">
@@ -803,6 +803,9 @@ button:hover {
   #state2-5 {
     width: 480px;
   }
+  /* #state4 {
+    width: 480px;
+  } */
 }
 .box {
   padding: 15px;
