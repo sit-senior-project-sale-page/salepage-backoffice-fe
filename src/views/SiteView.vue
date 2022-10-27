@@ -46,11 +46,11 @@ const previewProductImage = (image) => {
             <div class="h-40 w-40 rounded-lg mx-auto mb-3 overflow-hidden">
               <img
                 :src="previewProductImage(site.Product.ProductImage[0].data)"
-                class="hover:scale-110 transition-all"
+                class="hover:scale-110 transition-all cursor-pointer"
               />
             </div>
-            <div class="font-medium text-center capitalize">
-              {{ site.domain }}
+            <div class="font-medium text-center capitalize ">
+              <span class="cursor-pointer transition-all">{{ site.domain }}</span> 
             </div>
           </div>
         </div>

@@ -1,9 +1,13 @@
+<script setup>
+import FormField from "@/components/FormField.vue";
+import FormControl from "@/components/FormControl.vue";
+</script>
 <template>
   <!-- <div class="absolute top-0 w-screen h-screen overflow-auto z-20 bg pt-24"> -->
-  <div class="lg:p-5 lg:pt-14 mx-auto text-dark dark:text-slate-100">
+  <div class="lg:p-5 pt-10 mx-auto text-dark dark:text-slate-100">
     <div class="text-center">
       <div class="text-2xl font-bold">
-        Order <span style="color: #ffc24c">#3905483</span>
+        Order <span style="color: #ffb522">#3905483</span>
       </div>
       <div class="font-light text-sm text-gray-400">18 Sep 2022</div>
     </div>
@@ -37,6 +41,7 @@
           style="height: 1px; background-color: #e2e2e2"
         />
       </div>
+
       <div class="my-3">
         <div class="grid grid-cols-7 px-1">
           <div class="w-48 text-ellipsis col-span-4 pl-1">
@@ -78,9 +83,15 @@
         </div>
       </div>
     </div>
-    <div class="font-semibold my-10">
-      <div>parcel number: TH9201844813908409</div>
-      <div>shipping by: Kerry Express</div>
+    <div class="font-semibold my-10 space-y-5">
+      <div>
+        tracking number 
+        <FormControl placeholder="Fill the parcel tracking number" />
+      </div>
+      <div>
+        shipping by 
+        <FormControl placeholder="Ex. Kerry Express" />
+      </div>
     </div>
     <div class="mt-10 text-center font-extralight text-gray-400">
       terryofficial.th
@@ -88,7 +99,6 @@
     <div class="w-full my-5" style="height: 1px; background-color: #e2e2e2" />
     <button
       class="rounded-md text-white p-3 w-full text-center my-5"
-      style="background-color: #ffc24c"
     >
       send customer receipt
     </button>
@@ -98,5 +108,11 @@
 <style scoped>
 .bg {
   background-color: rgba(0, 0, 0, 0.6);
+}
+button{
+  background-color: #ffb522
+}
+button:hover {
+  background-color: #f6a709
 }
 </style>

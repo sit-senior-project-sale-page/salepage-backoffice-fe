@@ -180,7 +180,7 @@ const modalOneActive = ref(false);
     <SectionMain form class="mx-auto section" @submit.prevent="submit">
       <CardBox>
         <div class="text-center font-semibold text-lg pb-8">
-          Create SalePage
+          Edit SalePage
         </div>
 
         <FormField label="Website name">

@@ -62,6 +62,14 @@ const routes = [
   },
   {
     meta: {
+      title: "Edit Site",
+    },
+    path: "/edit-salepage",
+    name: "edit-salepage",
+    component: () => import("@/views/EditSite.vue"),
+  },
+  {
+    meta: {
       title: "Profile",
     },
     path: "/profile",

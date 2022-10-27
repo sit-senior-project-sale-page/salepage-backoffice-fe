@@ -13,7 +13,7 @@
     <div class="font-bold text-left text-sm my-auto">
       <div style="font-size: 10px">
         <span class="font-light text-black">order number:</span>
-        <span style="color: #ffc24c">3905483</span>
+        <span style="color: #ffb522">3905483</span>
       </div>
       <div
         class="font-semibold -mt-1 text-ellipsis whitespace-nowrap overflow-hidden"
@@ -31,7 +31,7 @@
           >
             TOTAL
           </div>
-          <div style="color: #ffc24c" class="font-semibold text-sm">1299 ฿</div>
+          <div style="color: #ffb522" class="font-semibold text-sm">1299 ฿</div>
         </div>
         <div class="text-center my-auto flex md:flex-col">
           <div
