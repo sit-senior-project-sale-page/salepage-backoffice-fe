@@ -168,6 +168,10 @@ const onFileChange = (e, type) => {
   }
 };
 
+const clearimg = () => {
+  imagePreviewURL.value.splice(0,imagePreviewURL.value.length);
+};
+
 const modalOneActive = ref(false);
 </script>
 
@@ -214,30 +218,38 @@ const modalOneActive = ref(false);
               v-for="productimage in imagePreviewURL"
               :key="productimage"
               :src="productimage"
-              style="width: 145px; height: 145px;"
+              style="width: 145px; height: 145px"
               class="object-cover rounded-lg"
             />
-            <!-- </div> -->
+          </div>
 
-            <!-- <img
+          <!-- <img
             :src="productimages[0].name"
             alt
             class="w-36 h-36 object-cover rounded-lg"
           /> -->
-            <!-- <img
+          <!-- <img
             v-for="productimage in productimages" :key="productimage"
             :src="productimage"
             alt
             class="w-36 h-36 object-cover rounded-lg"
           /> -->
+          <!-- </div> -->
+          <div class="flex space-x-5">
+            <FormFilePicker
+              v-model="customElementsForm.file"
+              color="contrast"
+              label="upload product photos"
+              @change="onFileChange($event, true)"
+            />
+            <BaseButton
+              v-if="imagePreviewURL.length>0"
+              label="Clear"
+              outline
+              color="contrast"
+              @click="clearimg"
+            />
           </div>
-
-          <FormFilePicker
-            v-model="customElementsForm.file"
-            color="contrast"
-            label="upload file"
-            @change="onFileChange($event, true)"
-          />
         </div>
         <BaseDivider />
 
@@ -286,7 +298,7 @@ const modalOneActive = ref(false);
             <FormFilePicker
               v-model="customElementsForm.file"
               color="contrast"
-              label="upload file"
+              label="upload option photo"
               @change="onFileChange($event)"
             />
           </FormField>
@@ -438,7 +450,7 @@ export default {
     width: 860px;
   }
 }
-.productimg{
+.productimg {
   width: 145px !important;
   height: 145px !important;
 }
