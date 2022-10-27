@@ -205,17 +205,19 @@ const modalOneActive = ref(false);
             <div class="mt-auto">Product Photos</div>
           </div>
 
-          <div
+          <!-- <div
             v-if="imagePreviewURL"
             class="w-full flex space-x-5 rounded-lg overflow-auto"
-          >
-            <div v-for="productimage in imagePreviewURL" :key="productimage">
-              <img
-                :src="productimage"
-                alt
-                class="w-36 h-36 object-cover rounded-lg"
-              />
-            </div>
+          > -->
+          <div class="w-full flex space-x-5 rounded-lg overflow-x-auto">
+            <img
+              v-for="productimage in imagePreviewURL"
+              :key="productimage"
+              :src="productimage"
+              style="width: 145px; height: 145px;"
+              class="object-cover rounded-lg"
+            />
+            <!-- </div> -->
 
             <!-- <img
             :src="productimages[0].name"
@@ -435,5 +437,9 @@ export default {
   .section {
     width: 860px;
   }
+}
+.productimg{
+  width: 145px !important;
+  height: 145px !important;
 }
 </style>
