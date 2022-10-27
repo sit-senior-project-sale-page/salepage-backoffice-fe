@@ -1,4 +1,7 @@
 <template>
+  <div class="px-8 w-screen py-6 absolute">
+    <img src="/upforsale.png" class="h-14 md:h-20 mx-auto md:mx-0" />
+  </div>
   <div class="flex flex-col pt-32 md:pt-24 mb-44 text-center">
     <div class="font-semibold text-xl" v-if="state == 1">
       Start your membership
@@ -7,10 +10,8 @@
     <div class="font-semibold text-xl" v-if="state == 2.5">
       Let's get rich ;D
     </div>
-    <!-- <div class="font-semibold text-xl" v-if="state == 3">
-      Just a few more step!
-    </div> -->
     <div class="font-semibold text-xl" v-if="state == 3">Last step!</div>
+    <div class="font-semibold text-xl" v-if="state == 4">Success 🎉</div>
 
     <div class="flex justify-center mt-5" style="transition-duration: 0.25s">
       <div
@@ -94,7 +95,6 @@
       >
         <span class="mx-auto my-auto">✔</span>
       </div>
-      
     </div>
     <div
       class="flex justify-center mt-5 -ml-8 space-x-12 md:space-x-28"
@@ -120,7 +120,7 @@
         @input="validateid()"
         v-model="id"
         minlength="6"
-        maxlength="100"
+        maxlength="20"
         type="text"
         placeholder="Username"
         name="id"
@@ -136,7 +136,7 @@
         @input="validatepw()"
         v-model="pw"
         minlength="6"
-        maxlength="100"
+        maxlength="20"
         type="password"
         placeholder="Password"
         name="password"
@@ -172,16 +172,49 @@
       class="flex flex-col mt-20 px-5 mx-auto text-left w-screen"
       style="transition-duration: 0.25s"
     >
-      <div class="text-3xl font-semibold">Shop information</div>
-      <div class="mt-3 text-sm font-light">
-        Don't worry, we won't do anything <br />
-        intruding on your privacy.
+      <div class="flex justify-between mb-3">
+        <div>
+          <div class="text-3xl font-semibold">Shop information</div>
+          <div class="mt-3 text-sm font-light">
+            Don't worry, we won't do anything <br />
+            intruding on your privacy.
+          </div>
+        </div>
+        <div>
+          <div
+            @click="selectImage"
+            class="h-20 w-20 rounded-full flex cursor-pointer"
+            style="border-width: 1.5px; border-color: #000000"
+            :style="{
+              'background-image': `url(${shopImage})`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              'background-position': 'center',
+            }"
+          >
+            <div v-if="shopImage == 'null'" class="mx-auto my-auto text-sm">
+              add photo
+            </div>
+          </div>
+          <input
+            ref="fileInput"
+            id="file"
+            type="file"
+            @input="pickImage"
+            accept="image/*"
+            class="p-1.5 rounded-lg w-4/6 ml-8 text-white hidden"
+            style="background-color: #70b6b2"
+          />
+          <!-- <div class="h-5 text-center">
+            <span class="text-red-500 text-xs"> * please fill</span>
+          </div> -->
+        </div>
       </div>
       <input
         @input="validateshopname"
         v-model="shopname"
-        minlength="6"
-        maxlength="100"
+        minlength="1"
+        maxlength="50"
         type="text"
         placeholder="shop name"
         name="shopname"
@@ -199,8 +232,8 @@
           <input
             @input="validatefname"
             v-model="fname"
-            minlength="6"
-            maxlength="100"
+            minlength="1"
+            maxlength="20"
             type="text"
             placeholder="first name"
             name="first name"
@@ -217,8 +250,8 @@
           <input
             @input="validatelname"
             v-model="lname"
-            minlength="6"
-            maxlength="100"
+            minlength="1"
+            maxlength="20"
             type="text"
             placeholder="last name"
             name="last name"
@@ -236,7 +269,7 @@
         @input="validateemail"
         v-model="email"
         minlength="6"
-        maxlength="100"
+        maxlength="50"
         type="email"
         placeholder="E-mail"
         name="email"
@@ -252,7 +285,7 @@
         @input="validatephone"
         v-model="phone"
         minlength="6"
-        maxlength="100"
+        maxlength="20"
         type="tel"
         pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
         placeholder="phone number"
@@ -269,7 +302,7 @@
         @input="validatelink"
         v-model="link"
         minlength="6"
-        maxlength="100"
+        maxlength="200"
         type="text"
         placeholder="link of shop social media account or contact"
         name="link"
@@ -334,7 +367,7 @@
       <select
         v-model="bank"
         minlength="6"
-        maxlength="100"
+        maxlength="30"
         type="text"
         name="bankac"
         aria-placeholder="hi"
@@ -422,14 +455,14 @@
         <div class="grid grid-cols-3">
           <div></div>
           <div
-            v-if="plan == 'ms'"
+            v-if="plan == 'single'"
             class="p-2 md:px-4 mx-auto rounded-lg text-center text-white font-semibold cursor-pointer plan1"
           >
             Single Plan
           </div>
           <div
-            v-if="plan != 'ms'"
-            @click="plan = 'ms'"
+            v-if="plan != 'single'"
+            @click="plan = 'single'"
             class="p-2 md:px-4 mx-auto rounded-lg text-center text-white font-semibold cursor-pointer deselect1"
           >
             Single Plan
@@ -452,13 +485,13 @@
         <div class="grid grid-cols-3 my-5">
           <div class="font-light my-auto">Price</div>
           <div
-            v-if="plan == 'ms'"
+            v-if="plan == 'single'"
             class="mx-auto rounded-lg text-center text-xl font-medium plan2"
           >
             299 THB
           </div>
           <div
-            v-if="plan != 'ms'"
+            v-if="plan != 'single'"
             class="mx-auto rounded-lg text-center text-xl font-medium deselect2"
           >
             299 THB
@@ -485,13 +518,13 @@
         <div class="grid grid-cols-3 mt-5">
           <div class="font-light my-auto">SalePage Amount</div>
           <div
-            v-if="plan == 'ms'"
+            v-if="plan == 'single'"
             class="mx-auto rounded-lg text-center text-xl font-medium plan2"
           >
             1
           </div>
           <div
-            v-if="plan != 'ms'"
+            v-if="plan != 'single'"
             class="mx-auto rounded-lg text-center text-xl font-medium deselect2"
           >
             1
@@ -525,11 +558,45 @@
     </div>
 
     <div
-    v-if="state == 4"
-      class="mx-auto text-gray-400 hover:text-gray-600 px-3 py-2 mt-5 cursor-pointer"
-      @click="state -= 1"
+      id="state4"
+      v-if="state == 4"
+      class="flex flex-col mt-20 mx-auto text-left px-5"
+      style="transition-duration: 0.25s"
     >
-      Back
+      <div
+        class="p-8 w-56 text-center rounded-3xl"
+        style="background-color: #f5f5f5"
+      >
+        <div
+          class="rounded-full mx-auto"
+          style="height: 150px; width: 150px"
+          :style="{
+            'background-image': `url(${shopImage})`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            'background-position': 'center',
+          }"
+        />
+        <div
+          class="text-lg font-bold pt-3 w-full text-ellipsis overflow-hidden whitespace-nowrap"
+        >
+          {{ shopname }} 
+        </div>
+        <div class="w-full text-ellipsis overflow-hidden whitespace-nowrap">
+          {{ id }}
+        </div>
+      </div>
+      <button
+        class="p-4 text-white rounded-md font-medium mt-8 mx-auto"
+      >
+        Done
+      </button>
+      <div
+        class="mx-auto text-gray-400 hover:text-gray-600 px-3 py-2 mt-5 cursor-pointer"
+        @click="state -= 1"
+      >
+        Back
+      </div>
     </div>
   </div>
 </template>
@@ -545,6 +612,8 @@ export default {
       id: "",
       pw: "",
 
+      shopImage: "null",
+      selectedImage: null,
       shopname: "",
       fname: "",
       lname: "",
@@ -556,7 +625,7 @@ export default {
       acnum: "",
       acname: "",
 
-      plan: "ms",
+      plan: "single",
 
       validate: {
         id: true,
@@ -578,6 +647,22 @@ export default {
     };
   },
   methods: {
+    selectImage() {
+      this.$refs.fileInput.click();
+    },
+    pickImage(event) {
+      let input = this.$refs.fileInput;
+      let file = input.files;
+      if (file && file[0]) {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+          this.shopImage = e.target.result;
+        };
+        reader.readAsDataURL(file[0]);
+        this.$emit("input", file[0]);
+      }
+      this.shopImage = event.target.files[0];
+    },
     validateid() {
       if (this.id.length >= 6) {
         this.validate.id = true;
