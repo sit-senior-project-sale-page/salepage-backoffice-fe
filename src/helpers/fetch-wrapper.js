@@ -17,7 +17,7 @@ function request(method) {
     };
     if (body) {
       requestOptions.headers["Content-Type"] = "application/json";
-      requestOptions.body = body;
+      requestOptions.body = JSON.stringify(body);
     }
     return fetch(`${baseUrl}/${url}`, requestOptions).then(handleResponse);
   };
