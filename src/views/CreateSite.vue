@@ -169,7 +169,7 @@ const onFileChange = (e, type) => {
 };
 
 const clearimg = () => {
-  imagePreviewURL.value.splice(0,imagePreviewURL.value.length);
+  imagePreviewURL.value.splice(0, imagePreviewURL.value.length);
 };
 
 const modalOneActive = ref(false);
@@ -243,7 +243,7 @@ const modalOneActive = ref(false);
               @change="onFileChange($event, true)"
             />
             <BaseButton
-              v-if="imagePreviewURL.length>0"
+              v-if="imagePreviewURL.length > 0"
               label="Clear"
               outline
               color="contrast"
@@ -273,6 +273,7 @@ const modalOneActive = ref(false);
           title="Product option"
           button-label="Confirm"
           has-cancel
+          has-confirm
           @confirm="addProductOption"
         >
           <FormField>
@@ -400,7 +401,7 @@ const modalOneActive = ref(false);
             />
           </CardBox>
         </FormField> -->
-        <div class="w-full flex justify-end text-">
+        <div class="w-full flex justify-end">
           <BaseButton
             type="submit"
             color="info"

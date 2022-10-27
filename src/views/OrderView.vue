@@ -32,7 +32,13 @@ const modalOneActive = ref(false);
       </CardBox>
     </SectionMain>
 
-    <CardBoxModal v-model="modalOneActive" button-label="Confirm" class="rounded-none">
+    <CardBoxModal
+      v-model="modalOneActive"
+      button-label="Confirm"
+      class="rounded-none"
+      :has-confirm="false"
+      :has-cancle="false"
+    >
       <div class="overflow-hidden mx-2">
         <OrderDetail />
       </div>

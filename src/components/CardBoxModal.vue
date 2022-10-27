@@ -21,6 +21,7 @@ const props = defineProps({
     default: "Done",
   },
   hasCancel: Boolean,
+  hasConfirm: Boolean,
   modelValue: {
     type: [String, Number, Boolean],
     default: null,
@@ -72,9 +73,14 @@ window.addEventListener("keydown", (e) => {
         <slot />
       </div>
 
-      <!-- <template #footer>
+      <template #footer>
         <BaseButtons>
-          <BaseButton :label="buttonLabel" :color="button" @click="confirm" />
+          <BaseButton
+            v-if="hasConfirm"
+            :label="buttonLabel"
+            :color="button"
+            @click="confirm"
+          />
           <BaseButton
             v-if="hasCancel"
             label="Cancel"
@@ -83,7 +89,7 @@ window.addEventListener("keydown", (e) => {
             @click="cancel"
           />
         </BaseButtons>
-      </template> -->
+      </template>
     </CardBox>
   </OverlayLayer>
 </template>
