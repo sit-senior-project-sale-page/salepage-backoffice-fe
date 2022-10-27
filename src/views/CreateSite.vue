@@ -67,19 +67,6 @@ const reset = () => {
 };
 
 const submit = async () => {
-  console.log(
-    "🚀 ~ file: CreateSite.vue ~ line 78 ~ submit ~ form",
-    JSON.stringify(form)
-  );
-
-  console.log(
-    "🚀 ~ file: CreateSite.vue ~ line 77 ~ submit ~ fileProduct",
-    fileProduct.value
-  );
-  console.log(
-    "🚀 ~ file: CreateSite.vue ~ line 78 ~ submit ~ fileProductOption",
-    fileProductOption.value
-  );
   if (!form.domain) {
     Swal.fire({
       title: "ข้อมูลไม่ครบ",
@@ -297,7 +284,7 @@ const modalOneActive = ref(false);
             />
 
             <img
-            v-if="fileProductOption.values.length>0"
+              v-if="fileProductOption.values.length > 0"
               :src="fileProductOption.values"
               style="width: 145px; height: 145px"
               class="object-cover rounded-lg"

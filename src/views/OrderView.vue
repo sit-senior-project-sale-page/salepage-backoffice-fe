@@ -7,10 +7,18 @@ import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.
 import TableSampleDynamic from "../components/TableSampleDynamic.vue";
 import OrderDetail from "../components/OrderDetail.vue";
 import OrderCard from "../components/OrderCard.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import CardBoxModal from "@/components/CardBoxModal.vue";
-
+import { useMainStore } from "@/stores/main";
 const modalOneActive = ref(false);
+
+defineProps({
+  siteId: Number,
+});
+const mainStore = useMainStore();
+mainStore.fetch("order", "order");
+
+const orders = computed(() => mainStore.order);
 </script>
 
 <template>
@@ -25,7 +33,9 @@ const modalOneActive = ref(false);
         <div class="text-center font-semibold text-lg pb-8">Orders</div>
         <!-- <div class="grid col2" data-fetch="order" v-for="order in order" :key="order"> -->
         <div class="grid col2">
-          <OrderCard @click="modalOneActive = true" />
+          <div v-for="order in orders" :key="order.id">
+            <OrderCard :order-props="order" @click="modalOneActive = true" />
+          </div>
         </div>
 
         <!-- <TableSampleDynamic checkable data-fetch="order" /> -->

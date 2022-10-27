@@ -1,3 +1,12 @@
+<script setup>
+import { ref, toRefs } from "vue";
+const props = defineProps({
+  orderProps: Object,
+});
+
+const { orderProps } = toRefs(props);
+const order = ref(orderProps.value);
+</script>
 <template>
   <div
     style="border-width: 1px; border-color: #dfdfdf; height: 70px"
@@ -7,19 +16,22 @@
       class="font-bold text-center text-xs my-auto text-black"
       style="font-size: 10px"
     >
-      <div>18 Sep</div>
-      <div class="-mt-1">2022</div>
+      <div>
+        {{ new Date(order.createdAt).getDate() }}/
+        {{ new Date(order.createdAt).getMonth() }}/
+      </div>
+      <div class="-mt-1">{{ new Date(order.createdAt).getFullYear() }}</div>
     </div>
     <div class="font-bold text-left text-sm my-auto">
       <div style="font-size: 10px">
         <span class="font-light text-black">order number:</span>
-        <span style="color: #ffb522">3905483</span>
+        <span style="color: #ffb522">{{ order.uid }}</span>
       </div>
       <div
         class="font-semibold -mt-1 text-ellipsis whitespace-nowrap overflow-hidden"
         style="color: #0f385f; width: 136px"
       >
-        Jiraphat Phulprapha
+        {{ order.customerName }}
       </div>
     </div>
     <div class="flex">
@@ -31,7 +43,9 @@
           >
             TOTAL
           </div>
-          <div style="color: #ffb522" class="font-semibold text-sm">1299 ฿</div>
+          <div style="color: #ffb522" class="font-semibold text-sm">
+            {{ order.totalAmount }} ฿
+          </div>
         </div>
         <div class="text-center my-auto flex md:flex-col">
           <div
@@ -41,7 +55,7 @@
             PARCEL STATUS
           </div>
           <div style="color: #35c502" class="font-semibold text-sm">
-            SHIPPED
+            {{ order.status }}
           </div>
         </div>
       </div>
