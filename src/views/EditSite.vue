@@ -179,9 +179,7 @@ const modalOneActive = ref(false);
   <LayoutAuthenticated>
     <SectionMain form class="mx-auto section" @submit.prevent="submit">
       <CardBox>
-        <div class="text-center font-semibold text-lg pb-8">
-          Edit SalePage
-        </div>
+        <div class="text-center font-semibold text-lg pb-8">Edit SalePage</div>
 
         <FormField label="Website name">
           <FormControl
@@ -297,7 +295,7 @@ const modalOneActive = ref(false);
             />
 
             <img
-            v-if="fileProductOption.values.length>0"
+              v-if="fileProductOption.values.length > 0"
               :src="fileProductOption.values"
               style="width: 145px; height: 145px"
               class="object-cover rounded-lg"
@@ -408,7 +406,8 @@ const modalOneActive = ref(false);
             />
           </CardBox>
         </FormField> -->
-        <div class="w-full flex justify-end">
+        <div class="w-full flex justify-end space-x-5">
+          <BaseButton outline color="info" label="cancel" @click="submit" />
           <BaseButton
             type="submit"
             color="info"
