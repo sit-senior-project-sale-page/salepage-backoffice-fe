@@ -10,7 +10,6 @@ import OrderCard from "../components/OrderCard.vue";
 import { ref, computed } from "vue";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import { useMainStore } from "@/stores/main";
-const modalOneActive = ref(false);
 
 defineProps({
   siteId: Number,
@@ -19,6 +18,13 @@ const mainStore = useMainStore();
 mainStore.fetch("order", "order");
 
 const orders = computed(() => mainStore.order);
+
+const orderClickById = ref({});
+const modalOneActive = ref(false);
+const click = (order) => {
+  orderClickById.value = order;
+  modalOneActive.value = true;
+};
 </script>
 
 <template>
@@ -34,7 +40,7 @@ const orders = computed(() => mainStore.order);
         <!-- <div class="grid col2" data-fetch="order" v-for="order in order" :key="order"> -->
         <div class="grid col2">
           <div v-for="order in orders" :key="order.id">
-            <OrderCard :order-props="order" @click="modalOneActive = true" />
+            <OrderCard :order-props="order" @click="click(order)" />
           </div>
         </div>
 
@@ -49,8 +55,8 @@ const orders = computed(() => mainStore.order);
       :has-confirm="false"
       :has-cancle="false"
     >
-      <div class="overflow-hidden mx-2">
-        <OrderDetail />
+      <div v-if="orderClickById.id" class="overflow-hidden mx-2">
+        <OrderDetail :order-props="orderClickById" />
       </div>
     </CardBoxModal>
   </LayoutAuthenticated>
