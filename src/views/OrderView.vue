@@ -1,10 +1,7 @@
 <script setup>
-import { mdiTableBorder } from "@mdi/js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBox from "@/components/CardBox.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
-import TableSampleDynamic from "../components/TableSampleDynamic.vue";
 import OrderDetail from "../components/OrderDetail.vue";
 import OrderCard from "../components/OrderCard.vue";
 import { ref, computed } from "vue";
@@ -37,14 +34,11 @@ const click = (order) => {
     >
       <CardBox class="mb-6">
         <div class="text-center font-semibold text-lg pb-8">Orders</div>
-        <!-- <div class="grid col2" data-fetch="order" v-for="order in order" :key="order"> -->
         <div class="grid col2">
           <div v-for="order in orders" :key="order.id">
             <OrderCard :order-props="order" @click="click(order)" />
           </div>
         </div>
-
-        <!-- <TableSampleDynamic checkable data-fetch="order" /> -->
       </CardBox>
     </SectionMain>
 

@@ -2,10 +2,10 @@
 import SectionMain from "@/components/SectionMain.vue";
 import CardBox from "@/components/CardBox.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import TableSampleDynamic from "../components/TableSampleDynamic.vue";
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import Swal from "sweetalert2";
-
+import router from "../router";
+import { RouterLink } from "vue-router";
 import { useMainStore } from "@/stores/main";
 
 const mainStore = useMainStore();
@@ -25,10 +25,7 @@ mainStore
   });
 
 const sites = computed(() => mainStore.site);
-
-const previewProductImage = (image) => {
-  return "data:image/png;base64," + image;
-};
+console.log("🚀 ~ file: SiteView.vue ~ line 27 ~ sites", sites);
 </script>
 
 <template>
@@ -44,18 +41,28 @@ const previewProductImage = (image) => {
         <div class="grid md:grid-cols-3 gap-y-8">
           <div v-for="site in sites" :key="site.id">
             <div class="h-40 w-40 rounded-lg mx-auto mb-3 overflow-hidden">
-              <img
-                :src="previewProductImage(site.Product.ProductImage[0].data)"
-                class="hover:scale-110 transition-all cursor-pointer"
-              />
+              <RouterLink :to="`/site/${site.id}`">
+                <img
+                  :src="site.Product.ProductImage[0].data"
+                  class="hover:scale-110 transition-all cursor-pointer"
+                />
+              </RouterLink>
             </div>
-            <div class="font-medium text-center capitalize ">
-              <span class="cursor-pointer transition-all">{{ site.domain }}</span> 
+            <div class="font-medium text-center capitalize">
+              <span class="cursor-pointer transition-all">{{
+                site.domain
+              }}</span
+              ><br />
+              <RouterLink
+                :to="`/edit/site/${site.id}`"
+                class="my-1 inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+              >
+                Edit
+              </RouterLink>
             </div>
           </div>
         </div>
       </CardBox>
-      <!-- <TableSampleDynamic data-fetch="site" /> -->
     </SectionMain>
   </LayoutAuthenticated>
 </template>

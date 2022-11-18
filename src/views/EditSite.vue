@@ -1,135 +1,247 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, computed } from "vue";
+import { storeToRefs } from "pinia";
 import { useMainStore } from "@/stores/main";
+import { useSiteStore } from "@/stores/site";
 import { mdiAccount, mdiDomain, mdiRenameBox, mdiCards } from "@mdi/js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBox from "@/components/CardBox.vue";
 import CardBoxModal from "@/components/CardBoxModal.vue";
-import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
 import FormFilePicker from "@/components/FormFilePicker.vue";
 import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
 import BaseDivider from "@/components/BaseDivider.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import BaseButtons from "@/components/BaseButtons.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
-import TableList from "@/components/TableList.vue";
-
-import { Form, Field } from "vee-validate";
+import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
-import * as Yup from "yup";
+import { update } from "lodash";
 
-const mainStore = useMainStore();
+const route = useRoute();
+const { site, loading, error } = storeToRefs(useSiteStore());
 
-const initProductOptionData = {
+const { fetchSiteById, updateSite } = useSiteStore();
+
+fetchSiteById(route.params.id);
+
+const updateProductOption = ref({});
+
+const deleteProductOptionIds = ref([]);
+const updateProductOptionImageIds = ref([]);
+const deleteProductImageIds = ref([]);
+
+const updateProductImage = ref([]);
+const updateProductOptionImage = ref([]);
+const createProductOptionImage = ref([]);
+const imagePreviewURL = ref([]);
+const imagePreviewOptionURL = ref();
+const imageOnlyPreviewOptionURL = ref();
+
+const modelEditProductOption = ref(false);
+const modelCreateProductOption = ref(false);
+
+let productOption = reactive({
   name: null,
   price: null,
   discountPrice: null,
-};
-let productOption = reactive({ ...initProductOptionData });
-
-const imagePreviewURL = ref([]);
-const imagePreviewOptionURL = ref([]);
-
-const initProduct = {
-  domain: "",
-  lineAccountId: "",
-  messengerAccountId: "",
-  product: {
-    name: "",
-    detail: "",
-    discountCode: "",
-    productOption: [],
-  },
-};
-
-const form = reactive({
-  ...initProduct,
+  quantity: null,
+  dataImage: "",
 });
 
-const fileProduct = ref([]);
-const fileProductOption = ref([]);
-
-const customElementsForm = reactive({
-  checkbox: ["lorem"],
-  radio: "one",
-  switch: ["one"],
-  file: null,
-});
-
-const deleteProductOption = (event, index) => {
-  form.product.productOption.splice(index, 1);
+const deleteProductImage = (index, productImageId) => {
+  site.value.Product.ProductImage.splice(index, 1);
+  if (productImageId) {
+    deleteProductImageIds.value.push(productImageId);
+  }
 };
 
-const reset = () => {
-  Object.assign(form, { ...initProduct });
+const deleteProductOption = (index, productOptionId) => {
+  site.value.Product.ProductOption.splice(index, 1);
+  deleteProductOptionIds.value.push(productOptionId);
+};
+
+const editProductOption = (index, data) => {
+  modelEditProductOption.value = true;
+  updateProductOption.value = data;
+};
+
+const saveEditProductOption = (productOptionImageId) => {
+  if (imageOnlyPreviewOptionURL.value) {
+    updateProductOption.value.dataImage = imageOnlyPreviewOptionURL.value;
+    imageOnlyPreviewOptionURL.value = "";
+    updateProductOptionImageIds.value.push(productOptionImageId);
+  }
+};
+
+const addProductOption = () => {
+  site.value.Product.ProductOption.push({
+    ...productOption,
+    dataImage: imagePreviewOptionURL.value,
+    type: "create",
+  });
+  Object.assign(productOption, {
+    name: null,
+    price: null,
+    discountPrice: null,
+    quantity: null,
+  });
+
+  imagePreviewOptionURL.value = "";
+};
+
+const onFileChange = (e, type) => {
+  e.preventDefault();
+
+  var files = e.target.files || e.dataTransfer.files;
+  if (!files.length) return;
+  if (files) {
+    if (type == "editProductImage") {
+      imagePreviewURL.value.push(URL.createObjectURL(files[0]));
+      updateProductImage.value.push(files[0]);
+      console.log("updateProductImage", updateProductImage);
+      site.value.Product.ProductImage.push({
+        data: URL.createObjectURL(files[0]),
+      });
+    } else if (type == "addProductOption") {
+      imagePreviewOptionURL.value = URL.createObjectURL(files[0]);
+      createProductOptionImage.value.push(files[0]);
+    } else {
+      updateProductOptionImage.value.push(files[0]);
+      imageOnlyPreviewOptionURL.value = URL.createObjectURL(
+        files[0]
+      ).toString();
+      updateProductOption.value.dataImage = "";
+    }
+    URL.revokeObjectURL(files);
+  }
 };
 
 const submit = async () => {
-  console.log(
-    "🚀 ~ file: CreateSite.vue ~ line 78 ~ submit ~ form",
-    JSON.stringify(form)
-  );
-
-  console.log(
-    "🚀 ~ file: CreateSite.vue ~ line 77 ~ submit ~ fileProduct",
-    fileProduct.value
-  );
-  console.log(
-    "🚀 ~ file: CreateSite.vue ~ line 78 ~ submit ~ fileProductOption",
-    fileProductOption.value
-  );
-  if (!form.domain) {
+  if (!site.value.Product.detail) {
     Swal.fire({
       title: "ข้อมูลไม่ครบ",
-      text: "โปรดกรอกโดเมนเว็ยไซต์",
+      text: "โปรดกรอกข้อมูลสินค้า",
       icon: "warning",
       toast: true,
       position: "top-right",
     });
-  } else if (!form.product.name) {
+  } else if (site.value.Product.ProductImage.length < 1) {
     Swal.fire({
       title: "ข้อมูลไม่ครบ",
-      text: "โปรดกรอกชื่อสินค้า",
+      text: "โปรดเพิ่มภาพสินค้าอย่างน้อยหนึ่ง",
       icon: "warning",
       toast: true,
       position: "top-right",
     });
-  } else if (!form.product.detail) {
+  } else if (site.value.Product.ProductOption.length < 1) {
     Swal.fire({
       title: "ข้อมูลไม่ครบ",
-      text: "โปรดกรอกรายละเอียดสินค้า",
+      text: "โปรดกรอกตัวเลือกสินค้าอย่างน้อยหนึ่ง",
       icon: "warning",
       toast: true,
       position: "top-right",
     });
   } else {
     const formData = new FormData();
-    for (let index = 0; index < fileProduct.value.length; index++) {
-      const fp = fileProduct.value[index];
-      console.log("🚀 ~ file: CreateSite.vue ~ line 111 ~ submit ~ fp", fp);
-      formData.append("product", fp);
+
+    //data
+    console.log("updateProductOption", site.value.Product);
+    console.log("updateProductOptionImageIds", updateProductOptionImageIds);
+    console.log("deleteProductOptionIds", deleteProductOptionIds);
+    console.log("deleteProductImageIds", deleteProductImageIds);
+    //files
+    console.log("updateProductImage", updateProductImage);
+    console.log("updateProductOptionImage", updateProductOptionImage);
+    console.log("updateProductOptionImage", updateProductOptionImage);
+
+    formData.append(
+      "updateProductOption",
+      JSON.stringify({
+        detail: site.value.Product.detail,
+        discountCode: site.value.Product.discountCode,
+        productOption: site.value.Product.ProductOption.filter(
+          (t) => !t.type
+        ).map((t) => {
+          return {
+            id: t.id,
+            name: t.name,
+            price: t.price,
+            quantity: t.quantity,
+            discountPrice: t.discountPrice,
+          };
+        }),
+      })
+    );
+
+    formData.append(
+      "createProductOption",
+      JSON.stringify({
+        productOption: site.value.Product.ProductOption.filter(
+          (t) => t.type === "create"
+        ).map((t) => {
+          return {
+            name: t.name,
+            price: t.price,
+            quantity: t.quantity,
+            discountPrice: t.discountPrice,
+          };
+        }),
+      })
+    );
+
+    formData.append(
+      "deleteProductImageIds",
+      JSON.stringify(deleteProductImageIds.value)
+    );
+    formData.append(
+      "deleteProductOptionIds",
+      JSON.stringify(deleteProductOptionIds.value)
+    );
+    formData.append(
+      "updateProductOptionImageIds",
+      JSON.stringify(updateProductOptionImageIds.value)
+    );
+    for (let index = 0; index < updateProductImage.value.length; index++) {
+      const createProductImage = updateProductImage.value[index];
+      formData.append("createProductImage", createProductImage);
     }
 
-    for (let index = 0; index < fileProductOption.value.length; index++) {
-      const fpo = fileProductOption.value[index];
-      console.log("🚀 ~ file: CreateSite.vue ~ line 116 ~ submit ~ fp", fpo);
+    for (
+      let index = 0;
+      index < updateProductOptionImage.value.length;
+      index++
+    ) {
+      const updateProductOptionImagee = updateProductOptionImage.value[index];
 
-      formData.append("productOption", fpo);
+      formData.append("updateProductOptionImage", updateProductOptionImagee);
     }
-    formData.append("site", JSON.stringify({ ...form }));
-    const response = await mainStore.postFormData("site", formData);
-    console.log(response);
-    if (response) {
+
+    for (
+      let index = 0;
+      index < createProductOptionImage.value.length;
+      index++
+    ) {
+      const createProductOptionImagee = createProductOptionImage.value[index];
+
+      formData.append("createProductOptionImage", createProductOptionImagee);
+    }
+
+    console.log("formData", formData);
+
+    const response = await updateSite(`product/${route.params.id}`, formData);
+    console.log(
+      "🚀 ~ file: EditSite.vue ~ line 232 ~ submit ~ response",
+      response
+    );
+
+    if (response.data?.isSuccess) {
       Swal.fire({
         title: "Success",
         text: "เพิ่มเว็บไซต์สำเร็จ",
         icon: "success",
         toast: true,
         position: "top-right",
-      });
-      Object.assign(form, initProduct);
+      }).then(fetchSiteById(route.params.id));
     } else {
       Swal.fire({
         title: "Error",
@@ -142,103 +254,64 @@ const submit = async () => {
   }
 };
 
-const addProductOption = () => {
-  const productOptionData = {
-    ...productOption,
-  };
-
-  form.product.productOption.push(productOptionData);
-  Object.assign(productOption, initProductOptionData);
-};
-
-const onFileChange = (e, type) => {
-  e.preventDefault();
-
-  var files = e.target.files || e.dataTransfer.files;
-  if (!files.length) return;
-  if (files) {
-    if (type) {
-      imagePreviewURL.value.push(URL.createObjectURL(files[0]));
-      fileProduct.value.push(files[0]);
-    } else {
-      imagePreviewOptionURL.value.push(URL.createObjectURL(files[0]));
-      fileProductOption.value.push(files[0]);
-    }
-    URL.revokeObjectURL(files);
-  }
-};
-
 const clearimg = () => {
   imagePreviewURL.value.splice(0, imagePreviewURL.value.length);
 };
-
-const modalOneActive = ref(false);
 </script>
 
 <template>
   <LayoutAuthenticated>
-    <SectionMain form class="mx-auto section" @submit.prevent="submit">
+    <p v-if="loading" class="text-center font-semibold text-lg pb-8">
+      Loading Data....
+    </p>
+    <SectionMain v-else form class="mx-auto w-full" @submit.prevent="submit">
       <CardBox>
         <div class="text-center font-semibold text-lg pb-8">Edit SalePage</div>
+        <div>
+          <FormField label="Website name">
+            <FormControl
+              :icon="mdiDomain"
+              :placeholder="site.domain"
+              :disabled="true"
+            />
+          </FormField>
 
-        <FormField label="Website name">
-          <FormControl
-            v-model="form.domain"
-            :icon="mdiDomain"
-            placeholder="xxxx.upforsale.shop"
-          />
-        </FormField>
-
-        <FormField label="Product">
-          <FormControl
-            v-model="form.product.name"
-            :icon="mdiRenameBox"
-            placeholder="Product name"
-          />
-          <FormControl
-            v-model="form.product.discountCode"
-            :icon="mdiCards"
-            placeholder="Discount code"
-          />
-        </FormField>
+          <FormField label="Product">
+            <FormControl
+              :icon="mdiRenameBox"
+              :placeholder="site.Product.name"
+              :disabled="true"
+            />
+            <FormControl
+              v-model="site.Product.discountCode"
+              :icon="mdiCards"
+              placeholder="Discount code"
+            />
+          </FormField>
+        </div>
+        <BaseDivider />
 
         <div class="space-y-5">
           <div class="font-bold flex">
             <div class="mt-auto">Product Photos</div>
           </div>
 
-          <!-- <div
-            v-if="imagePreviewURL"
-            class="w-full flex space-x-5 rounded-lg overflow-auto"
-          > -->
-          <div class="w-full flex space-x-5 rounded-lg overflow-x-auto">
+          <div class="w-full space-x-5">
             <img
-              v-for="productimage in imagePreviewURL"
+              v-for="(productimage, index) in site.Product?.ProductImage"
               :key="productimage"
-              :src="productimage"
+              :src="productimage.data"
               style="width: 145px; height: 145px"
-              class="object-cover rounded-lg"
+              class="object-cover rounded-lg flex"
+              @click="deleteProductImage(index, productimage.id)"
             />
           </div>
 
-          <!-- <img
-            :src="productimages[0].name"
-            alt
-            class="w-36 h-36 object-cover rounded-lg"
-          /> -->
-          <!-- <img
-            v-for="productimage in productimages" :key="productimage"
-            :src="productimage"
-            alt
-            class="w-36 h-36 object-cover rounded-lg"
-          /> -->
-          <!-- </div> -->
           <div class="flex space-x-5">
             <FormFilePicker
-              v-model="customElementsForm.file"
               color="contrast"
               label="upload product photos"
-              @change="onFileChange($event, true)"
+              @change="onFileChange($event, `editProductImage`)"
             />
             <BaseButton
               v-if="imagePreviewURL.length > 0"
@@ -249,29 +322,31 @@ const modalOneActive = ref(false);
             />
           </div>
         </div>
+
         <BaseDivider />
 
         <FormField
           label="Product detail"
           :help="
             'Your product detail ' +
-            form.product.detail.length +
+            site.Product?.detail.length +
             '/255 characters'
           "
         >
           <FormControl
-            v-model="form.product.detail"
+            v-model="site.Product.detail"
             type="textarea"
             placeholder="Explain your product detail"
           />
         </FormField>
 
         <CardBoxModal
-          v-model="modalOneActive"
-          title="Product option"
+          v-model="modelCreateProductOption"
+          title="Add Product option"
           button-label="Confirm"
           has-cancel
           has-confirm
+          button="success"
           @confirm="addProductOption"
         >
           <FormField>
@@ -293,77 +368,181 @@ const modalOneActive = ref(false);
               placeholder="discounted price (optional)"
               type="number"
             />
+            <FormControl
+              v-model="productOption.quantity"
+              :icon="mdiAccount"
+              placeholder="discounted price (optional)"
+              type="number"
+            />
 
             <img
-              v-if="fileProductOption.values.length > 0"
-              :src="fileProductOption.values"
+              v-if="imagePreviewOptionURL"
+              :src="imagePreviewOptionURL"
               style="width: 145px; height: 145px"
               class="object-cover rounded-lg"
             />
 
             <FormFilePicker
-              v-model="customElementsForm.file"
               color="contrast"
               label="upload option photo"
+              @change="onFileChange($event, `addProductOption`)"
+            />
+          </FormField>
+        </CardBoxModal>
+
+        <CardBoxModal
+          v-model="modelEditProductOption"
+          title="Edit Product option"
+          button-label="Confirm"
+          has-cancel
+          has-confirm
+          @confirm="saveEditProductOption(updateProductOption.id)"
+        >
+          <FormField>
+            <FormControl
+              v-model="updateProductOption.name"
+              :icon="mdiDomain"
+              placeholder="option name"
+            />
+
+            <FormControl
+              v-model="updateProductOption.price"
+              :icon="mdiAccount"
+              placeholder="price"
+              type="number"
+            />
+            <FormControl
+              v-model="updateProductOption.discountPrice"
+              :icon="mdiAccount"
+              placeholder="discounted price (optional)"
+              type="number"
+            />
+
+            <FormControl
+              v-model="updateProductOption.quantity"
+              :icon="mdiAccount"
+              placeholder="discounted price (optional)"
+              type="number"
+            />
+
+            <img
+              v-if="updateProductOption.dataImage"
+              :src="updateProductOption.dataImage"
+              style="width: 145px; height: 145px"
+              class="object-cover rounded-lg flex mx-auto"
+            />
+
+            <img
+              v-if="imageOnlyPreviewOptionURL"
+              :src="imageOnlyPreviewOptionURL"
+              style="width: 145px; height: 145px"
+              class="object-cover rounded-lg flex mx-auto"
+            />
+
+            <FormFilePicker
+              color="contrast"
+              label="upload option photo"
+              class="mx-auto flex"
               @change="onFileChange($event)"
             />
           </FormField>
         </CardBoxModal>
 
+        <BaseDivider />
+
         <div class="space-y-3">
           <div class="font-bold">Product options</div>
-          <!-- <TableList
-            v-if="form.product.productOption.length > 0"
-            :data-table="form.product.productOption"
-            @menu-delete-data="deleteProductOption"
-          /> -->
 
-          <div class="w-full overflow-x-auto relative shadow-md sm:rounded-lg">
-            <table class="text-sm text-left text-gray-500 dark:text-gray-400">
+          <div class="w-full overflow-y-auto relative shadow-md sm:rounded-lg">
+            <table
+              class="min-w-full text-sm leading-normal text-gray-500 dark:text-gray-400"
+            >
+              <thead>
+                <tr>
+                  <th
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                  >
+                    Image
+                  </th>
+                  <th
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                  >
+                    Name
+                  </th>
+                  <th
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                  >
+                    Price
+                  </th>
+                  <th
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                  >
+                    Discount Price
+                  </th>
+
+                  <th
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                  >
+                    Quantity
+                  </th>
+                  <th
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                  ></th>
+                  <th
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                  ></th>
+                </tr>
+              </thead>
               <tbody>
                 <tr
-                  v-for="(productOption, index) in form.product.productOption"
+                  v-for="(productOption, index) in site.Product?.ProductOption"
                   :key="productOption.name"
                   class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
-                  <!-- image -->
                   <td class="p-4 w-32">
                     <img
-                      :src="imagePreviewOptionURL[index]"
+                      :src="productOption.dataImage"
                       :alt="productOption.name"
                       class="w-24 h-24 object-cover rounded-lg"
                     />
                   </td>
 
-                  <!-- product option name -->
-                  <td
-                    class="py-4 px-6 font-semibold text-gray-900 dark:text-white"
-                  >
+                  <td class="py-4 px-6 font-semibold dark:text-white">
                     {{ productOption.name }}
                   </td>
 
-                  <!-- price -->
                   <td
                     class="py-4 px-6 font-semibold text-gray-900 dark:text-white"
                   >
                     {{ productOption.price }}
                   </td>
 
-                  <!-- discount code -->
                   <td
                     class="py-4 px-6 font-semibold text-gray-900 dark:text-white"
                   >
-                    {{ productOption.discountPrice ?? "ไม่มีลดราคา" }}
+                    {{ productOption.discountPrice }}
                   </td>
 
-                  <!-- button remove  -->
+                  <td
+                    class="py-4 px-6 font-semibold text-gray-900 dark:text-white"
+                  >
+                    {{ productOption.quantity }}
+                  </td>
                   <td class="py-4 px-6">
-                    <a
-                      href="#"
-                      class="font-medium text-red-600 dark:text-red-500 hover:underline"
-                      @click="deleteProductOption(index)"
-                      >Remove</a
+                    <button
+                      class="border border-yellow-300 p-2 rounded font-medium text-yellow-600 hover:bg-yellow-500 hover:text-white"
+                      @click="editProductOption(index, productOption)"
                     >
+                      Edit
+                    </button>
+                  </td>
+                  <td class="py-4 px-6">
+                    <button
+                      class="border border-red-300 p-2 rounded font-medium text-red-600 hover:bg-red-500 hover:text-white"
+                      @click="deleteProductOption(index, productOption.id)"
+                    >
+                      Remove
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -372,85 +551,24 @@ const modalOneActive = ref(false);
 
           <BaseButton
             label="Add product options"
-            color="contrast"
-            @click="modalOneActive = true"
+            color="info"
+            @click="modelCreateProductOption = true"
           />
         </div>
 
-        <!-- <div
-          v-if="imagePreviewOptionURL"
-          class="w-full mt-3 flex space-x-5 rounded-lg overflow-auto"
-        >
-          <div
-            v-for="productOptionimage in imagePreviewOptionURL"
-            :key="productOptionimage"
-          >
-            <img
-              :src="productOptionimage"
-              alt
-              class="w-36 h-36 object-cover rounded-lg"
-            />
-          </div>
-        </div> -->
-
-        <!-- <TableList
-            v-if="form.product.productOption.length > 0"
-            :data-table="form.product.productOption"
-            @menu-delete-data="deleteProductOption"
-          /> -->
-
-        <!-- <FormField label="Product options">
-          <CardBox>
-            <CardBoxComponentEmpty
-              v-if="form.product.productOption.length === 0"
-            />
-          </CardBox>
-        </FormField> -->
-        <div class="w-full flex justify-end space-x-5">
-          <BaseButton outline color="info" label="cancel" @click="submit" />
+        <div class="w-full flex justify-end">
           <BaseButton
             type="submit"
-            color="info"
-            label="Submit"
+            color="success"
+            label="Save"
             @click="submit"
           />
         </div>
-        <!-- <BaseButtons>
-          <BaseButton
-              type="reset"
-              color="info"
-              outline
-              label="Reset"
-              @click="reset"
-            />
-        </BaseButtons> -->
       </CardBox>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
 
-<script>
-export default {
-  // computed: {
-  //   character: function(){
-  //     return form.product.detail.length
-  //   }
-  // },
-  // data() {
-  //   return {
-  //     productimages: [],
-  //     productimage:''
-  //   };
-  // },
-  // methods: {
-  //   selectimage() {
-  //     this.productimage = imagePreviewURL
-  //     this.productimages.push(this.productimage)
-  //     console.log(this.productimages);
-  //   },
-  // },
-};
-</script>
 <style scoped>
 @media (min-width: 900px) {
   .section {

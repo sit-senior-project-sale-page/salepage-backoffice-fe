@@ -1,13 +1,7 @@
 import {
   mdiAccountCircle,
-  mdiMonitor,
-  mdiLock,
-  mdiAlertCircle,
   mdiSquareEditOutline,
   mdiTable,
-  mdiViewList,
-  mdiTelevisionGuide,
-  mdiResponsive,
   mdiDatabase,
 } from "@mdi/js";
 
@@ -17,6 +11,11 @@ export default [
   //   icon: mdiMonitor,
   //   label: "Dashboard",
   // },
+  {
+    to: "/profile",
+    label: "Profile",
+    icon: mdiAccountCircle,
+  },
   {
     to: "/",
     label: "My SalePage",
@@ -46,11 +45,6 @@ export default [
   //   to: "/responsive",
   //   label: "Responsive",
   //   icon: mdiResponsive,
-  // },
-  // {
-  //   to: "/profile",
-  //   label: "Profile",
-  //   icon: mdiAccountCircle,
   // },
   // {
   //   to: "/login",

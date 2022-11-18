@@ -84,7 +84,7 @@ window.addEventListener("keydown", (e) => {
           <BaseButton
             v-if="hasCancel"
             label="Cancel"
-            :color="button"
+            color="danger"
             outline
             @click="cancel"
           />

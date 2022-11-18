@@ -17,6 +17,8 @@ export const useMainStore = defineStore("main", {
     product: [],
     productsOption: [],
     order: [],
+    orderBySiteId: [],
+    siteById: {},
   }),
   actions: {
     setUser(payload) {
@@ -30,7 +32,7 @@ export const useMainStore = defineStore("main", {
 
     async fetch(state, url) {
       const data = await fetchWrapper.get(url);
-      console.log("🚀 ~ file: main.js ~ line 34 ~ fetch ~ data", data.data);
+      // console.log("🚀 ~ file: main.js ~ line 34 ~ fetch ~ data", data.data);
       if (data.data) {
         this[state] = data.data;
       }

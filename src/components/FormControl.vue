@@ -40,6 +40,7 @@ const props = defineProps({
     type: [String, Number, Boolean, Array, Object],
     default: "",
   },
+  disabled: Boolean,
   required: Boolean,
   borderless: Boolean,
   transparent: Boolean,
@@ -159,6 +160,7 @@ if (props.ctrlKFocus) {
       :placeholder="placeholder"
       :type="computedType"
       :class="inputElClass"
+      :disabled="disabled"
     />
     <FormControlIcon v-if="icon" :icon="icon" :h="controlIconH" />
   </div>

@@ -10,7 +10,7 @@ const routes = [
   //   },
   //   path: "/",
   //   name: "dashboard",
-  //   component: Home,
+  //   component: () => import("@/views/HomeView.vue"),
   // },
   {
     meta: {
@@ -27,6 +27,14 @@ const routes = [
     path: "/",
     name: "sites",
     component: () => import("@/views/SiteView.vue"),
+  },
+  {
+    meta: {
+      title: "Sites",
+    },
+    path: "/site/:id",
+    name: "sites-view",
+    component: () => import("@/views/SitePageDetail.vue"),
   },
   {
     meta: {
@@ -64,7 +72,7 @@ const routes = [
     meta: {
       title: "Edit Site",
     },
-    path: "/edit-salepage",
+    path: "/edit/site/:id",
     name: "edit-salepage",
     component: () => import("@/views/EditSite.vue"),
   },
