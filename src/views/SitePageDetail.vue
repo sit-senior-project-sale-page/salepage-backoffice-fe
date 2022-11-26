@@ -10,16 +10,14 @@ import * as chartConfig from "@/components/Charts/chart.config.js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBoxWidget from "@/components/CardBoxWidget.vue";
 import CardBox from "@/components/CardBox.vue";
-import CardBoxTransaction from "@/components/CardBoxTransaction.vue";
-import CardBoxClient from "@/components/CardBoxClient.vue";
+import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
+
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import OrderCard from "../components/OrderCard.vue";
 import OrderDetail from "../components/OrderDetail.vue";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import { useRoute } from "vue-router";
-import BaseButton from "@/components/BaseButton.vue";
-import BaseButtons from "@/components/BaseButtons.vue";
 
 const chartData = ref(null);
 
@@ -34,29 +32,26 @@ onMounted(() => {
 
 const mainStore = useMainStore();
 
-const clientBarItems = computed(() => mainStore.clients.slice(0, 4));
-
-const transactionBarItems = computed(() => mainStore.history);
-
 const route = useRoute();
 
 mainStore.fetch("orderBySiteId", `order/site/${route.params.id}`);
 
-const orders = computed(() => mainStore.orderById);
-console.log("🚀 ~ file: SitePageDetail.vue ~ line 44 ~ orders", orders);
+const orders = computed(() => mainStore.orderBySiteId);
 
 const orderClickById = ref({});
 const modalOneActive = ref(false);
+
 const click = (order) => {
   orderClickById.value = order;
   modalOneActive.value = true;
 };
+
 const orderWait = (array) => {
-  return array.filter((o) => (o.status = "WAIT")).length;
+  return array.filter((o) => o.status == "WAIT").length;
 };
 
 const orderApprove = (array) => {
-  return array.filter((o) => (o.status = "APPROVE")).length;
+  return array.filter((o) => o.status == "APPROVE").length;
 };
 </script>
 
@@ -89,37 +84,20 @@ const orderApprove = (array) => {
         />
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div class="flex flex-col justify-between">
-          <CardBoxTransaction
-            v-for="(transaction, index) in transactionBarItems"
-            :key="index"
-            :amount="transaction.amount"
-            :date="transaction.date"
-            :business="transaction.business"
-            :type="transaction.type"
-            :name="transaction.name"
-            :account="transaction.account"
-          />
-        </div>
-        <div class="flex flex-col justify-between">
-          <CardBoxClient
-            v-for="client in clientBarItems"
-            :key="client.id"
-            :name="client.name"
-            :login="client.login"
-            :date="client.created"
-            :progress="client.progress"
-          />
-        </div>
-      </div>
-
       <SectionTitleLineWithButton :icon="mdiAccountMultiple" title="Order" />
-      <CardBox class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div class="grid col2">
-          <div v-for="order in orders" :key="order.id">
-            <OrderCard :order-props="order" @click="click(order)" />
+      <CardBox>
+        <div v-if="orders.length > 0">
+          <div class="grid grap-2 lg:grid-cols-2">
+            <OrderCard
+              v-for="order in orders"
+              :key="order.id"
+              :order-props="order"
+              @click="click(order)"
+            />
           </div>
+        </div>
+        <div v-else>
+          <CardBoxComponentEmpty />
         </div>
       </CardBox>
     </SectionMain>
