@@ -48,7 +48,7 @@ function handleResponse(response) {
         logout();
       }
 
-      const error = (data && data.error) || response.statusText;
+      const error = data || response;
       return Promise.reject(error);
     }
 

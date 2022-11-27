@@ -44,14 +44,14 @@ const routes = [
     name: "products",
     component: () => import("@/views/ProductView.vue"),
   },
-  {
-    meta: {
-      title: "Orders",
-    },
-    path: "/orders",
-    name: "orders",
-    component: () => import("@/views/OrderView.vue"),
-  },
+  // {
+  //   meta: {
+  //     title: "Orders",
+  //   },
+  //   path: "/orders",
+  //   name: "orders",
+  //   component: () => import("@/views/OrderView.vue"),
+  // },
   {
     meta: {
       title: "Forms",
@@ -92,14 +92,14 @@ const routes = [
     name: "ui",
     component: () => import("@/views/UiView.vue"),
   },
-  {
-    meta: {
-      title: "Responsive layout",
-    },
-    path: "/responsive",
-    name: "responsive",
-    component: () => import("@/views/ResponsiveView.vue"),
-  },
+  // {
+  //   meta: {
+  //     title: "Responsive layout",
+  //   },
+  //   path: "/responsive",
+  //   name: "responsive",
+  //   component: () => import("@/views/ResponsiveView.vue"),
+  // },
   {
     meta: {
       title: "Login",
