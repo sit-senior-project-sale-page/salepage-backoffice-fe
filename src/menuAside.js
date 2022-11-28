@@ -26,11 +26,11 @@ export default [
   //   label: "My Product",
   //   icon: mdiViewList,
   // },
-  {
-    to: "/orders",
-    label: "Orders",
-    icon: mdiTable,
-  },
+  // {
+  //   to: "/orders",
+  //   label: "Orders",
+  //   icon: mdiTable,
+  // },
   {
     to: "/create-salepage",
     label: "Create SalePage",

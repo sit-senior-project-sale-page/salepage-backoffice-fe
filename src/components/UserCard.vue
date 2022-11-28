@@ -8,11 +8,13 @@ import CardBox from "@/components/CardBox.vue";
 import FormCheckRadio from "@/components/FormCheckRadio.vue";
 import PillTag from "@/components/PillTag.vue";
 
-const mainStore = useMainStore();
-
-const userName = computed(() => mainStore.userName);
-
 const userSwitchVal = ref(false);
+
+const props = defineProps({
+  user: Object,
+});
+
+console.log(props.user);
 </script>
 
 <template>
@@ -20,23 +22,22 @@ const userSwitchVal = ref(false);
     <BaseLevel type="justify-around lg:justify-center">
       <UserAvatarCurrentUser class="lg:mx-12" />
       <div class="space-y-3 text-center md:text-left lg:mx-12">
-        <div class="flex justify-center md:block">
-          <FormCheckRadio
-            v-model="userSwitchVal"
-            name="notifications-switch"
-            type="switch"
-            label="Notifications"
-            :input-value="true"
-          />
-        </div>
         <h1 class="text-2xl">
-          Howdy, <b>{{ userName }}</b
-          >!
+          {{ props.user.username }}
         </h1>
-        <p>Last login <b>12 mins ago</b> from <b>127.0.0.1</b></p>
-        <div class="flex justify-center md:block">
-          <PillTag label="Verified" color="info" :icon="mdiCheckDecagram" />
-        </div>
+        <p>
+          เข้าสู่ระบบล่าสุด
+          <b>{{
+            new Date(props.user.lastLogin).toLocaleDateString("th-TH", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              weekday: "long",
+            })
+          }}</b>
+          from
+          <b>{{ props.user.lastLoginIp }}</b>
+        </p>
       </div>
     </BaseLevel>
   </CardBox>

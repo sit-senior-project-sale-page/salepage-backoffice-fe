@@ -1,31 +1,34 @@
 <script setup>
 import { reactive } from "vue";
-import { useMainStore } from "@/stores/main";
 import {
   mdiAccount,
   mdiMail,
   mdiAsterisk,
+  mdiCheckCircle,
   mdiFormTextboxPassword,
-  mdiGithub,
 } from "@mdi/js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBox from "@/components/CardBox.vue";
 import BaseDivider from "@/components/BaseDivider.vue";
 import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
-import FormFilePicker from "@/components/FormFilePicker.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import UserCard from "@/components/UserCard.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
+import NotificationBar from "@/components/NotificationBar.vue";
 
-const mainStore = useMainStore();
+import { useAuthStore } from "@/stores/auth.js";
+import { useUsersStore } from "@/stores/users.js";
+import { storeToRefs } from "pinia";
+import Swal from "sweetalert2";
 
-const profileForm = reactive({
-  name: mainStore.userName,
-  email: mainStore.userEmail,
-});
+const userStore = useUsersStore();
+
+const { user, loading, error, statusError, statusSuccess } = storeToRefs(
+  useUsersStore()
+);
 
 const passwordForm = reactive({
   password_current: "",
@@ -33,12 +36,25 @@ const passwordForm = reactive({
   password_confirmation: "",
 });
 
-const submitProfile = () => {
-  mainStore.setUser(profileForm);
+userStore.profile();
+
+const submitProfile = async () => {
+  await userStore.updateprofile(user.value);
+  await userStore.profile();
 };
 
-const submitPass = () => {
-  //
+const submitPass = async () => {
+  if (passwordForm.password !== passwordForm.password_confirmation) {
+    Swal.fire({
+      title: "Error",
+      text: "โปรดกรอกรหัสผ่านให้เหมือนกัน",
+      icon: "warning",
+    });
+  }
+  await userStore.updatepassword({
+    oldPassword: passwordForm.password_current,
+    newPassword: passwordForm.password,
+  });
 };
 </script>
 
@@ -46,37 +62,45 @@ const submitPass = () => {
   <LayoutAuthenticated>
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiAccount" title="Profile" main>
-        <BaseButton
-          href="https://github.com/justboil/admin-one-vue-tailwind"
-          target="_blank"
-          :icon="mdiGithub"
-          label="Star on GitHub"
-          color="contrast"
-          rounded-full
-          small
-        />
       </SectionTitleLineWithButton>
 
-      <UserCard class="mb-6" />
+      <UserCard :user="user" class="mb-6" />
+
+      <NotificationBar
+        v-if="statusSuccess"
+        color="success"
+        :icon="mdiCheckCircle"
+      >
+        <b>Success</b>.
+      </NotificationBar>
+      <NotificationBar v-if="statusError" color="danger" :icon="mdiCheckCircle">
+        <b>{{ error.message }}</b
+        >.
+      </NotificationBar>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <CardBox is-form @submit.prevent="submitProfile">
-          <FormField label="Avatar" help="Max 500kb">
-            <FormFilePicker label="Upload" />
-          </FormField>
-
-          <FormField label="Name" help="Required. Your name">
+          <FormField label="Firstname">
             <FormControl
-              v-model="profileForm.name"
+              v-model="user.firstname"
+              :icon="mdiAccount"
+              name="firstname"
+              required
+              autocomplete="username"
+            />
+          </FormField>
+          <FormField label="Lastname">
+            <FormControl
+              v-model="user.lastname"
               :icon="mdiAccount"
               name="username"
               required
               autocomplete="username"
             />
           </FormField>
-          <FormField label="E-mail" help="Required. Your e-mail">
+          <FormField label="E-mail">
             <FormControl
-              v-model="profileForm.email"
+              v-model="user.email"
               :icon="mdiMail"
               type="email"
               name="email"
@@ -85,10 +109,58 @@ const submitPass = () => {
             />
           </FormField>
 
+          <FormField label="Link To Page">
+            <FormControl
+              v-model="user.email"
+              :icon="mdiMail"
+              type="text"
+              name="email"
+              required
+              autocomplete="email"
+            />
+          </FormField>
+
+          <FormField label="Payment Bank Account Name">
+            <FormControl
+              v-model="user.paymentBankAccountName"
+              :icon="mdiMail"
+              type="text"
+              name="email"
+              required
+              autocomplete="email"
+            />
+          </FormField>
+
+          <FormField label="Payment Bank Account Number">
+            <FormControl
+              v-model="user.paymentBankAccountNumber"
+              :icon="mdiMail"
+              type="text"
+              name="email"
+              required
+              autocomplete="email"
+            />
+          </FormField>
+
+          <FormField label="Payment Bank Name">
+            <FormControl
+              v-model="user.paymentBankName"
+              :icon="mdiMail"
+              type="text"
+              name="email"
+              required
+              autocomplete="email"
+            />
+          </FormField>
+
           <template #footer>
             <BaseButtons>
-              <BaseButton color="info" type="submit" label="Submit" />
-              <BaseButton color="info" label="Options" outline />
+              <BaseButton
+                color="info"
+                type="submit"
+                label="Save Profile"
+                :disabled="loading"
+              />
             </BaseButtons>
           </template>
         </CardBox>
@@ -137,8 +209,12 @@ const submitPass = () => {
 
           <template #footer>
             <BaseButtons>
-              <BaseButton type="submit" color="info" label="Submit" />
-              <BaseButton color="info" label="Options" outline />
+              <BaseButton
+                type="submit"
+                color="info"
+                label="Submit"
+                :disabled="loading"
+              />
             </BaseButtons>
           </template>
         </CardBox>

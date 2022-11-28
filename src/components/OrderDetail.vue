@@ -3,7 +3,6 @@ import FormControl from "@/components/FormControl.vue";
 import { ref, toRefs } from "vue";
 import { useMainStore } from "@/stores/main";
 import Swal from "sweetalert2";
-import { track } from "@vue/reactivity";
 
 const mainStore = useMainStore();
 
@@ -13,6 +12,8 @@ const props = defineProps({
 
 const { orderProps } = toRefs(props);
 const order = ref(orderProps.value);
+
+console.log("order", order);
 
 const trackingNumber = ref("");
 const shippedBy = ref("");
@@ -129,6 +130,9 @@ const sendCustomerTrackingNumber = async (orderId) => {
         phone number : {{ order.customerPhoneNumber }}
       </div>
       <div class="font-light">email : {{ order.customerEmail }}</div>
+      <div class="font-light">
+        slip : <img :src="order.customerPaymentSlip" />
+      </div>
     </div>
     <div class="my-5">
       <div
@@ -179,32 +183,32 @@ const sendCustomerTrackingNumber = async (orderId) => {
 
     <div class="font-semibold my-10 space-y-5">
       <div>
-        tracking number
+        Tracking number
         <FormControl
           v-model="trackingNumber"
           placeholder="Fill the parcel tracking number"
         />
       </div>
       <div>
-        shipping by
+        Shipping by
         <FormControl v-model="shippedBy" placeholder="Ex. Kerry Express" />
       </div>
     </div>
     <div class="w-full my-5" style="height: 1px; background-color: #e2e2e2" />
     <button
-      class="rounded-md text-white p-3 w-full text-center my-5"
+      class="rounded-md text-white p-3 w-full text-center my-5 bg-green-500 hover:bg-green-600"
       @click="sendCustomerReceipt(order.id)"
     >
-      send customer receipt
+      APPROVE and Send Customer Receipt
     </button>
     <button
-      class="rounded-md text-white p-3 w-full text-center my-5"
+      class="rounded-md text-white p-3 w-full text-center my-5 bg-yellow-500 hover:bg-yellow-600"
       @click="sendCustomerTrackingNumber(order.id)"
     >
-      send customer parcel tracking no.
+      DELIVERED and Send Customer Parcel Tracking NO
     </button>
     <button
-      class="rounded-md text-white p-3 w-full text-center my-5"
+      class="rounded-md text-white p-3 w-full text-center my-5 bg-red-500 hover:bg-red-600"
       @click="cancleOrder(order.id)"
     >
       cancle order
@@ -215,11 +219,5 @@ const sendCustomerTrackingNumber = async (orderId) => {
 <style scoped>
 .bg {
   background-color: rgba(0, 0, 0, 0.6);
-}
-button {
-  background-color: #ffb522;
-}
-button:hover {
-  background-color: #f6a709;
 }
 </style>
