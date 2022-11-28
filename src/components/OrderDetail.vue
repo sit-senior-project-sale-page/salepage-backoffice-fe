@@ -3,8 +3,11 @@ import FormControl from "@/components/FormControl.vue";
 import { ref, toRefs } from "vue";
 import { useMainStore } from "@/stores/main";
 import Swal from "sweetalert2";
-
+import { storeToRefs } from "pinia";
+import BaseButton from "@/components/BaseButton.vue";
 const mainStore = useMainStore();
+
+const { loading } = storeToRefs(useMainStore());
 
 const props = defineProps({
   orderProps: Object,
@@ -195,24 +198,23 @@ const sendCustomerTrackingNumber = async (orderId) => {
       </div>
     </div>
     <div class="w-full my-5" style="height: 1px; background-color: #e2e2e2" />
-    <button
-      class="rounded-md text-white p-3 w-full text-center my-5 bg-green-500 hover:bg-green-600"
+    <BaseButton
+      class="rounded-md text-white border-transparent p-3 w-full text-center my-5 bg-green-500 hover:bg-green-600"
+      :disabled="loading"
+      label="APPROVE and
+    Send Customer Receipt"
       @click="sendCustomerReceipt(order.id)"
-    >
-      APPROVE and Send Customer Receipt
-    </button>
-    <button
-      class="rounded-md text-white p-3 w-full text-center my-5 bg-yellow-500 hover:bg-yellow-600"
+    />
+    <BaseButton
+      class="rounded-md border-transparent text-white p-3 w-full text-center my-5 bg-yellow-500 hover:bg-yellow-600"
+      label="DELIVERED and Send Customer Parcel Tracking NO"
       @click="sendCustomerTrackingNumber(order.id)"
-    >
-      DELIVERED and Send Customer Parcel Tracking NO
-    </button>
-    <button
-      class="rounded-md text-white p-3 w-full text-center my-5 bg-red-500 hover:bg-red-600"
+    />
+    <BaseButton
+      class="rounded-md border-transparent text-white p-3 w-full text-center my-5 bg-red-500 hover:bg-red-600"
+      label="Cancle Order"
       @click="cancleOrder(order.id)"
-    >
-      cancle order
-    </button>
+    />
   </div>
   <!-- </div> -->
 </template>

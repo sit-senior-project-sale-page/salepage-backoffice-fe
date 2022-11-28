@@ -19,6 +19,10 @@ export const useMainStore = defineStore("main", {
     order: [],
     orderBySiteId: [],
     siteById: {},
+    loading: false,
+    error: {},
+    statusSuccess: false,
+    statusError: false,
   }),
   actions: {
     setUser(payload) {
@@ -39,10 +43,22 @@ export const useMainStore = defineStore("main", {
     },
 
     async post(url, data) {
-      return await fetchWrapper.post(url, data);
+      this.loading = true;
+      return await fetchWrapper
+        .post(url, data)
+        .then(() => ((this.loading = false), (this.statusSuccess = true)))
+        .catch(
+          (error) => (
+            console.log(error),
+            (this.error = error),
+            (this.statusError = true),
+            (this.loading = false)
+          )
+        );
     },
 
     postFormData(sampleDataKey, data) {
+      this.loading = true;
       const httpService = axios.create({
         baseURL: import.meta.env.VITE_API_BASE_URL,
         headers: {
@@ -51,7 +67,17 @@ export const useMainStore = defineStore("main", {
         },
       });
 
-      return httpService.post(`${sampleDataKey}`, data);
+      httpService
+        .post(`${sampleDataKey}`, data)
+        .then(() => ((this.loading = false), (this.statusSuccess = true)))
+        .catch(
+          (error) => (
+            console.log(error),
+            (this.error = error),
+            (this.statusError = true),
+            (this.loading = false)
+          )
+        );
     },
   },
 });
