@@ -21,7 +21,7 @@ function onSubmit(values, { setErrors }) {
   return authStore.login(username, password).catch((error) => {
     Swal.fire({
       title: "Error",
-      text: error,
+      text: error.error,
       icon: "error",
     });
     setErrors({ apiError: error });
