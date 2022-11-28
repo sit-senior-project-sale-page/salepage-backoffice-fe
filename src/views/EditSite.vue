@@ -296,7 +296,7 @@ const clearimg = () => {
             <div class="mt-auto">Product Photos</div>
           </div>
 
-          <div class="w-full space-x-5">
+          <div class="w-full flex space-x-5 rounded-lg overflow-x-auto">
             <img
               v-for="(productimage, index) in site.Product?.ProductImage"
               :key="productimage"
@@ -306,6 +306,7 @@ const clearimg = () => {
               @click="deleteProductImage(index, productimage.id)"
             />
           </div>
+          
 
           <div class="flex space-x-5">
             <FormFilePicker
@@ -381,6 +382,7 @@ const clearimg = () => {
               style="width: 145px; height: 145px"
               class="object-cover rounded-lg"
             />
+           
 
             <FormFilePicker
               color="contrast"
