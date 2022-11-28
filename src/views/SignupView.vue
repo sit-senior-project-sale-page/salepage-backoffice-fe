@@ -10,10 +10,7 @@ import { useAuthStore } from "@/stores/auth.js";
       Start your membership
     </div>
     <div class="font-semibold text-xl" v-if="state == 2">Let we know you</div>
-    <div class="font-semibold text-xl" v-if="state == 2.5">
-      Let's get rich ;D
-    </div>
-    <div class="font-semibold text-xl" v-if="state == 3">Last step!</div>
+    <div class="font-semibold text-xl" v-if="state == 3">Let's get rich ;D</div>
     <div class="font-semibold text-xl" v-if="state == 4">Success 🎉</div>
 
     <div class="flex justify-center mt-5" style="transition-duration: 0.25s">
@@ -103,9 +100,9 @@ import { useAuthStore } from "@/stores/auth.js";
       class="flex justify-center mt-5 -ml-8 space-x-12 md:space-x-28"
       style="color: #20293a; transition-duration: 0.25s"
     >
-      <div class="text-sm pl-2">create account</div>
-      <div class="text-sm">your shop</div>
-      <div class="text-sm">choose plan</div>
+      <div class="text-sm ">create account</div>
+      <div class="text-sm">information</div>
+      <div class="text-sm">payment</div>
     </div>
 
     <div
@@ -328,7 +325,8 @@ import { useAuthStore } from "@/stores/auth.js";
           lname.length < 1 ||
           email.length < 6 ||
           phone.length < 6 ||
-          link.length < 1
+          link.length < 1 ||
+          shopImage == 'null'
         "
         class="p-4 text-white rounded-md font-medium mt-8 mx-auto cursor-not-allowed"
         style="background-color: #e9e9e9"
@@ -342,10 +340,11 @@ import { useAuthStore } from "@/stores/auth.js";
           lname.length >= 1 &&
           email.length >= 6 &&
           phone.length >= 6 &&
-          link.length >= 1
+          link.length >= 1 &&
+          shopImage != 'null'
         "
         class="p-4 text-white rounded-md font-medium mt-8 mx-auto"
-        @click="state += 0.5"
+        @click="state += 1"
       >
         Next
       </button>
@@ -356,9 +355,10 @@ import { useAuthStore } from "@/stores/auth.js";
         Back
       </div>
     </div>
+    
     <div
       id="state2-5"
-      v-if="state == 2.5"
+      v-if="state == 3"
       class="flex flex-col mt-20 px-5 mx-auto text-left w-screen"
       style="transition-duration: 0.25s"
     >
@@ -430,131 +430,13 @@ import { useAuthStore } from "@/stores/auth.js";
       <button
         v-if="bank.length >= 1 && acnum.length >= 10 && acname.length >= 6"
         class="p-4 text-white rounded-md font-medium mt-8 mx-auto"
-        @click="state += 0.5"
-      >
-        Next
-      </button>
-      <div
-        class="mx-auto text-gray-400 hover:text-gray-600 px-3 py-2 mt-5 cursor-pointer"
-        @click="state -= 0.5"
-      >
-        Back
-      </div>
-    </div>
-
-    <div
-      id="state3"
-      v-if="state == 3"
-      class="flex flex-col mt-20 mx-auto text-left px-5"
-      style="transition-duration: 0.25s"
-    >
-      <div class="text-3xl font-semibold head">Choose your plan</div>
-
-      <div
-        class="mt-10 text-sm font-light rounded-2xl box"
-        style="border-color: #000000; border-width: 1.5px"
-      >
-        <div class="text-xl font-semibold mb-5">Monthly subscribtion</div>
-        <div class="grid grid-cols-3">
-          <div></div>
-          <div
-            v-if="plan == 'single'"
-            class="p-2 md:px-4 mx-auto rounded-lg text-center text-white font-semibold cursor-pointer plan1"
-          >
-            Single Plan
-          </div>
-          <div
-            v-if="plan != 'single'"
-            @click="plan = 'single'"
-            class="p-2 md:px-4 mx-auto rounded-lg text-center text-white font-semibold cursor-pointer deselect1"
-          >
-            Single Plan
-          </div>
-          <div
-            v-if="plan == 'me'"
-            class="p-2 px-4 mx-auto rounded-lg text-center text-white font-semibold cursor-pointer plan1"
-          >
-            Exclusive Plan
-          </div>
-          <div
-            @click="plan = 'me'"
-            v-if="plan != 'me'"
-            class="p-2 px-4 mx-auto rounded-lg text-center text-white font-semibold cursor-pointer deselect1"
-          >
-            Exclusive Plan
-          </div>
-        </div>
-
-        <div class="grid grid-cols-3 my-5">
-          <div class="font-light my-auto">Price</div>
-          <div
-            v-if="plan == 'single'"
-            class="mx-auto rounded-lg text-center text-xl font-medium plan2"
-          >
-            299 THB
-          </div>
-          <div
-            v-if="plan != 'single'"
-            class="mx-auto rounded-lg text-center text-xl font-medium deselect2"
-          >
-            299 THB
-          </div>
-          <div
-            v-if="plan == 'me'"
-            class="mx-auto rounded-lg text-center text-xl font-medium plan2"
-          >
-            1299 THB
-          </div>
-          <div
-            v-if="plan != 'me'"
-            class="mx-auto rounded-lg text-center text-xl font-medium deselect2"
-          >
-            1299 THB
-          </div>
-        </div>
-
-        <div
-          class="w-full my-auto"
-          style="height: 0.5px; background-color: #000000"
-        />
-
-        <div class="grid grid-cols-3 mt-5">
-          <div class="font-light my-auto">SalePage Amount</div>
-          <div
-            v-if="plan == 'single'"
-            class="mx-auto rounded-lg text-center text-xl font-medium plan2"
-          >
-            1
-          </div>
-          <div
-            v-if="plan != 'single'"
-            class="mx-auto rounded-lg text-center text-xl font-medium deselect2"
-          >
-            1
-          </div>
-          <div
-            v-if="plan == 'me'"
-            class="mx-auto rounded-lg text-center text-xl font-medium plan2"
-          >
-            5
-          </div>
-          <div
-            v-if="plan != 'me'"
-            class="mx-auto rounded-lg text-center text-xl font-medium deselect2"
-          >
-            5
-          </div>
-        </div>
-      </div>
-      <button
-        class="p-4 text-white rounded-md font-medium mt-10 mx-auto"
         @click="state += 1"
       >
         Next
       </button>
       <div
         class="mx-auto text-gray-400 hover:text-gray-600 px-3 py-2 mt-5 cursor-pointer"
-        @click="state -= 0.5"
+        @click="state -= 1"
       >
         Back
       </div>
