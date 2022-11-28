@@ -54,6 +54,14 @@ const routes = [
   },
   {
     meta: {
+      title: "Subscription",
+    },
+    path: "/subscription",
+    name: "Subscription",
+    component: () => import("@/views/Subscription.vue"),
+  },
+  {
+    meta: {
       title: "Forms",
     },
     path: "/forms",

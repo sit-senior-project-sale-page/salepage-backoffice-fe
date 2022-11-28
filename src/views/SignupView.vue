@@ -1,3 +1,6 @@
+<script setup>
+import { useAuthStore } from "@/stores/auth.js";
+</script>
 <template>
   <div class="px-8 py-6 absolute">
     <img src="/upforsale.png" class="h-14 md:h-20 mx-auto md:mx-0" />

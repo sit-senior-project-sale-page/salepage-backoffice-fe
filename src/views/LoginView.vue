@@ -10,8 +10,8 @@ import { Form, Field } from "vee-validate";
 import { useAuthStore } from "@/stores/auth.js";
 import Swal from "sweetalert2";
 const schema = Yup.object().shape({
-  username: Yup.string().required("โปรดกรอก Username"),
-  password: Yup.string().required("โปรดกรอก Password"),
+  username: Yup.string().required("Please fill username"),
+  password: Yup.string().required("Please fill  Password"),
 });
 
 function onSubmit(values, { setErrors }) {
@@ -71,6 +71,11 @@ function onSubmit(values, { setErrors }) {
             label="signin"
             :disabled="isSubmitting"
           />
+        </div>
+        <div class="text-xs text-white mt-3">
+          <span style="color: #a8a8a8">New here? </span>
+          <router-link to="/signup">
+          <span class="hover:underline cursor-pointer">Sign up now.</span></router-link>
         </div>
       </Form>
     </SectionFullScreen>
