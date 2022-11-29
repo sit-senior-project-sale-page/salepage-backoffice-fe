@@ -4,12 +4,12 @@ import { storeToRefs } from "pinia";
 import { useMainStore } from "@/stores/main";
 import { useSiteStore } from "@/stores/site";
 import { mdiAccount, mdiDomain, mdiRenameBox, mdiCards } from "@mdi/js";
-import SectionMain from "@/components/SectionMain.vue";
-import CardBox from "@/components/CardBox.vue";
-import CardBoxModal from "@/components/CardBoxModal.vue";
-import FormFilePicker from "@/components/FormFilePicker.vue";
-import FormField from "@/components/FormField.vue";
-import FormControl from "@/components/FormControl.vue";
+import SectionMain from "@/components/Section/SectionMain.vue";
+import CardBox from "@/components/Card/CardBox.vue";
+import CardBoxModal from "@/components/Card/CardBoxModal.vue";
+import FormFilePicker from "@/components/Form/FormFilePicker.vue";
+import FormField from "@/components/Form/FormField.vue";
+import FormControl from "@/components/Form/FormControl.vue";
 import BaseDivider from "@/components/BaseDivider.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
@@ -306,7 +306,6 @@ const clearimg = () => {
               @click="deleteProductImage(index, productimage.id)"
             />
           </div>
-          
 
           <div class="flex space-x-5">
             <FormFilePicker
@@ -382,7 +381,6 @@ const clearimg = () => {
               style="width: 145px; height: 145px"
               class="object-cover rounded-lg"
             />
-           
 
             <FormFilePicker
               color="contrast"

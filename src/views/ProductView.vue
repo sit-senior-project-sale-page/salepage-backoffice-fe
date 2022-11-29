@@ -1,10 +1,10 @@
 <script setup>
 import { mdiTableBorder } from "@mdi/js";
-import SectionMain from "@/components/SectionMain.vue";
-import CardBox from "@/components/CardBox.vue";
+import SectionMain from "@/components/Section/SectionMain.vue";
+import CardBox from "@/components/Card/CardBox.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
-import TableSampleDynamic from "../components/TableSampleDynamic.vue";
+import SectionTitleLineWithButton from "@/components/Section/SectionTitleLineWithButton.vue";
+import TableSampleDynamic from "../components/Table/TableSampleDynamic.vue";
 </script>
 
 <template>

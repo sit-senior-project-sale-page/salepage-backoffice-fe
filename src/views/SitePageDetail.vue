@@ -1,34 +1,21 @@
 <script setup>
-import { computed, ref, onMounted } from "vue";
+import { computed, ref } from "vue";
 import { useMainStore } from "@/stores/main";
 import {
   mdiAccountMultiple,
   mdiCartOutline,
   mdiChartTimelineVariant,
 } from "@mdi/js";
-import * as chartConfig from "@/components/Charts/chart.config.js";
-import SectionMain from "@/components/SectionMain.vue";
-import CardBoxWidget from "@/components/CardBoxWidget.vue";
-import CardBox from "@/components/CardBox.vue";
-import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
-
+import SectionMain from "@/components/Section/SectionMain.vue";
+import CardBoxWidget from "@/components/Card/CardBoxWidget.vue";
+import CardBox from "@/components/Card/CardBox.vue";
+import CardBoxComponentEmpty from "@/components/Card/CardBoxComponentEmpty.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
-import OrderCard from "../components/OrderCard.vue";
-import OrderDetail from "../components/OrderDetail.vue";
-import CardBoxModal from "@/components/CardBoxModal.vue";
+import SectionTitleLineWithButton from "@/components/Section/SectionTitleLineWithButton.vue";
+import OrderCard from "../components/Order/OrderCard.vue";
+import OrderDetail from "../components/Order/OrderDetail.vue";
+import CardBoxModal from "@/components/Card/CardBoxModal.vue";
 import { useRoute } from "vue-router";
-
-const chartData = ref(null);
-
-const fillChartData = () => {
-  chartData.value = chartConfig.sampleChartData();
-};
-
-onMounted(() => {
-  fillChartData();
-  // setInterval(loop, 2000);
-});
 
 const mainStore = useMainStore();
 
@@ -87,7 +74,9 @@ const orderApprove = (array) => {
       <SectionTitleLineWithButton :icon="mdiAccountMultiple" title="Order" />
       <CardBox>
         <div v-if="orders.length > 0">
-          <div class="grid gap-y-3 justify-items-center md:grid-cols-2 xl:grid-cols-3">
+          <div
+            class="grid gap-y-3 justify-items-center md:grid-cols-2 xl:grid-cols-3"
+          >
             <OrderCard
               v-for="order in orders"
               :key="order.id"

@@ -17,6 +17,11 @@ export default [
     icon: mdiAccountCircle,
   },
   {
+    to: "/subscription",
+    label: "Plan",
+    icon: mdiTable,
+  },
+  {
     to: "/",
     label: "My SalePage",
     icon: mdiDatabase,

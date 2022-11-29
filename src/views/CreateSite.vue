@@ -2,23 +2,17 @@
 import { reactive, ref } from "vue";
 import { useMainStore } from "@/stores/main";
 import { mdiAccount, mdiDomain, mdiRenameBox, mdiCards } from "@mdi/js";
-import SectionMain from "@/components/SectionMain.vue";
-import CardBox from "@/components/CardBox.vue";
-import CardBoxModal from "@/components/CardBoxModal.vue";
-import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
-import FormFilePicker from "@/components/FormFilePicker.vue";
-import FormField from "@/components/FormField.vue";
-import FormControl from "@/components/FormControl.vue";
+import SectionMain from "@/components/Section/SectionMain.vue";
+import CardBox from "@/components/Card/CardBox.vue";
+import CardBoxModal from "@/components/Card/CardBoxModal.vue";
+import FormFilePicker from "@/components/Form/FormFilePicker.vue";
+import FormField from "@/components/Form/FormField.vue";
+import FormControl from "@/components/Form/FormControl.vue";
 import BaseDivider from "@/components/BaseDivider.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import BaseButtons from "@/components/BaseButtons.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
-import TableList from "@/components/TableList.vue";
 
-import { Form, Field } from "vee-validate";
 import Swal from "sweetalert2";
-import * as Yup from "yup";
 import { storeToRefs } from "pinia";
 
 const mainStore = useMainStore();

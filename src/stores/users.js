@@ -21,7 +21,7 @@ export const useUsersStore = defineStore({
     async updateprofile(user) {
       this.loading = true;
       fetchWrapper
-        .post("user/profile", user)
+        .patch("user/profile", user)
         .then(() => ((this.loading = false), (this.statusSuccess = true)))
         .catch(
           (error) => (
@@ -34,7 +34,7 @@ export const useUsersStore = defineStore({
     async updatepassword(data) {
       this.loading = true;
       fetchWrapper
-        .post("user/profile/changepassword", data)
+        .patch("user/profile/changepassword", data)
         .then(() => ((this.loading = false), (this.statusSuccess = true)))
         .catch(
           (error) => (

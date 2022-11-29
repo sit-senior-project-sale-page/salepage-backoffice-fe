@@ -44,29 +44,13 @@ const routes = [
     name: "products",
     component: () => import("@/views/ProductView.vue"),
   },
-  // {
-  //   meta: {
-  //     title: "Orders",
-  //   },
-  //   path: "/orders",
-  //   name: "orders",
-  //   component: () => import("@/views/OrderView.vue"),
-  // },
   {
     meta: {
       title: "Subscription",
     },
     path: "/subscription",
     name: "Subscription",
-    component: () => import("@/views/Subscription.vue"),
-  },
-  {
-    meta: {
-      title: "Forms",
-    },
-    path: "/forms",
-    name: "forms",
-    component: () => import("@/views/FormsView.vue"),
+    component: () => import("@/views/SubScription.vue"),
   },
   {
     meta: {
@@ -92,22 +76,7 @@ const routes = [
     name: "profile",
     component: () => import("@/views/ProfileView.vue"),
   },
-  {
-    meta: {
-      title: "Ui",
-    },
-    path: "/ui",
-    name: "ui",
-    component: () => import("@/views/UiView.vue"),
-  },
-  // {
-  //   meta: {
-  //     title: "Responsive layout",
-  //   },
-  //   path: "/responsive",
-  //   name: "responsive",
-  //   component: () => import("@/views/ResponsiveView.vue"),
-  // },
+
   {
     meta: {
       title: "Login",
@@ -123,14 +92,6 @@ const routes = [
     path: "/signup",
     name: "Signup",
     component: () => import("@/views/SignupView.vue"),
-  },
-  {
-    meta: {
-      title: "Error",
-    },
-    path: "/error",
-    name: "error",
-    component: () => import("@/views/ErrorView.vue"),
   },
 ];
 

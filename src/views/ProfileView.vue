@@ -7,19 +7,18 @@ import {
   mdiCheckCircle,
   mdiFormTextboxPassword,
 } from "@mdi/js";
-import SectionMain from "@/components/SectionMain.vue";
-import CardBox from "@/components/CardBox.vue";
+import SectionMain from "@/components/Section/SectionMain.vue";
+import CardBox from "@/components/Card/CardBox.vue";
 import BaseDivider from "@/components/BaseDivider.vue";
-import FormField from "@/components/FormField.vue";
-import FormControl from "@/components/FormControl.vue";
+import FormField from "@/components/Form/FormField.vue";
+import FormControl from "@/components/Form/FormControl.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
-import UserCard from "@/components/UserCard.vue";
+import UserCard from "@/components/User/UserCard.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
+import SectionTitleLineWithButton from "@/components/Section/SectionTitleLineWithButton.vue";
 import NotificationBar from "@/components/NotificationBar.vue";
 
-import { useAuthStore } from "@/stores/auth.js";
 import { useUsersStore } from "@/stores/users.js";
 import { storeToRefs } from "pinia";
 import Swal from "sweetalert2";
