@@ -1,8 +1,8 @@
 <script setup>
 import * as Yup from "yup";
-import SectionFullScreen from "@/components/SectionFullScreen.vue";
-import CardBox from "@/components/CardBox.vue";
-import FormField from "@/components/FormField.vue";
+import SectionFullScreen from "@/components/Section/SectionFullScreen.vue";
+import CardBox from "@/components/Card/CardBox.vue";
+import FormField from "@/components/Form/FormField.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import LayoutGuest from "@/layouts/LayoutGuest.vue";
@@ -75,7 +75,10 @@ function onSubmit(values, { setErrors }) {
         <div class="text-xs text-white mt-3">
           <span style="color: #a8a8a8">New here? </span>
           <router-link to="/signup">
-          <span class="hover:underline cursor-pointer">Sign up now.</span></router-link>
+            <span class="hover:underline cursor-pointer"
+              >Sign up now.</span
+            ></router-link
+          >
         </div>
       </Form>
     </SectionFullScreen>
