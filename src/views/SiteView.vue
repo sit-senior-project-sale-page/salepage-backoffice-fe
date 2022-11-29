@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { RouterLink } from "vue-router";
 import { useMainStore } from "@/stores/main";
 import { storeToRefs } from "pinia";
+import SiteCard from "../components/SiteCard.vue";
 
 const mainStore = useMainStore();
 mainStore
@@ -33,45 +34,21 @@ console.log("🚀 ~ file: SiteView.vue ~ line 30 ~ siteDate", siteDate);
 <template>
   <LayoutAuthenticated>
     <SectionMain form color="white" class="mx-auto section rounded-lg">
-      <CardBox class="mb-6 pb-12">
+      <CardBox class="mb-6 sm:pb-12">
         <div class="text-center font-semibold text-lg pb-8">My SalePage</div>
-        <div v-if="siteDate.length > 0" class="grid md:grid-cols-3 gap-y-8">
-          <div v-for="site in siteDate" :key="site.id">
-            <div class="h-40 w-40 rounded-lg mx-auto mb-3 overflow-hidden">
-              <img
-                :src="site?.Product?.ProductImage[0]?.data"
-                class="hover:scale-110 transition-all cursor-pointer"
-              />
-            </div>
-            <div class="font-medium text-center capitalize">
-              <span class="cursor-pointer transition-all">{{
-                site?.domain
-              }}</span
-              ><br />
-              <RouterLink
-                :to="`/edit/site/${site.id}`"
-                class="my-1 mr-1 inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
-              >
-                View Detail
-              </RouterLink>
-              <RouterLink
-                :to="`/site/${site.id}`"
-                class="my-1 inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-              >
-                View Order
-              </RouterLink>
-            </div>
-          </div>
+        <div v-if="siteDate.length > 0" class="grid lg:grid-cols-2 gap-y-5">
+          <SiteCard
+            v-for="site in siteDate"
+            :key="site.id"
+            :site-props="site"
+          />
+          <SiteCard
+            v-for="site in siteDate"
+            :key="site.id"
+            :site-props="site"
+          />
         </div>
       </CardBox>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
-
-<style scoped>
-@media (min-width: 900px) {
-  .section {
-    width: 860px;
-  }
-}
-</style>
