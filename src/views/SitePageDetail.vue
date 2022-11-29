@@ -94,12 +94,6 @@ const orderApprove = (array) => {
               :order-props="order"
               @click="click(order)"
             />
-            <OrderCard
-              v-for="order in orders"
-              :key="order.id"
-              :order-props="order"
-              @click="click(order)"
-            />
           </div>
         </div>
         <div v-else>
