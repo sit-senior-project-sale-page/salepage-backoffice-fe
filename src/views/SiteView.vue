@@ -25,29 +25,27 @@ mainStore
   });
 
 const { sites } = storeToRefs(useMainStore());
+
+const siteDate = computed(() => sites.value);
+console.log("🚀 ~ file: SiteView.vue ~ line 30 ~ siteDate", siteDate);
 </script>
 
 <template>
   <LayoutAuthenticated>
-    <SectionMain
-      form
-      color="white"
-      class="mx-auto section rounded-lg"
-      @submit.prevent="submit"
-    >
+    <SectionMain form color="white" class="mx-auto section rounded-lg">
       <CardBox class="mb-6 pb-12">
         <div class="text-center font-semibold text-lg pb-8">My SalePage</div>
-        <div class="grid md:grid-cols-3 gap-y-8">
-          <div v-for="site in sites" :key="site.id">
+        <div v-if="siteDate.length > 0" class="grid md:grid-cols-3 gap-y-8">
+          <div v-for="site in siteDate" :key="site.id">
             <div class="h-40 w-40 rounded-lg mx-auto mb-3 overflow-hidden">
               <img
-                :src="site.Product.ProductImage[0].data"
+                :src="site?.Product?.ProductImage[0]?.data"
                 class="hover:scale-110 transition-all cursor-pointer"
               />
             </div>
             <div class="font-medium text-center capitalize">
               <span class="cursor-pointer transition-all">{{
-                site.domain
+                site?.domain
               }}</span
               ><br />
               <RouterLink

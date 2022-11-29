@@ -62,7 +62,7 @@ export const useSiteStore = defineStore("site", {
         },
       });
       try {
-        return httpService.patch(`${siteUrl}`, data);
+        httpService.patch(`${siteUrl}`, data);
       } catch (error) {
         this.error = error;
       } finally {

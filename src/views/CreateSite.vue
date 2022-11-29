@@ -19,8 +19,13 @@ import TableList from "@/components/TableList.vue";
 import { Form, Field } from "vee-validate";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
+import { storeToRefs } from "pinia";
 
 const mainStore = useMainStore();
+
+const { loading, error, statusSuccess, statusError } = storeToRefs(
+  useMainStore()
+);
 
 const initProductOptionData = {
   name: null,
@@ -83,6 +88,22 @@ const submit = async () => {
       toast: true,
       position: "top-right",
     });
+  } else if (form.product.productOption.length == 0) {
+    Swal.fire({
+      title: "ข้อมูลไม่ครบ",
+      text: "โปรดเพิ่มออฟชั่นสินค้าอย่างน้อย 1 ",
+      icon: "warning",
+      toast: true,
+      position: "top-right",
+    });
+  } else if (fileProduct.value.length == 0) {
+    Swal.fire({
+      title: "ข้อมูลไม่ครบ",
+      text: "โปรดเพิ่มภาพสินค้าอย่างน้อย 1 ",
+      icon: "warning",
+      toast: true,
+      position: "top-right",
+    });
   } else if (!form.product.detail) {
     Swal.fire({
       title: "ข้อมูลไม่ครบ",
@@ -106,9 +127,8 @@ const submit = async () => {
       formData.append("productOption", fpo);
     }
     formData.append("site", JSON.stringify({ ...form }));
-    const response = await mainStore.postFormData("site", formData);
-    console.log(response);
-    if (response) {
+    await mainStore.postFormData("site", formData);
+    if (statusSuccess) {
       Swal.fire({
         title: "Success",
         text: "เพิ่มเว็บไซต์สำเร็จ",
@@ -400,6 +420,7 @@ const modalOneActive = ref(false);
             type="submit"
             color="info"
             label="Submit"
+            :disabled="loading"
             @click="submit"
           />
         </div>
