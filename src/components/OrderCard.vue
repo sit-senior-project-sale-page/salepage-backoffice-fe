@@ -22,7 +22,7 @@ const order = ref(orderProps.value);
       </div>
       <div class="-mt-1">{{ new Date(order.createdAt).getFullYear() }}</div>
     </div>
-    <div class="font-bold text-left text-sm my-auto" style="color: #ffb522">
+    <div class="font-bold text-left text-sm my-auto md:mr-1" style="color: #ffb522">
       <div
         class="text-ellipsis whitespace-nowrap overflow-hidden"
         style="font-size: 10px; width: 136px"
