@@ -36,12 +36,7 @@ console.log("🚀 ~ file: SiteView.vue ~ line 30 ~ siteDate", siteDate);
     <SectionMain form color="white" class="mx-auto section rounded-lg">
       <CardBox class="mb-6 sm:pb-12">
         <div class="text-center font-semibold text-lg pb-8">My SalePage</div>
-        <div v-if="siteDate.length > 0" class="grid lg:grid-cols-2 gap-y-5">
-          <SiteCard
-            v-for="site in siteDate"
-            :key="site.id"
-            :site-props="site"
-          />
+        <div v-if="siteDate.length > 0" class="grid lg:grid-cols-2 gap-y-7 lg:w-10/12 mx-auto">
           <SiteCard
             v-for="site in siteDate"
             :key="site.id"

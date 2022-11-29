@@ -23,14 +23,14 @@ const site = ref(siteProps.value);
       <div class="flex space-x-1 mt-5">
         <RouterLink
           :to="`/edit/site/${site.id}`"
-          class=" py-2 px-3 text-xs font-medium text-center rounded-md text-black w-full sm:w-auto"
+          class=" py-2 px-3 text-xs font-medium text-center rounded-md text-black w-full sm:w-auto hover:bg-gray-100"
           style="border-color: #000000; border-width: 1.5px"
         >
           View Detail
         </RouterLink>
         <RouterLink
           :to="`/site/${site.id}`"
-          class=" py-2 px-3 text-xs font-medium text-center rounded-md text-black w-full sm:w-auto"
+          class=" py-2 px-3 text-xs font-medium text-center rounded-md text-black w-full sm:w-auto hover:bg-gray-100"
           style="border-color: #000000; border-width: 1.5px"
         >
           View Order
