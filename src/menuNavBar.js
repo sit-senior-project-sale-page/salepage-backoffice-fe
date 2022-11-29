@@ -12,27 +12,6 @@ import {
 } from "@mdi/js";
 
 export default [
-  // {
-  //   icon: mdiMenu,
-  //   label: "Sample menu",
-  //   menu: [
-  //     {
-  //       icon: mdiClockOutline,
-  //       label: "Item One",
-  //     },
-  //     {
-  //       icon: mdiCloud,
-  //       label: "Item Two",
-  //     },
-  //     {
-  //       isDivider: true,
-  //     },
-  //     {
-  //       icon: mdiCrop,
-  //       label: "Item Last",
-  //     },
-  //   ],
-  // },
   {
     isCurrentUser: true,
     menu: [
@@ -59,10 +38,4 @@ export default [
       },
     ],
   },
-  // {
-  //   icon: mdiLogout,
-  //   label: "Log out",
-  //   isDesktopNoLabel: true,
-  //   isLogout: true,
-  // },
 ];
