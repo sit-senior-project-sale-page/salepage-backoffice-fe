@@ -87,7 +87,13 @@ const orderApprove = (array) => {
       <SectionTitleLineWithButton :icon="mdiAccountMultiple" title="Order" />
       <CardBox>
         <div v-if="orders.length > 0">
-          <div class="grid grap-2 lg:grid-cols-2">
+          <div class="grid gap-y-3 justify-items-center md:grid-cols-2 xl:grid-cols-3">
+            <OrderCard
+              v-for="order in orders"
+              :key="order.id"
+              :order-props="order"
+              @click="click(order)"
+            />
             <OrderCard
               v-for="order in orders"
               :key="order.id"

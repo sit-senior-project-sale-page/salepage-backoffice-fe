@@ -34,10 +34,10 @@ const click = (order) => {
     >
       <CardBox class="mb-6">
         <div class="text-center font-semibold text-lg pb-8">Orders</div>
-        <div class="grid col2">
-          <div v-for="order in orders" :key="order.id">
+        <div class="">
+          <!-- <div v-for="order in orders" :key="order.id">
             <OrderCard :order-props="order" @click="click(order)" />
-          </div>
+          </div> -->
         </div>
       </CardBox>
     </SectionMain>
@@ -57,11 +57,6 @@ const click = (order) => {
 </template>
 
 <style scoped>
-@media (min-width: 768px) {
-  .card {
-    width: 360px;
-  }
-}
 @media (min-width: 900px) {
   .section {
     width: 860px;
@@ -76,9 +71,5 @@ const click = (order) => {
   height: 100vh;
   width: 100vw;
   overflow: auto;
-}
-@media (min-width: 1280px) {
-  .detail {
-  }
 }
 </style>
