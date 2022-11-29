@@ -50,7 +50,7 @@ const routes = [
     },
     path: "/subscription",
     name: "Subscription",
-    component: () => import("@/views/SubScription.vue"),
+    component: () => import("@/views/SubScriptions.vue"),
   },
   {
     meta: {
