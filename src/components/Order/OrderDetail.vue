@@ -7,7 +7,7 @@ import { storeToRefs } from "pinia";
 import BaseButton from "@/components/BaseButton.vue";
 const mainStore = useMainStore();
 
-const { loading } = storeToRefs(useMainStore());
+const { loading, error } = storeToRefs(useMainStore());
 
 const props = defineProps({
   orderProps: Object,
@@ -61,7 +61,7 @@ const sendCustomerReceipt = async (orderId) => {
   } else {
     Swal.fire({
       title: "Error",
-      text: "ส่งอีเมลคอมเฟิร์มการสั่งซื้อไม่สำเร็จ",
+      text: error.value.message,
       icon: "error",
       toast: true,
       position: "top-right",
@@ -169,13 +169,6 @@ const sendCustomerTrackingNumber = async (orderId) => {
       </div>
 
       <div class="text-white">
-        <!-- <div class="-mt-3 p-1 grid grid-cols-5 bg-gray-800">
-          <div class="col-span-2"></div>
-          <div class="text-right pr-5 font-semibold col-span-2">
-            Delivery fee
-          </div>
-          <div class="text-right">40 ฿</div>
-        </div> -->
         <div class="p-1 grid grid-cols-5 bg-gray-800">
           <div class="col-span-2"></div>
           <div class="text-right pr-5 font-semibold col-span-2">Total</div>
@@ -200,7 +193,9 @@ const sendCustomerTrackingNumber = async (orderId) => {
     <div class="w-full my-5" style="height: 1px; background-color: #e2e2e2" />
     <BaseButton
       class="rounded-md text-white border-transparent p-3 w-full text-center my-5 bg-green-500 hover:bg-green-600"
-      :disabled="loading || order.status === 'APPROVE'"
+      :disabled="
+        loading || order.status === 'APPROVE' || order.status === 'DELIVERED'
+      "
       label="APPROVE and
     Send Customer Receipt"
       @click="sendCustomerReceipt(order.id)"
@@ -208,7 +203,9 @@ const sendCustomerTrackingNumber = async (orderId) => {
     <BaseButton
       class="rounded-md border-transparent text-white p-3 w-full text-center my-5 bg-yellow-500 hover:bg-yellow-600"
       label="DELIVERED and Send Customer Parcel Tracking NO"
-      :disabled="loading || order.status === 'DELIVERED'"
+      :disabled="
+        loading || order.status === 'WAIT' || order.status === 'DELIVERED'
+      "
       @click="sendCustomerTrackingNumber(order.id)"
     />
     <BaseButton
