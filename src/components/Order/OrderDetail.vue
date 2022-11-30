@@ -201,13 +201,13 @@ const sendCustomerTrackingNumber = async (orderId) => {
     <BaseButton
       class="rounded-md text-white border-transparent p-3 w-full text-center my-5 bg-green-500 hover:bg-green-600"
       :disabled="loading || order.status === 'APPROVE'"
-      label="APPROVE and
+      label="APPROVE /
     Send Customer Receipt"
       @click="sendCustomerReceipt(order.id)"
     />
     <BaseButton
       class="rounded-md border-transparent text-white p-3 w-full text-center my-5 bg-yellow-500 hover:bg-yellow-600"
-      label="DELIVERED and Send Customer Parcel Tracking NO"
+      label="Send Customer Parcel Tracking NO (DELIVERED)"
       :disabled="loading || order.status === 'DELIVERED'"
       @click="sendCustomerTrackingNumber(order.id)"
     />
