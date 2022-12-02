@@ -26,26 +26,27 @@
 //   console.log(response);
 //   formData.append("site", JSON.stringify({ ...form }));
 //   await mainStore.postFormData("site", formData);
-  // if (response) {
-  //   Swal.fire({
-  //     title: "Success",
-  //     text: "ยกเลิกออเดอร์สำเร็จ",
-  //     icon: "success",
-  //     toast: true,
-  //     position: "top-right",
-  //   });
-  // } else {
-  //   Swal.fire({
-  //     title: "Error",
-  //     text: "ยกเลิกออเดอร์ไม่สำเร็จ",
-  //     icon: "error",
-  //     toast: true,
-  //     position: "top-right",
-  //   });
+// if (response) {
+//   Swal.fire({
+//     title: "Success",
+//     text: "ยกเลิกออเดอร์สำเร็จ",
+//     icon: "success",
+//     toast: true,
+//     position: "top-right",
+//   });
+// } else {
+//   Swal.fire({
+//     title: "Error",
+//     text: "ยกเลิกออเดอร์ไม่สำเร็จ",
+//     icon: "error",
+//     toast: true,
+//     position: "top-right",
+//   });
 
-  // }
+// }
 // };
 </script>
+
 <template>
   <div class="px-8 py-6 absolute">
     <img src="/upforsale.png" class="h-14 md:h-20 mx-auto md:mx-0" />
@@ -225,53 +226,7 @@
             intruding on your privacy.
           </div>
         </div>
-        <div>
-          <div
-            @click="selectImage"
-            class="h-20 w-20 rounded-full flex cursor-pointer"
-            style="border-width: 1.5px; border-color: #000000"
-            :style="{
-              'background-image': `url(${shopImage})`,
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              'background-position': 'center',
-            }"
-          >
-            <div v-if="shopImage == 'null'" class="mx-auto my-auto text-sm">
-              add photo
-            </div>
-          </div>
-          <input
-            ref="fileInput"
-            id="file"
-            type="file"
-            @input="pickImage"
-            accept="image/*"
-            class="p-1.5 rounded-lg w-4/6 ml-8 text-white hidden"
-            style="background-color: #70b6b2"
-          />
-          <!-- <div class="h-5 text-center">
-            <span class="text-red-500 text-xs"> * please fill</span>
-          </div> -->
-        </div>
       </div>
-      <input
-        @input="validateshopname"
-        v-model="shopname"
-        minlength="1"
-        maxlength="50"
-        type="text"
-        placeholder="shop name"
-        name="shopname"
-        class="bg-white rounded-md p-3 mt-3 text-sm"
-        style="border-width: 1.5px; border-color: #000000"
-      />
-      <div class="h-5">
-        <span v-if="validate.shopname == false" class="text-red-500 text-xs">
-          * please fill</span
-        >
-      </div>
-
       <div class="flex space-x-3">
         <div class="w-full">
           <input
@@ -343,35 +298,13 @@
           * please fill</span
         >
       </div>
-      <input
-        @input="validatelink"
-        v-model="link"
-        minlength="6"
-        maxlength="200"
-        type="text"
-        placeholder="link of shop social media account or contact"
-        name="link"
-        class="bg-white rounded-md p-3 mt-3 text-sm"
-        style="border-width: 1.5px; border-color: #000000"
-      />
-      <div class="h-5 space-x-1">
-        <span v-if="validate.link == false" class="text-red-500 text-xs">
-          * please fill</span
-        >
-        <span class="text-xs font-light mt-2" style="color: #aaaaaa"
-          >ex. https://www.instagram.com/terryofficial.th/</span
-        >
-      </div>
 
       <button
         v-if="
-          shopname.length < 1 ||
           fname.length < 1 ||
           lname.length < 1 ||
           email.length < 6 ||
-          phone.length < 6 ||
-          link.length < 1 ||
-          shopImage == 'null'
+          phone.length < 6
         "
         class="p-4 text-white rounded-md font-medium mt-8 mx-auto cursor-not-allowed"
         style="background-color: #e9e9e9"
@@ -380,13 +313,10 @@
       </button>
       <button
         v-if="
-          shopname.length >= 1 &&
           fname.length >= 1 &&
           lname.length >= 1 &&
           email.length >= 6 &&
-          phone.length >= 6 &&
-          link.length >= 1 &&
-          shopImage != 'null'
+          phone.length >= 6
         "
         class="p-4 text-white rounded-md font-medium mt-8 mx-auto"
         @click="state += 1"
@@ -475,7 +405,7 @@
       <button
         v-if="bank.length >= 1 && acnum.length >= 10 && acname.length >= 6"
         class="p-4 text-white rounded-md font-medium mt-8 mx-auto"
-        @click="state += 1, signup()"
+        @click="(state += 1) + signup()"
       >
         Next
       </button>
@@ -498,22 +428,12 @@
         style="background-color: #f5f5f5"
       >
         <div
-          class="rounded-full mx-auto"
-          style="height: 150px; width: 150px"
-          :style="{
-            'background-image': `url(${shopImage})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            'background-position': 'center',
-          }"
-        />
-        <div
-          class="text-lg font-bold pt-3 w-full text-ellipsis overflow-hidden whitespace-nowrap"
+          class="w-full text-lg font-bold text-ellipsis overflow-hidden whitespace-nowrap"
         >
-          {{ shopname }}
+          @{{ id }}
         </div>
         <div class="w-full text-ellipsis overflow-hidden whitespace-nowrap">
-          {{ id }}
+          {{ fname }} {{ lname }}
         </div>
       </div>
       <button class="p-4 text-white rounded-md font-medium mt-8 mx-auto">
@@ -544,79 +464,65 @@ export default {
       id: "",
       pw: "",
 
-      shopImage: "null",
-      selectedImage: null,
-      shopname: "",
+      // shopImage: "null",
+      // selectedImage: null,
+      // shopname: "",
       fname: "",
       lname: "",
       email: "",
       phone: "",
-      link: "",
+      // link: "",
 
       bank: "",
       acnum: "",
       acname: "",
 
-      plan: "single",
+      // plan: "single",
 
       validate: {
         id: true,
         pw: true,
 
-        shopname: true,
+        // shopname: true,
         fname: true,
         lname: true,
         email: true,
         phone: true,
-        link: true,
+        // link: true,
 
         bank: true,
         acnum: true,
         acname: true,
 
-        plan: true,
+        // plan: true,
       },
     };
   },
   methods: {
     async signup() {
+      // console.log("start");
       const mainStore = useMainStore();
-      const { loading, error, statusSuccess, statusError } = storeToRefs(
-        useMainStore()
-      );
 
       let user = {
         username: this.id,
         password: this.pw,
 
-        // shopImage: "null",
-        // selectedImage: null,
-        // shopname: "",
         firstname: this.fname,
         lastname: this.lname,
         email: this.email,
         mobileNumber: this.phone,
-        // link: "",
 
         via: this.bank,
         paymentAccountNumber: this.acnum,
         paymentAccountName: this.acname,
         paymentMethodCodeName: "TransferNumber",
-
-        // plan: "single",
       };
       // let userJson = JSON.stringify(user);
       const formData = new FormData();
-      formData.append("register", JSON.stringify({user}));
-      await mainStore.postFormData("register", formData);
+      formData.append("register", JSON.stringify({ user }));
+      await mainStore.postFormData("register", JSON.stringify({ user }));
 
-      
-
-      // let response = await fetch(`${ip}/api/artists/add`, {
-      //   method: "POST",
-      //   headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      //   body: formData,
-      // });
+      // console.log("finish");
     },
     selectImage() {
       this.$refs.fileInput.click();
