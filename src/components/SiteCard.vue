@@ -9,7 +9,7 @@ const site = ref(siteProps.value);
 </script>
 
 <template>
-  <div class="bg-white p-5 rounded-xl box mx-auto">
+  <div class="bg-white rounded-xl box mx-auto p-5 justify-center">
     <div class="mr-3">
       <img
         :src="site?.Product?.ProductImage[0]?.data"
@@ -52,9 +52,6 @@ const site = ref(siteProps.value);
   }
   .sitename{
     text-align: left;
-  }
-  RouterLink{
-    width: auto w-full;
   }
 }
 </style>

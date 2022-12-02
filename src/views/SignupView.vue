@@ -1,5 +1,50 @@
 <script setup>
-import { useAuthStore } from "@/stores/auth.js";
+// import { useAuthStore } from "@/stores/auth.js";
+// import { useMainStore } from "@/stores/main";
+
+// const mainStore = useMainStore();
+
+// const { loading, error } = storeToRefs(useMainStore());
+
+// const user = {
+//   domain: "",
+//   lineAccountId: "",
+//   messengerAccountId: "",
+//   product: {
+//     name: "",
+//     detail: "",
+//     discountCode: "",
+//     productOption: [],
+//   },
+// };
+
+// const signup = async () => {
+//   const formData = new FormData();
+//   const response = await mainStore.post(`endpint/register`, {
+//     status: false,
+//   });
+//   console.log(response);
+//   formData.append("site", JSON.stringify({ ...form }));
+//   await mainStore.postFormData("site", formData);
+  // if (response) {
+  //   Swal.fire({
+  //     title: "Success",
+  //     text: "ยกเลิกออเดอร์สำเร็จ",
+  //     icon: "success",
+  //     toast: true,
+  //     position: "top-right",
+  //   });
+  // } else {
+  //   Swal.fire({
+  //     title: "Error",
+  //     text: "ยกเลิกออเดอร์ไม่สำเร็จ",
+  //     icon: "error",
+  //     toast: true,
+  //     position: "top-right",
+  //   });
+
+  // }
+// };
 </script>
 <template>
   <div class="px-8 py-6 absolute">
@@ -100,7 +145,7 @@ import { useAuthStore } from "@/stores/auth.js";
       class="flex justify-center mt-5 -ml-8 space-x-12 md:space-x-28"
       style="color: #20293a; transition-duration: 0.25s"
     >
-      <div class="text-sm ">create account</div>
+      <div class="text-sm">create account</div>
       <div class="text-sm">information</div>
       <div class="text-sm">payment</div>
     </div>
@@ -355,7 +400,7 @@ import { useAuthStore } from "@/stores/auth.js";
         Back
       </div>
     </div>
-    
+
     <div
       id="state2-5"
       v-if="state == 3"
@@ -430,7 +475,7 @@ import { useAuthStore } from "@/stores/auth.js";
       <button
         v-if="bank.length >= 1 && acnum.length >= 10 && acname.length >= 6"
         class="p-4 text-white rounded-md font-medium mt-8 mx-auto"
-        @click="state += 1"
+        @click="state += 1, signup()"
       >
         Next
       </button>
@@ -465,15 +510,13 @@ import { useAuthStore } from "@/stores/auth.js";
         <div
           class="text-lg font-bold pt-3 w-full text-ellipsis overflow-hidden whitespace-nowrap"
         >
-          {{ shopname }} 
+          {{ shopname }}
         </div>
         <div class="w-full text-ellipsis overflow-hidden whitespace-nowrap">
           {{ id }}
         </div>
       </div>
-      <button
-        class="p-4 text-white rounded-md font-medium mt-8 mx-auto"
-      >
+      <button class="p-4 text-white rounded-md font-medium mt-8 mx-auto">
         Done
       </button>
       <div
@@ -486,6 +529,10 @@ import { useAuthStore } from "@/stores/auth.js";
   </div>
 </template>
 <script>
+import { useMainStore } from "@/stores/main";
+
+// const mainStore = useMainStore();
+
 export default {
   data() {
     return {
@@ -532,6 +579,45 @@ export default {
     };
   },
   methods: {
+    async signup() {
+      const mainStore = useMainStore();
+      const { loading, error, statusSuccess, statusError } = storeToRefs(
+        useMainStore()
+      );
+
+      let user = {
+        username: this.id,
+        password: this.pw,
+
+        // shopImage: "null",
+        // selectedImage: null,
+        // shopname: "",
+        firstname: this.fname,
+        lastname: this.lname,
+        email: this.email,
+        mobileNumber: this.phone,
+        // link: "",
+
+        via: this.bank,
+        paymentAccountNumber: this.acnum,
+        paymentAccountName: this.acname,
+        paymentMethodCodeName: "TransferNumber",
+
+        // plan: "single",
+      };
+      // let userJson = JSON.stringify(user);
+      const formData = new FormData();
+      formData.append("register", JSON.stringify({user}));
+      await mainStore.postFormData("register", formData);
+
+      
+
+      // let response = await fetch(`${ip}/api/artists/add`, {
+      //   method: "POST",
+      //   headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      //   body: formData,
+      // });
+    },
     selectImage() {
       this.$refs.fileInput.click();
     },
