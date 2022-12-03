@@ -1,63 +1,14 @@
-<script setup>
-// import { useAuthStore } from "@/stores/auth.js";
-// import { useMainStore } from "@/stores/main";
-
-// const mainStore = useMainStore();
-
-// const { loading, error } = storeToRefs(useMainStore());
-
-// const user = {
-//   domain: "",
-//   lineAccountId: "",
-//   messengerAccountId: "",
-//   product: {
-//     name: "",
-//     detail: "",
-//     discountCode: "",
-//     productOption: [],
-//   },
-// };
-
-// const signup = async () => {
-//   const formData = new FormData();
-//   const response = await mainStore.post(`endpint/register`, {
-//     status: false,
-//   });
-//   console.log(response);
-//   formData.append("site", JSON.stringify({ ...form }));
-//   await mainStore.postFormData("site", formData);
-// if (response) {
-//   Swal.fire({
-//     title: "Success",
-//     text: "ยกเลิกออเดอร์สำเร็จ",
-//     icon: "success",
-//     toast: true,
-//     position: "top-right",
-//   });
-// } else {
-//   Swal.fire({
-//     title: "Error",
-//     text: "ยกเลิกออเดอร์ไม่สำเร็จ",
-//     icon: "error",
-//     toast: true,
-//     position: "top-right",
-//   });
-
-// }
-// };
-</script>
-
 <template>
   <div class="px-8 py-6 absolute">
     <img src="/upforsale.png" class="h-14 md:h-20 mx-auto md:mx-0" />
   </div>
   <div class="flex flex-col pt-32 md:pt-24 mb-44 text-center">
-    <div class="font-semibold text-xl" v-if="state == 1">
+    <div v-if="state == 1" class="font-semibold text-xl">
       Start your membership
     </div>
-    <div class="font-semibold text-xl" v-if="state == 2">Let we know you</div>
-    <div class="font-semibold text-xl" v-if="state == 3">Let's get rich ;D</div>
-    <div class="font-semibold text-xl" v-if="state == 4">Success 🎉</div>
+    <div v-if="state == 2" class="font-semibold text-xl">Let we know you</div>
+    <div v-if="state == 3" class="font-semibold text-xl">Let's get rich ;D</div>
+    <div v-if="state == 4" class="font-semibold text-xl">Success 🎉</div>
 
     <div class="flex justify-center mt-5" style="transition-duration: 0.25s">
       <div
@@ -152,8 +103,8 @@
     </div>
 
     <div
-      id="state1"
       v-if="state == 1"
+      id="state1"
       class="flex flex-col mt-20 px-5 mx-auto text-left w-screen"
       style="transition-duration: 0.25s"
     >
@@ -163,7 +114,6 @@
         We hate paperwork, too.
       </div>
       <input
-        @input="validateid()"
         v-model="id"
         minlength="6"
         maxlength="20"
@@ -172,6 +122,7 @@
         name="id"
         class="bg-white rounded-md p-3 mt-5 text-sm"
         style="border-width: 1.5px; border-color: #000000"
+        @input="validateid()"
       />
       <div class="h-3">
         <span v-if="validate.id == false" class="text-red-500 text-xs">
@@ -179,7 +130,6 @@
         >
       </div>
       <input
-        @input="validatepw()"
         v-model="pw"
         minlength="6"
         maxlength="20"
@@ -188,6 +138,7 @@
         name="password"
         class="bg-white rounded-md p-3 mt-5 text-sm"
         style="border-width: 1.5px; border-color: #000000"
+        @input="validatepw()"
       />
       <div class="h-3">
         <span v-if="validate.pw == false" class="text-red-500 text-xs">
@@ -213,8 +164,8 @@
     </div>
 
     <div
-      id="state2"
       v-if="state == 2"
+      id="state2"
       class="flex flex-col mt-20 px-5 mx-auto text-left w-screen"
       style="transition-duration: 0.25s"
     >
@@ -230,7 +181,6 @@
       <div class="flex space-x-3">
         <div class="w-full">
           <input
-            @input="validatefname"
             v-model="fname"
             minlength="1"
             maxlength="20"
@@ -239,6 +189,7 @@
             name="first name"
             class="bg-white rounded-md p-3 mt-3 text-sm w-full"
             style="border-width: 1.5px; border-color: #000000"
+            @input="validatefname"
           />
           <div class="h-5">
             <span v-if="validate.fname == false" class="text-red-500 text-xs">
@@ -248,7 +199,6 @@
         </div>
         <div class="w-full">
           <input
-            @input="validatelname"
             v-model="lname"
             minlength="1"
             maxlength="20"
@@ -257,6 +207,7 @@
             name="last name"
             class="bg-white rounded-md p-3 mt-3 text-sm w-full"
             style="border-width: 1.5px; border-color: #000000"
+            @input="validatelname"
           />
           <div class="h-5 pl-2">
             <span v-if="validate.lname == false" class="text-red-500 text-xs">
@@ -266,7 +217,6 @@
         </div>
       </div>
       <input
-        @input="validateemail"
         v-model="email"
         minlength="6"
         maxlength="50"
@@ -275,6 +225,7 @@
         name="email"
         class="bg-white rounded-md p-3 mt-3 text-sm"
         style="border-width: 1.5px; border-color: #000000"
+        @input="validateemail"
       />
       <div class="h-5">
         <span v-if="validate.email == false" class="text-red-500 text-xs">
@@ -282,7 +233,6 @@
         >
       </div>
       <input
-        @input="validatephone"
         v-model="phone"
         minlength="6"
         maxlength="20"
@@ -292,6 +242,7 @@
         name="phone number"
         class="bg-white rounded-md p-3 mt-3 text-sm"
         style="border-width: 1.5px; border-color: #000000"
+        @input="validatephone"
       />
       <div class="h-5">
         <span v-if="validate.phone == false" class="text-red-500 text-xs">
@@ -332,8 +283,8 @@
     </div>
 
     <div
-      id="state2-5"
       v-if="state == 3"
+      id="state2-5"
       class="flex flex-col mt-20 px-5 mx-auto text-left w-screen"
       style="transition-duration: 0.25s"
     >
@@ -364,7 +315,6 @@
         <option value="CITIBANK">UOB</option>
       </select>
       <input
-        @input="validateacnum"
         v-model="acnum"
         minlength="10"
         maxlength="20"
@@ -372,6 +322,7 @@
         name="bankac"
         class="bg-white rounded-md p-3 mt-8 text-sm"
         style="border-width: 1.5px; border-color: #000000"
+        @input="validateacnum"
       />
       <div class="h-4">
         <span v-if="validate.acnum == false" class="text-red-500 text-xs">
@@ -379,7 +330,6 @@
         >
       </div>
       <input
-        @input="validateacname"
         v-model="acname"
         minlength="6"
         maxlength="50"
@@ -388,6 +338,7 @@
         name="bankac"
         class="bg-white rounded-md p-3 mt-3 text-sm"
         style="border-width: 1.5px; border-color: #000000"
+        @input="validateacname"
       />
       <div class="h-4">
         <span v-if="validate.acname == false" class="text-red-500 text-xs">
@@ -418,8 +369,8 @@
     </div>
 
     <div
-      id="state4"
       v-if="state == 4"
+      id="state4"
       class="flex flex-col mt-20 mx-auto text-left px-5"
       style="transition-duration: 0.25s"
     >
@@ -517,10 +468,7 @@ export default {
         paymentAccountName: this.acname,
         paymentMethodCodeName: "TransferNumber",
       };
-      // let userJson = JSON.stringify(user);
-      const formData = new FormData();
-      formData.append("register", JSON.stringify({ user }));
-      await mainStore.postFormData("register", JSON.stringify({ user }));
+      await mainStore.post("register", user);
 
       // console.log("finish");
     },
