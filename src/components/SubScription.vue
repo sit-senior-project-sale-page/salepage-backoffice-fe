@@ -1,15 +1,16 @@
 <script setup>
-import { computed, ref } from "vue";
+import { ref, watch, onMounted } from "vue";
 
-const userSwitchVal = ref(false);
+const emit = defineEmits(["setPlan"]);
+const plan = ref("STARTER");
 
-const props = defineProps({
-  user: Object,
+onMounted(() => {
+  emit("setPlan", plan.value);
 });
 
-console.log(props.user);
-
-const plan = ref("starter");
+watch(plan, (newPlan) => {
+  emit("setPlan", newPlan);
+});
 </script>
 
 <template>
@@ -20,7 +21,7 @@ const plan = ref("starter");
     <div class="text-xl font-semibold mb-5">Monthly subscribtion</div>
 
     <div
-      v-if="plan == 'starter'"
+      v-if="plan == 'STARTER'"
       class="p-3 rounded-lg"
       style="border-color: #20293a; border-width: 1.5px"
     >
@@ -31,10 +32,10 @@ const plan = ref("starter");
       <div class="rounded-lg text-xl font-medium plan2"></div>
     </div>
     <div
-      v-if="plan != 'starter'"
+      v-if="plan != 'STARTER'"
       class="p-3 rounded-lg"
       style="border-color: #c5d4e1; border-width: 1.5px"
-      @click="plan = 'starter'"
+      @click="plan = 'STARTER'"
     >
       <div class="font-semibold mb-3" style="color: #20293a">Starter Plan</div>
       <div class="rounded-lg text-xl font-medium plan2">
@@ -44,7 +45,7 @@ const plan = ref("starter");
     </div>
 
     <div
-      v-if="plan == 'business'"
+      v-if="plan == 'BUSINESS'"
       class="p-3 rounded-lg"
       style="border-color: #20293a; border-width: 1.5px"
     >
@@ -55,10 +56,10 @@ const plan = ref("starter");
       <div class="rounded-lg text-xl font-medium plan2"></div>
     </div>
     <div
-      v-if="plan != 'business'"
+      v-if="plan != 'BUSINESS'"
       class="p-3 rounded-lg"
       style="border-color: #c5d4e1; border-width: 1.5px"
-      @click="plan = 'business'"
+      @click="plan = 'BUSINESS'"
     >
       <div class="font-semibold mb-3" style="color: #20293a">Starter Plan</div>
       <div class="rounded-lg text-xl font-medium plan2">
@@ -75,28 +76,28 @@ const plan = ref("starter");
     <div class="grid grid-cols-3">
       <div></div>
       <div
-        v-if="plan == 'starter'"
+        v-if="plan == 'STARTER'"
         class="p-2 md:px-4 mx-auto rounded-lg text-center text-white font-semibold cursor-pointer plan1"
       >
         Starter Plan
       </div>
       <div
-        v-if="plan != 'starter'"
+        v-if="plan != 'STARTER'"
         class="p-2 md:px-4 mx-auto rounded-lg text-center text-white font-semibold cursor-pointer deselect1"
-        @click="plan = 'starter'"
+        @click="plan = 'STARTER'"
       >
         Starter Plan
       </div>
       <div
-        v-if="plan == 'business'"
+        v-if="plan == 'BUSINESS'"
         class="p-2 px-4 mx-auto rounded-lg text-center text-white font-semibold cursor-pointer plan1"
       >
         Business Plan
       </div>
       <div
-        v-if="plan != 'business'"
+        v-if="plan != 'BUSINESS'"
         class="p-2 px-4 mx-auto rounded-lg text-center text-white font-semibold cursor-pointer deselect1"
-        @click="plan = 'business'"
+        @click="plan = 'BUSINESS'"
       >
         Business Plan
       </div>
@@ -105,25 +106,25 @@ const plan = ref("starter");
     <div class="grid grid-cols-3 my-5">
       <div class="font-light my-auto">Price</div>
       <div
-        v-if="plan == 'starter'"
+        v-if="plan == 'STARTER'"
         class="mx-auto rounded-lg text-center text-xl font-medium plan2"
       >
         299 THB
       </div>
       <div
-        v-if="plan != 'starter'"
+        v-if="plan != 'STARTER'"
         class="mx-auto rounded-lg text-center text-xl font-medium deselect2"
       >
         299 THB
       </div>
       <div
-        v-if="plan == 'business'"
+        v-if="plan == 'BUSINESS'"
         class="mx-auto rounded-lg text-center text-xl font-medium plan2"
       >
         1299 THB
       </div>
       <div
-        v-if="plan != 'business'"
+        v-if="plan != 'BUSINESS'"
         class="mx-auto rounded-lg text-center text-xl font-medium deselect2"
       >
         1299 THB
@@ -138,25 +139,25 @@ const plan = ref("starter");
     <div class="grid grid-cols-3 mt-5">
       <div class="font-light my-auto">SalePage Amount</div>
       <div
-        v-if="plan == 'starter'"
+        v-if="plan == 'STARTER'"
         class="mx-auto rounded-lg text-center text-xl font-medium plan2"
       >
         1
       </div>
       <div
-        v-if="plan != 'starter'"
+        v-if="plan != 'STARTER'"
         class="mx-auto rounded-lg text-center text-xl font-medium deselect2"
       >
         1
       </div>
       <div
-        v-if="plan == 'business'"
+        v-if="plan == 'BUSINESS'"
         class="mx-auto rounded-lg text-center text-xl font-medium plan2"
       >
         5
       </div>
       <div
-        v-if="plan != 'business'"
+        v-if="plan != 'BUSINESS'"
         class="mx-auto rounded-lg text-center text-xl font-medium deselect2"
       >
         5
