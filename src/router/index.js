@@ -84,6 +84,22 @@ const routes = [
     name: "Signup",
     component: () => import("@/views/SignupView.vue"),
   },
+  {
+    meta: {
+      title: "UserManage",
+    },
+    path: "/usermanage",
+    name: "UserManage",
+    component: () => import("@/views/UserManage.vue"),
+  },
+  {
+    meta: {
+      title: "SalpageManage",
+    },
+    path: "/salpagemanage",
+    name: "SalpageManage",
+    component: () => import("@/views/SalpageManage.vue"),
+  },
 ];
 
 const router = createRouter({
