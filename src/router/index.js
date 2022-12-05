@@ -88,7 +88,7 @@ const routes = [
     meta: {
       title: "UserManage",
     },
-    path: "/usermanage",
+    path: "/user-manage",
     name: "UserManage",
     component: () => import("@/views/UserManage.vue"),
   },
@@ -96,7 +96,7 @@ const routes = [
     meta: {
       title: "SalpageManage",
     },
-    path: "/salpagemanage",
+    path: "/salpage-manage",
     name: "SalpageManage",
     component: () => import("@/views/SalpageManage.vue"),
   },

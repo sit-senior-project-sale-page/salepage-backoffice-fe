@@ -7,7 +7,6 @@ import TableCheckboxCell from "@/components/Table/TableCheckboxCell.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import UserAvatar from "@/components/User/UserAvatar.vue";
 
 defineProps({
   checkable: Boolean,
@@ -118,12 +117,7 @@ const checked = (isChecked, client) => {
           v-if="checkable"
           @checked="checked($event, client)"
         />
-        <td class="border-b-0 lg:w-6 before:hidden">
-          <UserAvatar
-            :username="client.name"
-            class="w-24 h-24 mx-auto lg:w-6 lg:h-6"
-          />
-        </td>
+        <td class="border-b-0 lg:w-6 before:hidden"></td>
         <td data-label="Name">
           {{ client.name }}
         </td>

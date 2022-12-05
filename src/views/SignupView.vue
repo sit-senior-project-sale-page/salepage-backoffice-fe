@@ -356,9 +356,10 @@
       <button
         v-if="bank.length >= 1 && acnum.length >= 10 && acname.length >= 6"
         class="p-4 text-white rounded-md font-medium mt-8 mx-auto"
-        @click="(state += 1) + signup()"
+        :class="loadingPost ? 'cursor-not-allowed opacity-70' : ''"
+        @click="signup()"
       >
-        Next
+        Sign up
       </button>
       <div
         class="mx-auto text-gray-400 hover:text-gray-600 px-3 py-2 mt-5 cursor-pointer"
@@ -388,7 +389,7 @@
         </div>
       </div>
       <button class="p-4 text-white rounded-md font-medium mt-8 mx-auto">
-        Done
+        <RouterLink :to="`/login`"> Done </RouterLink>
       </button>
       <div
         class="mx-auto text-gray-400 hover:text-gray-600 px-3 py-2 mt-5 cursor-pointer"
@@ -400,10 +401,10 @@
   </div>
 </template>
 <script>
-import { useMainStore } from "@/stores/main";
-
-// const mainStore = useMainStore();
-
+import { useAuthStore } from "@/stores/auth";
+import Swal from "sweetalert2";
+import { storeToRefs } from "pinia";
+const { loadingPost } = storeToRefs(useAuthStore());
 export default {
   data() {
     return {
@@ -451,8 +452,7 @@ export default {
   },
   methods: {
     async signup() {
-      // console.log("start");
-      const mainStore = useMainStore();
+      const authStore = useAuthStore();
 
       let user = {
         username: this.id,
@@ -468,7 +468,27 @@ export default {
         paymentAccountName: this.acname,
         paymentMethodCodeName: "TransferNumber",
       };
-      await mainStore.post("register", user);
+
+      await authStore
+        .register(user)
+        .then(() => {
+          this.state += 1;
+          loadingPost.value = false;
+        })
+        .catch((error) => {
+          Swal.fire({
+            title: "Error",
+            text: error.message,
+            icon: "error",
+          }).then((t) => {
+            if (t.isConfirmed) {
+              loadingPost.value = false;
+              window.location.reload();
+            }
+          });
+        });
+
+      // (state += 1)
 
       // console.log("finish");
     },

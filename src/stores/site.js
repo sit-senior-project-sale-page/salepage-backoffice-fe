@@ -8,6 +8,7 @@ export const useSiteStore = defineStore("site", {
     sites: [],
     siteById: {},
     loading: false,
+    loadingUpdate: false,
     error: null,
   }),
   getters: {
@@ -40,7 +41,8 @@ export const useSiteStore = defineStore("site", {
       }
     },
 
-    async createSite(sampleDataKey, data) {
+    async createSite(siteUrl, data) {
+      this.loadingUpdate = true;
       const httpService = axios.create({
         baseURL: import.meta.env.VITE_API_BASE_URL,
         headers: {
@@ -48,12 +50,11 @@ export const useSiteStore = defineStore("site", {
           ...authHeader(),
         },
       });
-
-      return httpService.post(`${sampleDataKey}`, data);
+      return httpService.post(`${siteUrl}`, data);
     },
 
     async updateSite(siteUrl, data) {
-      this.loading = true;
+      this.loadingUpdate = true;
       const httpService = axios.create({
         baseURL: import.meta.env.VITE_API_BASE_URL,
         headers: {
@@ -61,13 +62,7 @@ export const useSiteStore = defineStore("site", {
           ...authHeader(),
         },
       });
-      try {
-        httpService.patch(`${siteUrl}`, data);
-      } catch (error) {
-        this.error = error;
-      } finally {
-        this.loading = false;
-      }
+      return httpService.patch(`${siteUrl}`, data);
     },
   },
 });

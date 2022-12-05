@@ -11,8 +11,6 @@ export const useMainStore = defineStore("main", {
     isFieldFocusRegistered: false,
 
     /* Sample data (commonly used) */
-    clients: [],
-    history: [],
     sites: [],
     product: [],
     productsOption: [],

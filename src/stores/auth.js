@@ -7,14 +7,17 @@ export const useAuthStore = defineStore({
   state: () => ({
     // initialize state from local storage to enable user to stay logged in
     user: JSON.parse(localStorage.getItem("user")),
+    type: localStorage.getItem("type"),
     accessToken: localStorage.getItem("accessToken"),
     returnUrl: null,
+    loadingPost: false,
   }),
   actions: {
-    async login(username, password) {
+    async login(username, password, app = "USER") {
       const user = await fetchWrapper.post(`auth/login`, {
         username,
         password,
+        app: app,
       });
 
       if (user) {
@@ -23,9 +26,9 @@ export const useAuthStore = defineStore({
         this.user = profile.data;
       }
 
-      // update pinia state
-
-      // store user details and jwt in local storage to keep user logged in between page refreshes
+      if (app == "ADMIN") {
+        localStorage.setItem("type", 1);
+      }
       localStorage.setItem("user", JSON.stringify(this.user));
       localStorage.setItem("accessToken", this.accessToken);
 
@@ -38,7 +41,13 @@ export const useAuthStore = defineStore({
       this.accessToken = null;
       localStorage.removeItem("user");
       localStorage.removeItem("accessToken");
+      localStorage.removeItem("type");
       router.push("/login");
+    },
+
+    async register(data) {
+      this.loadingPost = true;
+      return await fetchWrapper.post(`register`, data);
     },
   },
 });

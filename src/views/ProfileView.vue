@@ -20,14 +20,19 @@ import SectionTitleLineWithButton from "@/components/Section/SectionTitleLineWit
 import NotificationBar from "@/components/NotificationBar.vue";
 
 import { useUsersStore } from "@/stores/users.js";
+import { useAuthStore } from "@/stores/auth.js";
 import { storeToRefs } from "pinia";
 import Swal from "sweetalert2";
 
 const userStore = useUsersStore();
+// const authStore = useAuthStore();
 
 const { user, loading, error, statusError, statusSuccess } = storeToRefs(
   useUsersStore()
 );
+
+const { type } = storeToRefs(useAuthStore());
+console.log("🚀 ~ file: ProfileView.vue:35 ~ type", type);
 
 const passwordForm = reactive({
   password_current: "",
@@ -77,8 +82,11 @@ const submitPass = async () => {
         >.
       </NotificationBar>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <CardBox is-form @submit.prevent="submitProfile">
+      <div
+        class="grid grid-cols-1 lg:grid-cols-2 gap-6"
+        :class="type !== 1 ? `lg:grid-cols-1` : ``"
+      >
+        <CardBox v-if="type !== '1'" is-form @submit.prevent="submitProfile">
           <FormField label="Firstname">
             <FormControl
               v-model="user.firstname"

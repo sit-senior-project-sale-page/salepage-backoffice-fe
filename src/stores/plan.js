@@ -5,14 +5,15 @@ export const usePlanStore = defineStore("plan", {
   state: () => ({
     plan: {},
     loading: false,
+    loadingPost: false,
   }),
   getters: {
-    getSite: (state) => {
+    getPlan: (state) => {
       return () => state.plan;
     },
   },
   actions: {
-    async getPlan() {
+    async fetchPlan() {
       this.loading = true;
       try {
         this.plan = await fetchWrapper
@@ -26,7 +27,7 @@ export const usePlanStore = defineStore("plan", {
     },
 
     async registerPlan(data) {
-      this.loading = true;
+      this.loadingPost = true;
       return await fetchWrapper.post(`user/plan`, data);
     },
   },

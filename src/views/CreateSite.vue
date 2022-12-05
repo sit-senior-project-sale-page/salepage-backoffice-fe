@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useMainStore } from "@/stores/main";
+import { useSiteStore } from "@/stores/site";
 import { mdiAccount, mdiDomain, mdiRenameBox, mdiCards } from "@mdi/js";
 import SectionMain from "@/components/Section/SectionMain.vue";
 import CardBox from "@/components/Card/CardBox.vue";
@@ -15,11 +16,9 @@ import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 
-const mainStore = useMainStore();
+const { loadingUpdate } = storeToRefs(useSiteStore());
 
-const { loading, error, statusSuccess, statusError } = storeToRefs(
-  useMainStore()
-);
+const { createSite } = useSiteStore();
 
 const initProductOptionData = {
   name: null,
@@ -110,36 +109,45 @@ const submit = async () => {
     const formData = new FormData();
     for (let index = 0; index < fileProduct.value.length; index++) {
       const fp = fileProduct.value[index];
-      console.log("🚀 ~ file: CreateSite.vue ~ line 111 ~ submit ~ fp", fp);
       formData.append("product", fp);
     }
 
     for (let index = 0; index < fileProductOption.value.length; index++) {
       const fpo = fileProductOption.value[index];
-      console.log("🚀 ~ file: CreateSite.vue ~ line 116 ~ submit ~ fp", fpo);
 
       formData.append("productOption", fpo);
     }
     formData.append("site", JSON.stringify({ ...form }));
-    await mainStore.postFormData("site", formData);
-    if (statusSuccess) {
-      Swal.fire({
-        title: "Success",
-        text: "เพิ่มเว็บไซต์สำเร็จ",
-        icon: "success",
-        toast: true,
-        position: "top-right",
+    await createSite("site", formData)
+      .then(() => {
+        Swal.fire({
+          title: "Success",
+          text: "สร้างเว็บไซต์สำเร็จ",
+          icon: "success",
+          toast: true,
+          position: "top-right",
+        }).then((t) => {
+          loadingUpdate.value = false;
+          if (t.isConfirmed) {
+            window.location.reload();
+          }
+        });
+      })
+      .catch((error) => {
+        console.log("error from network createSite ", error);
+        loadingUpdate.value = false;
+        Swal.fire({
+          title: "Error",
+          text: error.response.data.message,
+          icon: "error",
+          toast: true,
+          position: "top-right",
+        }).then((t) => {
+          if (t.isConfirmed) {
+            window.location.reload();
+          }
+        });
       });
-      Object.assign(form, initProduct);
-    } else {
-      Swal.fire({
-        title: "Error",
-        text: "เพิ่มเว็บไซต์ไม่สำเร็จ",
-        icon: "error",
-        toast: true,
-        position: "top-right",
-      });
-    }
   }
 };
 
@@ -315,11 +323,6 @@ const modalOneActive = ref(false);
 
         <div class="space-y-3">
           <div class="font-bold">Product options</div>
-          <!-- <TableList
-            v-if="form.product.productOption.length > 0"
-            :data-table="form.product.productOption"
-            @menu-delete-data="deleteProductOption"
-          /> -->
 
           <div class="w-full overflow-x-auto relative shadow-md sm:rounded-lg">
             <table class="text-sm text-left text-gray-500 dark:text-gray-400">
@@ -414,46 +417,15 @@ const modalOneActive = ref(false);
             type="submit"
             color="info"
             label="Submit"
-            :disabled="loading"
+            :disabled="loadingUpdate"
             @click="submit"
           />
         </div>
-        <!-- <BaseButtons>
-          <BaseButton
-              type="reset"
-              color="info"
-              outline
-              label="Reset"
-              @click="reset"
-            />
-        </BaseButtons> -->
       </CardBox>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
 
-<script>
-export default {
-  // computed: {
-  //   character: function(){
-  //     return form.product.detail.length
-  //   }
-  // },
-  // data() {
-  //   return {
-  //     productimages: [],
-  //     productimage:''
-  //   };
-  // },
-  // methods: {
-  //   selectimage() {
-  //     this.productimage = imagePreviewURL
-  //     this.productimages.push(this.productimage)
-  //     console.log(this.productimages);
-  //   },
-  // },
-};
-</script>
 <style scoped>
 @media (min-width: 900px) {
   .section {

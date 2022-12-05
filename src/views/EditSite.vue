@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref, computed } from "vue";
 import { storeToRefs } from "pinia";
-import { useMainStore } from "@/stores/main";
+import BaseButtons from "@/components/BaseButtons.vue";
 import { useSiteStore } from "@/stores/site";
 import { mdiAccount, mdiDomain, mdiRenameBox, mdiCards } from "@mdi/js";
 import SectionMain from "@/components/Section/SectionMain.vue";
@@ -15,10 +15,9 @@ import BaseButton from "@/components/BaseButton.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import { useRoute } from "vue-router";
 import Swal from "sweetalert2";
-import { update } from "lodash";
 
 const route = useRoute();
-const { site, loading, error } = storeToRefs(useSiteStore());
+const { site, loading, loadingUpdate } = storeToRefs(useSiteStore());
 
 const { fetchSiteById, updateSite } = useSiteStore();
 
@@ -144,16 +143,6 @@ const submit = async () => {
   } else {
     const formData = new FormData();
 
-    //data
-    console.log("updateProductOption", site.value.Product);
-    console.log("updateProductOptionImageIds", updateProductOptionImageIds);
-    console.log("deleteProductOptionIds", deleteProductOptionIds);
-    console.log("deleteProductImageIds", deleteProductImageIds);
-    //files
-    console.log("updateProductImage", updateProductImage);
-    console.log("updateProductOptionImage", updateProductOptionImage);
-    console.log("updateProductOptionImage", updateProductOptionImage);
-
     formData.append(
       "updateProductOption",
       JSON.stringify({
@@ -226,31 +215,32 @@ const submit = async () => {
       formData.append("createProductOptionImage", createProductOptionImagee);
     }
 
-    console.log("formData", formData);
-
-    const response = await updateSite(`product/${route.params.id}`, formData);
-    console.log(
-      "🚀 ~ file: EditSite.vue ~ line 232 ~ submit ~ response",
-      response
-    );
-
-    if (response.data?.isSuccess) {
-      Swal.fire({
-        title: "Success",
-        text: "เพิ่มเว็บไซต์สำเร็จ",
-        icon: "success",
-        toast: true,
-        position: "top-right",
-      }).then(fetchSiteById(route.params.id));
-    } else {
-      Swal.fire({
-        title: "Error",
-        text: "เพิ่มเว็บไซต์ไม่สำเร็จ",
-        icon: "error",
-        toast: true,
-        position: "top-right",
+    await updateSite(`product/${route.params.id}`, formData)
+      .then(() => {
+        loadingUpdate.value = false;
+        Swal.fire({
+          title: "Success",
+          text: "แก้ไขเว็บไซต์สำเร็จ",
+          icon: "success",
+          toast: true,
+          position: "top-right",
+        }).then((t) => {
+          if (t.isConfirmed) {
+            fetchSiteById(route.params.id);
+          }
+        });
+      })
+      .catch((error) => {
+        loadingUpdate.value = false;
+        console.log("error from network editSite", error);
+        Swal.fire({
+          title: "Error",
+          text: "แก้ไขเว็บไซต์ไม่สำเร็จ",
+          icon: "error",
+          toast: true,
+          position: "top-right",
+        });
       });
-    }
   }
 };
 
@@ -264,7 +254,7 @@ const clearimg = () => {
     <p v-if="loading" class="text-center font-semibold text-lg pb-8">
       Loading Data....
     </p>
-    <SectionMain v-else form class="mx-auto w-full" @submit.prevent="submit">
+    <SectionMain v-else class="mx-auto w-full">
       <CardBox>
         <div class="text-center font-semibold text-lg pb-8">Edit SalePage</div>
         <div>
@@ -556,13 +546,15 @@ const clearimg = () => {
           />
         </div>
 
-        <div class="w-full flex justify-end">
-          <BaseButton
-            type="submit"
-            color="success"
-            label="Save"
-            @click="submit"
-          />
+        <div class="w-full flex justify-end mt-4">
+          <BaseButtons>
+            <BaseButton
+              color="success"
+              label="Save"
+              :disabled="loadingUpdate"
+              @click="submit"
+            ></BaseButton>
+          </BaseButtons>
         </div>
       </CardBox>
     </SectionMain>
