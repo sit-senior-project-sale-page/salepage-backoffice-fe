@@ -2,24 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/stores/auth.js";
 import { fetchWrapper } from "../helpers/fetch-wrapper";
 const routes = [
-  // {
-  //   // Document title tag
-  //   // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
-  //   meta: {
-  //     title: "Dashboard",
-  //   },
-  //   path: "/",
-  //   name: "dashboard",
-  //   component: () => import("@/views/HomeView.vue"),
-  // },
-  {
-    meta: {
-      title: "Tables",
-    },
-    path: "/tables",
-    name: "tables",
-    component: () => import("@/views/TablesView.vue"),
-  },
   {
     meta: {
       title: "Sites",
@@ -85,6 +67,15 @@ const routes = [
     name: "login",
     component: () => import("@/views/LoginView.vue"),
   },
+
+  {
+    meta: {
+      title: "AdminLogin",
+    },
+    path: "/bo/login",
+    name: "Adminlogin",
+    component: () => import("@/views/AdminLoginView.vue"),
+  },
   {
     meta: {
       title: "Signup",
@@ -105,7 +96,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ["/login"];
+  const publicPages = ["/login", "/signup", "/bo/login"];
   const authRequired = !publicPages.includes(to.path);
   const auth = useAuthStore();
 
