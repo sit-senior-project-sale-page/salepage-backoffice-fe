@@ -2,18 +2,16 @@
 import SectionMain from "@/components/Section/SectionMain.vue";
 import CardBox from "@/components/Card/CardBox.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import Swal from "sweetalert2";
-import { useMainStore } from "@/stores/main";
 import { storeToRefs } from "pinia";
-import SiteCard from "../components/SiteCard.vue";
 
 import { useAdminStore } from "@/stores/admin";
 import BaseButton from "@/components/BaseButton.vue";
 
 const adminStore = useAdminStore();
-const { admin, loading } = storeToRefs(adminStore);
-const sites = ref([]);
+const { admin, loading, loadingPost } = storeToRefs(adminStore);
+// const sites = ref([]);
 const admins = ref([]);
 
 const fetchData = async () => {
@@ -27,11 +25,24 @@ const toggleEnable = async (id, enable) => {
     adminId: id,
     isEnable: enable,
   };
-  const res = await adminStore.updateAdmin(dto);
-  if (res) {
-    Swal.fire(res.message || 'update successful');
-    fetchData();
-  }
+  await adminStore
+    .updateAdmin(dto)
+    .then(() => {
+      loadingPost.value = false;
+      Swal.fire("update successful").then((t) => {
+        if (t.isConfirmed) {
+          fetchData();
+        }
+      });
+    })
+    .catch((error) => {
+      loadingPost.value = false;
+      Swal.fire({
+        title: "Error",
+        text: error.message,
+        icon: "error",
+      });
+    });
 };
 
 const deleteAdmin = async (id) => {
@@ -39,39 +50,65 @@ const deleteAdmin = async (id) => {
     adminId: id,
     isDelete: true,
   };
-  const res = await adminStore.updateAdmin(dto);
-  if (res) {
-    Swal.fire(res.message || 'delete successful');
-    fetchData();
-  }
+  await adminStore
+    .updateAdmin(dto)
+    .then(() => {
+      loadingPost.value = false;
+      Swal.fire("delete successful").then((t) => {
+        if (t.isConfirmed) {
+          fetchData();
+        }
+      });
+    })
+    .catch((error) => {
+      loadingPost.value = false;
+      Swal.fire({
+        title: "Error",
+        text: error.message,
+        icon: "error",
+      });
+    });
 };
 
 const changeRole = async (id, role) => {
-const { value, isConfirmed } = await Swal.fire({
-  title: 'Select Role',
-  input: 'select',
-  inputValue: role,
-  inputOptions: {
-    'Roles': {
-      ADMIN: 'Admin',
-      ADMIN_WEB: 'Website Admin',
+  const { value, isConfirmed } = await Swal.fire({
+    title: "Select Role",
+    input: "select",
+    inputValue: role,
+    inputOptions: {
+      Roles: {
+        ADMIN: "Admin",
+        ADMIN_WEB: "Website Admin",
+      },
     },
-  },
-  inputPlaceholder: 'Select ',
-  showCancelButton: true,
-})
-if (value && isConfirmed) {
+    inputPlaceholder: "Select ",
+    showCancelButton: true,
+  });
+  if (value && isConfirmed) {
     const dto = {
-    adminId: id,
-    role: value,
-  };
-  const res = await adminStore.updateAdmin(dto);
-  if (res) {
-    Swal.fire(res.message || 'Update Role Successful');
-    fetchData();
+      adminId: id,
+      role: value,
+    };
+    await adminStore
+      .updateAdmin(dto)
+      .then(() => {
+        loadingPost.value = false;
+        Swal.fire("update role successful").then((t) => {
+          if (t.isConfirmed) {
+            fetchData();
+          }
+        });
+      })
+      .catch((error) => {
+        loadingPost.value = false;
+        Swal.fire({
+          title: "Error",
+          text: error.message,
+          icon: "error",
+        });
+      });
   }
-}
-}
+};
 
 fetchData();
 </script>
@@ -79,9 +116,7 @@ fetchData();
   <LayoutAuthenticated>
     <SectionMain class="mx-auto section">
       <CardBox>
-        <div class="text-center font-semibold text-lg pb-8">
-          Admin Update
-        </div>
+        <div class="text-center font-semibold text-lg pb-8">Admin Update</div>
         <div class="rounded-md">
           <p v-if="loading" class="text-center font-semibold text-lg pb-8">
             Loading Data....
@@ -108,40 +143,45 @@ fetchData();
                   </div>
                 </td>
                 <td>{{ admin.username }}</td>
-                <td
-                  :class="admin.isEnable ? 'text-green-500' : 'text-red-400'"
-                >
+                <td :class="admin.isEnable ? 'text-green-500' : 'text-red-400'">
                   {{ admin.isEnable ? "enabled" : "disabled" }}
                 </td>
-                <td>{{ admin.AdminUserRole[0] ? admin.AdminUserRole[0].role.name : 'No Role' }}</td>
+                <td>
+                  {{
+                    admin.AdminUserRole[0]
+                      ? admin.AdminUserRole[0].role.name
+                      : "No Role"
+                  }}
+                </td>
                 <td class="flex justify-center space-x-2">
                   <BaseButton
                     style="background-color: #ffb730"
                     class="p-3 sm:p-4 text-white rounded-md w-full font-medium border-none"
                     :label="admin.isEnable ? 'disable' : 'enable'"
-                    @click="toggleEnable(admin.id,!admin.isEnable)"
+                    @click="toggleEnable(admin.id, !admin.isEnable)"
                   />
                   <BaseButton
                     v-show="admin.AdminUserRole[0].role.name !== 'OWNER'"
                     style=""
                     class="p-3 sm:p-4 text-white bg-blue-500 rounded-md w-full font-medium border-none"
                     label="change role"
-                    @click="changeRole(admin.id, admin.AdminUserRole[0].role.name)"
+                    @click="
+                      changeRole(admin.id, admin.AdminUserRole[0].role.name)
+                    "
                   />
                   <BaseButton
                     style="background-color: red"
                     class="p-3 sm:p-4 text-white rounded-md w-full font-medium border-none"
                     label="delete"
+                    :disabled="loadingPost"
                     @click="deleteAdmin(admin.id)"
                   />
                 </td>
               </tr>
             </tbody>
           </table>
-        </div>
-      </CardBox></SectionMain
-    ></LayoutAuthenticated
-  >
+        </div> </CardBox></SectionMain
+  ></LayoutAuthenticated>
 </template>
 <style scoped>
 @media (min-width: 900px) {

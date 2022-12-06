@@ -11,49 +11,22 @@ import BaseButton from "@/components/BaseButton.vue";
 
 const adminStore = useAdminStore();
 const { admin, loading, loadingPost } = storeToRefs(adminStore);
-const sites = ref([]);
+const orderPlans = ref([]);
 
 const fetchData = async () => {
-  const res = await adminStore.fetchSite();
-  // console.log(res);
-  sites.value = res;
+  const res = await adminStore.fetchOrderPlan(); // console.log(res);
+  orderPlans.value = res;
 };
 
-const toggleEnable = async (id, enable) => {
+const toggleEnable = async (id) => {
   const dto = {
-    sitePageId: id,
-    isEnable: enable,
+    orderPlanId: id,
   };
   await adminStore
-    .editSite(dto)
+    .editOrderPlan(dto)
     .then(() => {
       loadingPost.value = false;
       Swal.fire("update successful").then((t) => {
-        if (t.isConfirmed) {
-          fetchData();
-        }
-      });
-    })
-    .catch((error) => {
-      loadingPost.value = false;
-      Swal.fire({
-        title: "Error",
-        text: error.message,
-        icon: "error",
-      });
-    });
-};
-
-const deleteSite = async (id) => {
-  const dto = {
-    sitePageId: id,
-    isDelete: true,
-  };
-  await adminStore
-    .editSite(dto)
-    .then(() => {
-      loadingPost.value = false;
-      Swal.fire("delete successful").then((t) => {
         if (t.isConfirmed) {
           fetchData();
         }
@@ -76,7 +49,7 @@ fetchData();
     <SectionMain class="mx-auto section">
       <CardBox>
         <div class="text-center font-semibold text-lg pb-8">
-          SalePage manage
+          Ordre Plan Approval
         </div>
         <div class="rounded-md">
           <p v-if="loading" class="text-center font-semibold text-lg pb-8">
@@ -88,40 +61,37 @@ fetchData();
                 class="font-bold bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
                 <td>ID</td>
-                <td>Domain</td>
+                <td>Member</td>
                 <td>Status</td>
-                <td>Owner</td>
                 <td>Action</td>
               </tr>
               <tr
-                v-for="site in sites"
-                :key="site.id"
+                v-for="orderPlan in orderPlans"
+                :key="orderPlan.id"
                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
                 <td>
                   <div class="flex">
-                    <div class="my-auto ml-5">{{ site.id }}</div>
+                    <div class="my-auto ml-5">{{ orderPlan.id }}</div>
                   </div>
                 </td>
-                <td>{{ site.domain }}</td>
-                <td :class="site.isEnable ? 'text-green-500' : 'text-red-400'">
-                  {{ site.isEnable ? "enabled" : "disabled" }}
+                <td>{{ orderPlan.member.username }}</td>
+                <td
+                  :class="
+                    orderPlan.status === 'WAIT'
+                      ? 'text-green-500'
+                      : 'text-red-400'
+                  "
+                >
+                  {{ orderPlan.status }}
                 </td>
-                <td>{{ site.member.username }}</td>
                 <td class="flex justify-center space-x-2">
                   <BaseButton
                     style="background-color: #ffb730"
                     class="p-3 sm:p-4 text-white rounded-md w-full font-medium border-none"
-                    :label="site.isEnable ? 'disable' : 'enable'"
+                    label="Approve"
                     :disabled="loadingPost"
-                    @click="toggleEnable(site.id, !site.isEnable)"
-                  />
-                  <BaseButton
-                    style="background-color: red"
-                    class="p-3 sm:p-4 text-white rounded-md w-full font-medium border-none"
-                    label="delete"
-                    :disabled="loadingPost"
-                    @click="deleteSite(site.id)"
+                    @click="toggleEnable(orderPlan.id)"
                   />
                 </td>
               </tr>

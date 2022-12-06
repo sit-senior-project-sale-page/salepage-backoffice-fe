@@ -116,6 +116,15 @@ const routes = [
     name: "AdminUpdate",
     component: () => import("@/views/AdminUpdate.vue"),
   },
+
+  {
+    meta: {
+      title: "Salepage Approve",
+    },
+    path: "/salepage-approve",
+    name: "Salepage Approve",
+    component: () => import("@/views/SalepageApprove.vue"),
+  },
 ];
 
 const router = createRouter({

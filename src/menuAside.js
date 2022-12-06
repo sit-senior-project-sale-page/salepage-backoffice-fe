@@ -50,7 +50,7 @@ const adminRoute = [
   },
 
   {
-    to: "/profile",
+    to: "/salepage-approve",
     label: "Approve Plan",
     icon: mdiAccountCircle,
   },

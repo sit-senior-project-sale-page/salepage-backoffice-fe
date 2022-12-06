@@ -26,15 +26,29 @@ export const useAdminStore = defineStore("admin", {
       }
     },
     async editMember(dto) {
+      this.loadingPost = true;
+      return await fetchWrapper
+        .patch(`bo/member/edit`, dto)
+        .then((response) => response.data);
+    },
+
+    async fetchOrderPlan() {
+      this.loading = true;
       try {
         return await fetchWrapper
-          .patch(`bo/member/edit`, dto)
+          .get(`bo/orderplan`)
           .then((response) => response.data);
       } catch (error) {
         this.error = error;
       } finally {
         this.loading = false;
       }
+    },
+    async editOrderPlan(dto) {
+      this.loadingPost = true;
+      return await fetchWrapper
+        .patch(`bo/member/approve`, dto)
+        .then((response) => response.data);
     },
     async fetchSite() {
       this.loading = true;
@@ -49,28 +63,16 @@ export const useAdminStore = defineStore("admin", {
       }
     },
     async editSite(dto) {
-      try {
-        return await fetchWrapper
-          .patch(`bo/site/edit`, dto)
-          .then((response) => response.data);
-      } catch (error) {
-        this.error = error;
-      } finally {
-        this.loading = false;
-      }
+      this.loadingPost = true;
+      return await fetchWrapper
+        .patch(`bo/site/edit`, dto)
+        .then((response) => response.data);
     },
     async createAdmin(dto) {
-      console.log("called");
-      try {
-        return await fetchWrapper
-          .patch(`bo/create/`, dto)
-          .then((response) => response.data);
-      } catch (error) {
-        console.log(error);
-        this.error = error;
-      } finally {
-        this.loading = false;
-      }
+      this.loadingPost = true;
+      return await fetchWrapper
+        .patch(`bo/create/`, dto)
+        .then((response) => response.data);
     },
     async fetchAdmin() {
       this.loading = true;
@@ -85,15 +87,8 @@ export const useAdminStore = defineStore("admin", {
       }
     },
     async updateAdmin(dto) {
-      try {
-        return await fetchWrapper
-          .patch(`bo/edit`, dto)
-          .then((response) => response.data);
-      } catch (error) {
-        this.error = error;
-      } finally {
-        this.loading = false;
-      }
+      this.loadingPost = true;
+      return await fetchWrapper.patch(`bo/edit`, dto);
     },
   },
 });

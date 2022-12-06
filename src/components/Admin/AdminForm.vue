@@ -10,13 +10,13 @@ import { Form, Field } from "vee-validate";
 import { useAuthStore } from "@/stores/auth.js";
 import { ref } from "vue";
 import Swal from "sweetalert2";
-import { storeToRefs } from "pinia";;
+import { storeToRefs } from "pinia";
 
 import { useAdminStore } from "@/stores/admin";
 import { useRouter } from "vue-router";
 
 const adminStore = useAdminStore();
-const { admin, loading } = storeToRefs(adminStore);
+const { admin, loading, loadingPost } = storeToRefs(adminStore);
 
 const role = ref("");
 const schema = Yup.object().shape({
@@ -30,20 +30,20 @@ const onSubmit = async (values, { setErrors }) => {
   if (!role.value) {
     Swal.fire("please select role");
   }
-//   console.log(values);
+  //   console.log(values);
   const dto = {
     username: values.username,
     password: values.password,
     role: role.value,
   };
   console.log(dto);
-//   console.log(adminStore.createAdmin)
+  //   console.log(adminStore.createAdmin)
   const res = await adminStore.createAdmin(dto);
   if (res) {
-    Swal.fire(res.message || 'create admin complete');
-    router.push('admin-update');
+    Swal.fire(res.message || "create admin complete");
+    router.push("admin-update");
   }
-}
+};
 </script>
 
 <template>
@@ -91,8 +91,8 @@ const onSubmit = async (values, { setErrors }) => {
           >Select an option</label
         >
         <select
-          v-model="role"
           id="countries"
+          v-model="role"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         >
           <option value="">Choose a Role</option>
@@ -106,7 +106,7 @@ const onSubmit = async (values, { setErrors }) => {
           class="p-3 sm:p-4 text-white rounded-md w-full font-medium border-none"
           type="submit"
           label="CONFIRM"
-          :disabled="isSubmitting"
+          :disabled="loadingPost"
         />
       </div>
     </Form>
