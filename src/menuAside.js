@@ -10,7 +10,6 @@ import {
 import { useAuthStore } from "@/stores/auth.js";
 
 const { type } = useAuthStore();
-console.log("🚀 ~ file: menuAside.js:13 ~ type", type);
 
 const userRoute = [
   {
@@ -29,7 +28,7 @@ const userRoute = [
     icon: mdiViewList,
     menu: [
       {
-        to: "/",
+        to: "/salepage",
         label: "SalePage",
         icon: mdiDatabase,
       },

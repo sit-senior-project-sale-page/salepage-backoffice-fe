@@ -4,9 +4,17 @@ import { fetchWrapper } from "../helpers/fetch-wrapper";
 const routes = [
   {
     meta: {
-      title: "Sites",
+      title: "Home",
     },
     path: "/",
+    name: "home",
+    component: () => import("@/views/HomeView.vue"),
+  },
+  {
+    meta: {
+      title: "Sites",
+    },
+    path: "/sites",
     name: "sites",
     component: () => import("@/views/SiteView.vue"),
   },
