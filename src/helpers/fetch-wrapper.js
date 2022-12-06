@@ -28,7 +28,7 @@ function request(method) {
 export function authHeader() {
   // return auth header with jwt if user is logged in and request is to the api url
   const { user, accessToken } = useAuthStore();
-
+  // console.log('auth store', accessToken);
   const isLoggedIn = !!user?.data;
   if ((isLoggedIn, accessToken)) {
     return { Authorization: `Bearer ${accessToken}` };

@@ -14,36 +14,64 @@ import BaseButton from "@/components/BaseButton.vue";
 const adminStore = useAdminStore();
 const { admin, loading } = storeToRefs(adminStore);
 const sites = ref([]);
+const admins = ref([]);
 
 const fetchData = async () => {
-  const res = await adminStore.fetchSite();
-  // console.log(res);
-  sites.value = res;
+  const res = await adminStore.fetchAdmin();
+  console.log(res);
+  admins.value = res;
 };
 
 const toggleEnable = async (id, enable) => {
   const dto = {
-    sitePageId: id,
+    adminId: id,
     isEnable: enable,
   };
-  const res = await adminStore.editSite(dto);
+  const res = await adminStore.updateAdmin(dto);
   if (res) {
     Swal.fire(res.message || 'update successful');
     fetchData();
   }
-}
+};
 
-const deleteSite = async (id) => {
+const deleteAdmin = async (id) => {
   const dto = {
-    sitePageId: id,
+    adminId: id,
     isDelete: true,
   };
-  const res = await adminStore.editSite(dto);
+  const res = await adminStore.updateAdmin(dto);
   if (res) {
     Swal.fire(res.message || 'delete successful');
     fetchData();
   }
 };
+
+const changeRole = async (id, role) => {
+const { value, isConfirmed } = await Swal.fire({
+  title: 'Select Role',
+  input: 'select',
+  inputValue: role,
+  inputOptions: {
+    'Roles': {
+      ADMIN: 'Admin',
+      ADMIN_WEB: 'Website Admin',
+    },
+  },
+  inputPlaceholder: 'Select ',
+  showCancelButton: true,
+})
+if (value && isConfirmed) {
+    const dto = {
+    adminId: id,
+    role: value,
+  };
+  const res = await adminStore.updateAdmin(dto);
+  if (res) {
+    Swal.fire(res.message || 'Update Role Successful');
+    fetchData();
+  }
+}
+}
 
 fetchData();
 </script>
@@ -52,7 +80,7 @@ fetchData();
     <SectionMain class="mx-auto section">
       <CardBox>
         <div class="text-center font-semibold text-lg pb-8">
-          SalePage manage
+          Admin Update
         </div>
         <div class="rounded-md">
           <p v-if="loading" class="text-center font-semibold text-lg pb-8">
@@ -64,40 +92,47 @@ fetchData();
                 class="font-bold bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
                 <td>ID</td>
-                <td>Domain</td>
+                <td>Username</td>
                 <td>Status</td>
-                <td>Owner</td>
+                <td>Role</td>
                 <td>Action</td>
               </tr>
               <tr
-                v-for="site in sites"
-                :key="site.id"
+                v-for="admin in admins"
+                :key="admin.id"
                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
                 <td>
                   <div class="flex">
-                    <div class="my-auto ml-5">{{ site.id }}</div>
+                    <div class="my-auto ml-5">{{ admin.id }}</div>
                   </div>
                 </td>
-                <td>{{ site.domain }}</td>
+                <td>{{ admin.username }}</td>
                 <td
-                  :class="site.isEnable ? 'text-green-500' : 'text-red-400'"
+                  :class="admin.isEnable ? 'text-green-500' : 'text-red-400'"
                 >
-                  {{ site.isEnable ? "enabled" : "disabled" }}
+                  {{ admin.isEnable ? "enabled" : "disabled" }}
                 </td>
-                <td>{{ site.member.username }}</td>
+                <td>{{ admin.AdminUserRole[0] ? admin.AdminUserRole[0].role.name : 'No Role' }}</td>
                 <td class="flex justify-center space-x-2">
                   <BaseButton
                     style="background-color: #ffb730"
                     class="p-3 sm:p-4 text-white rounded-md w-full font-medium border-none"
-                    :label="site.isEnable ? 'disable' : 'enable'"
-                    @click="toggleEnable(site.id,!site.isEnable)"
+                    :label="admin.isEnable ? 'disable' : 'enable'"
+                    @click="toggleEnable(admin.id,!admin.isEnable)"
+                  />
+                  <BaseButton
+                    v-show="admin.AdminUserRole[0].role.name !== 'OWNER'"
+                    style=""
+                    class="p-3 sm:p-4 text-white bg-blue-500 rounded-md w-full font-medium border-none"
+                    label="change role"
+                    @click="changeRole(admin.id, admin.AdminUserRole[0].role.name)"
                   />
                   <BaseButton
                     style="background-color: red"
                     class="p-3 sm:p-4 text-white rounded-md w-full font-medium border-none"
                     label="delete"
-                    @click="deleteSite(site.id)"
+                    @click="deleteAdmin(admin.id)"
                   />
                 </td>
               </tr>

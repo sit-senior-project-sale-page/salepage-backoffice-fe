@@ -100,6 +100,22 @@ const routes = [
     name: "SalpageManage",
     component: () => import("@/views/SalpageManage.vue"),
   },
+  {
+    meta: {
+      title: "AdminCreate",
+    },
+    path: "/admin-create",
+    name: "AdminCreate",
+    component: () => import("@/views/AdminCreate.vue"),
+  },
+  {
+    meta: {
+      title: "AdminUpdate",
+    },
+    path: "/admin-update",
+    name: "AdminUpdate",
+    component: () => import("@/views/AdminUpdate.vue"),
+  },
 ];
 
 const router = createRouter({

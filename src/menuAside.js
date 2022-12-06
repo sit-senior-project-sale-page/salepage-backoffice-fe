@@ -59,12 +59,12 @@ const adminRoute = [
     icon: mdiViewList,
     menu: [
       {
-        to: "/",
+        to: "/admin-create",
         label: "Add Admin",
         icon: mdiAccount,
       },
       {
-        to: "/create-salepage",
+        to: "/admin-update",
         label: "Edit Admin",
         icon: mdiAccount,
       },
