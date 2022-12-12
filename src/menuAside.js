@@ -28,7 +28,7 @@ const userRoute = [
     icon: mdiViewList,
     menu: [
       {
-        to: "/salepage",
+        to: "/sites",
         label: "SalePage",
         icon: mdiDatabase,
       },
