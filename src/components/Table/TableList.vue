@@ -131,7 +131,7 @@ const checked = (isChecked, client) => {
           @checked="checked($event, client)"
         />
         <td v-for="(column, indexColumn) in keyItems" :key="indexColumn">
-          {{ client[column] ?? "ไม่มีข้อมูล" }}
+          {{ client[column] ?? "No data found" }}
         </td>
         <td>
           <BaseButton

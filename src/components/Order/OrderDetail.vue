@@ -29,7 +29,7 @@ const cancleOrder = async (orderId) => {
   if (response) {
     Swal.fire({
       title: "Success",
-      text: "ยกเลิกออเดอร์สำเร็จ",
+      text: "Cancel order success",
       icon: "success",
       toast: true,
       position: "top-right",
@@ -37,7 +37,7 @@ const cancleOrder = async (orderId) => {
   } else {
     Swal.fire({
       title: "Error",
-      text: "ยกเลิกออเดอร์ไม่สำเร็จ",
+      text: "Cancel order fail",
       icon: "error",
       toast: true,
       position: "top-right",
@@ -53,7 +53,7 @@ const sendCustomerReceipt = async (orderId) => {
   if (response) {
     Swal.fire({
       title: "Success",
-      text: "ส่งอีเมลคอมเฟิร์มการสั่งซื้อสำเร็จ",
+      text: "Email sent",
       icon: "success",
       toast: true,
       position: "top-right",
@@ -62,7 +62,7 @@ const sendCustomerReceipt = async (orderId) => {
     Swal.fire({
       title: "Error",
       text: error.value.message,
-      icon: "error",
+      icon: "Fail to send",
       toast: true,
       position: "top-right",
     });
@@ -72,16 +72,16 @@ const sendCustomerReceipt = async (orderId) => {
 const sendCustomerTrackingNumber = async (orderId) => {
   if (trackingNumber.value === "") {
     Swal.fire({
-      title: "ข้อมูลไม่ครบ",
-      text: "โปรดกรอกหมายเลขการส่งสินค้า",
+      title: "Missing field",
+      text: "Please enter a tracking number",
       icon: "warning",
       toast: true,
       position: "top-right",
     });
   } else if (shippedBy.value === "") {
     Swal.fire({
-      title: "ข้อมูลไม่ครบ",
-      text: "โปรดกรอกบริษัทขนส่งสินค้า",
+      title: "Missing field",
+      text: "Please enter a shipping company",
       icon: "warning",
       toast: true,
       position: "top-right",
@@ -95,7 +95,7 @@ const sendCustomerTrackingNumber = async (orderId) => {
     if (response) {
       Swal.fire({
         title: "Success",
-        text: "ส่งอีเมลคอนเฟิร์มการส่งสินค้าสำเร็จ",
+        text: "Email sent",
         icon: "success",
         toast: true,
         position: "top-right",
@@ -103,7 +103,7 @@ const sendCustomerTrackingNumber = async (orderId) => {
     } else {
       Swal.fire({
         title: "Error",
-        text: "ส่งอีเมลคอนเฟิร์มการส่งสินค้าไม่สำเร็จ",
+        text: "Fail to send",
         icon: "error",
         toast: true,
         position: "top-right",
