@@ -31,7 +31,7 @@ const registerPlan = () => {
       loadingPost.value = false;
       Swal.fire({
         title: "Wait",
-        text: "โปรดรอการอนุมัติจากระบบ",
+        text: "Please waiting for confirmation",
         icon: "success",
       });
     })

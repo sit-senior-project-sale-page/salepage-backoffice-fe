@@ -67,40 +67,40 @@ const reset = () => {
 const submit = async () => {
   if (!form.domain) {
     Swal.fire({
-      title: "ข้อมูลไม่ครบ",
-      text: "โปรดกรอกโดเมนเว็ยไซต์",
+      title: "Missing field",
+      text: "Please enter a domin name",
       icon: "warning",
       toast: true,
       position: "top-right",
     });
   } else if (!form.product.name) {
     Swal.fire({
-      title: "ข้อมูลไม่ครบ",
-      text: "โปรดกรอกชื่อสินค้า",
+      title: "Missing field",
+      text: "Please enter a product name",
       icon: "warning",
       toast: true,
       position: "top-right",
     });
   } else if (form.product.productOption.length == 0) {
     Swal.fire({
-      title: "ข้อมูลไม่ครบ",
-      text: "โปรดเพิ่มออฟชั่นสินค้าอย่างน้อย 1 ",
+      title: "Missing field",
+      text: "Please add at least 1 product option",
       icon: "warning",
       toast: true,
       position: "top-right",
     });
   } else if (fileProduct.value.length == 0) {
     Swal.fire({
-      title: "ข้อมูลไม่ครบ",
-      text: "โปรดเพิ่มภาพสินค้าอย่างน้อย 1 ",
+      title: "Missing field",
+      text: "Please add at least 1 product photo",
       icon: "warning",
       toast: true,
       position: "top-right",
     });
   } else if (!form.product.detail) {
     Swal.fire({
-      title: "ข้อมูลไม่ครบ",
-      text: "โปรดกรอกรายละเอียดสินค้า",
+      title: "Missing field",
+      text: "Please enter a product detail",
       icon: "warning",
       toast: true,
       position: "top-right",
@@ -122,7 +122,7 @@ const submit = async () => {
       .then(() => {
         Swal.fire({
           title: "Success",
-          text: "สร้างเว็บไซต์สำเร็จ",
+          text: "Created succes",
           icon: "success",
           toast: true,
           position: "top-right",
@@ -359,7 +359,7 @@ const modalOneActive = ref(false);
                   <td
                     class="py-4 px-6 font-semibold text-gray-900 dark:text-white"
                   >
-                    {{ productOption.discountPrice ?? "ไม่มีลดราคา" }}
+                    {{ productOption.discountPrice ?? "No discount" }}
                   </td>
 
                   <!-- button remove  -->

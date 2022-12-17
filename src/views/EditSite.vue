@@ -118,24 +118,24 @@ const onFileChange = (e, type) => {
 const submit = async () => {
   if (!site.value.Product.detail) {
     Swal.fire({
-      title: "ข้อมูลไม่ครบ",
-      text: "โปรดกรอกข้อมูลสินค้า",
+      title: "Missing field",
+      text: "Please enter a product detail",
       icon: "warning",
       toast: true,
       position: "top-right",
     });
   } else if (site.value.Product.ProductImage.length < 1) {
     Swal.fire({
-      title: "ข้อมูลไม่ครบ",
-      text: "โปรดเพิ่มภาพสินค้าอย่างน้อยหนึ่ง",
+      title: "Missing field",
+      text: "Please add at least 1 product photo",
       icon: "warning",
       toast: true,
       position: "top-right",
     });
   } else if (site.value.Product.ProductOption.length < 1) {
     Swal.fire({
-      title: "ข้อมูลไม่ครบ",
-      text: "โปรดกรอกตัวเลือกสินค้าอย่างน้อยหนึ่ง",
+      title: "Missing field",
+      text: "Please add at least 1 product option",
       icon: "warning",
       toast: true,
       position: "top-right",
@@ -220,7 +220,7 @@ const submit = async () => {
         loadingUpdate.value = false;
         Swal.fire({
           title: "Success",
-          text: "แก้ไขเว็บไซต์สำเร็จ",
+          text: "Edited success",
           icon: "success",
           toast: true,
           position: "top-right",
@@ -235,7 +235,7 @@ const submit = async () => {
         console.log("error from network editSite", error);
         Swal.fire({
           title: "Error",
-          text: "แก้ไขเว็บไซต์ไม่สำเร็จ",
+          text: "Fail to edit",
           icon: "error",
           toast: true,
           position: "top-right",

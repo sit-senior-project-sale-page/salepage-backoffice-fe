@@ -18,7 +18,7 @@ console.log(props.user);
       <div class="space-y-3 text-center md:text-left lg:mx-12">
         <h1 class="text-2xl">username : {{ props.user.username }}</h1>
         <p class="text-center">
-          เข้าสู่ระบบล่าสุด
+          Last login
           <b>{{
             new Date(props.user.lastLogin).toLocaleDateString("th-TH", {
               year: "numeric",

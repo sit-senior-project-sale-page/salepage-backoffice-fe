@@ -51,7 +51,7 @@ const submitPass = async () => {
   if (passwordForm.password !== passwordForm.password_confirmation) {
     Swal.fire({
       title: "Error",
-      text: "โปรดกรอกรหัสผ่านให้เหมือนกัน",
+      text: "Please confirm password correctly",
       icon: "warning",
     });
   }
