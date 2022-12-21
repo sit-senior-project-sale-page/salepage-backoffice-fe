@@ -480,6 +480,7 @@ export default {
             title: "Error",
             text: error.message,
             icon: "error",
+            allowOutsideClick: false,
           }).then((t) => {
             if (t.isConfirmed) {
               loadingPost.value = false;

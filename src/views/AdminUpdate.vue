@@ -41,6 +41,7 @@ const toggleEnable = async (id, enable) => {
         title: "Error",
         text: error.message,
         icon: "error",
+        allowOutsideClick: false,
       });
     });
 };
@@ -66,6 +67,7 @@ const deleteAdmin = async (id) => {
         title: "Error",
         text: error.message,
         icon: "error",
+        allowOutsideClick: false,
       });
     });
 };

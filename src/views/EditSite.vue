@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, computed } from "vue";
+import { reactive, ref, computed, watch, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import BaseButtons from "@/components/BaseButtons.vue";
 import { useSiteStore } from "@/stores/site";
@@ -13,10 +13,42 @@ import FormControl from "@/components/Form/FormControl.vue";
 import BaseDivider from "@/components/BaseDivider.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { usePlanStore } from "@/stores/plan.js";
 import Swal from "sweetalert2";
 
 const route = useRoute();
+const router = useRouter();
+const userPlanStore = usePlanStore();
+const { plan, loading: loadingPlan } = storeToRefs(usePlanStore());
+
+onMounted(() => {
+  userPlanStore.fetchPlan();
+});
+
+watch(
+  () => loadingPlan.value,
+  (p, v) => {
+    if (!p) {
+      if (!plan.value) {
+        Swal.fire({
+          title: "Error",
+          text: "Please Supscription plan",
+          icon: "error",
+          allowOutsideClick: false,
+        }).then((t) => {
+          if (t.isConfirmed) {
+            router.push("subscription");
+          }
+        });
+      }
+    }
+  },
+  {
+    immediate: true,
+  }
+);
+
 const { site, loading, loadingUpdate } = storeToRefs(useSiteStore());
 
 const { fetchSiteById, updateSite } = useSiteStore();
@@ -41,8 +73,8 @@ const modelCreateProductOption = ref(false);
 
 let productOption = reactive({
   name: null,
-  price: null,
-  discountPrice: null,
+  price: 0,
+  discountPrice: 0,
   quantity: null,
   dataImage: "",
 });
@@ -224,6 +256,7 @@ const submit = async () => {
           icon: "success",
           toast: true,
           position: "top-right",
+          allowOutsideClick: false,
         }).then((t) => {
           if (t.isConfirmed) {
             fetchSiteById(route.params.id);
@@ -239,6 +272,7 @@ const submit = async () => {
           icon: "error",
           toast: true,
           position: "top-right",
+          allowOutsideClick: false,
         });
       });
   }

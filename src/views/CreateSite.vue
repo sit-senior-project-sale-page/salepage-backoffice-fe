@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, watch, onMounted } from "vue";
 import { useMainStore } from "@/stores/main";
 import { useSiteStore } from "@/stores/site";
 import { mdiAccount, mdiDomain, mdiRenameBox, mdiCards } from "@mdi/js";
@@ -15,8 +15,38 @@ import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
+import { usePlanStore } from "@/stores/plan.js";
+import { useRouter } from "vue-router";
 
 const { loadingUpdate } = storeToRefs(useSiteStore());
+const router = useRouter();
+const userPlanStore = usePlanStore();
+const { plan, loading: loadingPlan } = storeToRefs(usePlanStore());
+
+onMounted(() => {
+  userPlanStore.fetchPlan();
+});
+
+watch(
+  () => plan.value,
+  (p, v) => {
+    if (!p) {
+      Swal.fire({
+        title: "Error",
+        text: "Please Supscription plan",
+        icon: "error",
+        allowOutsideClick: false,
+      }).then((t) => {
+        if (t.isConfirmed) {
+          router.push("subscription");
+        }
+      });
+    }
+  },
+  {
+    immediate: true,
+  }
+);
 
 const { createSite } = useSiteStore();
 
@@ -24,6 +54,7 @@ const initProductOptionData = {
   name: null,
   price: null,
   discountPrice: null,
+  quantity: null,
 };
 let productOption = reactive({ ...initProductOptionData });
 
@@ -126,6 +157,7 @@ const submit = async () => {
           icon: "success",
           toast: true,
           position: "top-right",
+          allowOutsideClick: false,
         }).then((t) => {
           loadingUpdate.value = false;
           if (t.isConfirmed) {
@@ -142,6 +174,7 @@ const submit = async () => {
           icon: "error",
           toast: true,
           position: "top-right",
+          allowOutsideClick: false,
         }).then((t) => {
           if (t.isConfirmed) {
             window.location.reload();
@@ -187,7 +220,10 @@ const modalOneActive = ref(false);
 <template>
   <LayoutAuthenticated>
     <SectionMain form class="mx-auto section" @submit.prevent="submit">
-      <CardBox>
+      <p v-if="loadingPlan" class="text-center font-semibold text-lg pb-8">
+        Loading Data....
+      </p>
+      <CardBox v-else>
         <div class="text-center font-semibold text-lg pb-8">
           Create SalePage
         </div>
@@ -302,6 +338,13 @@ const modalOneActive = ref(false);
               v-model="productOption.discountPrice"
               :icon="mdiAccount"
               placeholder="discounted price (optional)"
+              type="number"
+            />
+
+            <FormControl
+              v-model="productOption.quantity"
+              :icon="mdiAccount"
+              placeholder="quantity"
               type="number"
             />
 

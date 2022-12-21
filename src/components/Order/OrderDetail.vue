@@ -33,6 +33,7 @@ const cancleOrder = async (orderId) => {
       icon: "success",
       toast: true,
       position: "top-right",
+      allowOutsideClick: false,
     });
   } else {
     Swal.fire({
@@ -41,6 +42,7 @@ const cancleOrder = async (orderId) => {
       icon: "error",
       toast: true,
       position: "top-right",
+      allowOutsideClick: false,
     });
   }
 };
@@ -57,6 +59,7 @@ const sendCustomerReceipt = async (orderId) => {
       icon: "success",
       toast: true,
       position: "top-right",
+      allowOutsideClick: false,
     });
   } else {
     Swal.fire({
@@ -65,6 +68,7 @@ const sendCustomerReceipt = async (orderId) => {
       icon: "Fail to send",
       toast: true,
       position: "top-right",
+      allowOutsideClick: false,
     });
   }
 };
@@ -77,6 +81,7 @@ const sendCustomerTrackingNumber = async (orderId) => {
       icon: "warning",
       toast: true,
       position: "top-right",
+      allowOutsideClick: false,
     });
   } else if (shippedBy.value === "") {
     Swal.fire({
@@ -85,6 +90,7 @@ const sendCustomerTrackingNumber = async (orderId) => {
       icon: "warning",
       toast: true,
       position: "top-right",
+      allowOutsideClick: false,
     });
   } else {
     const response = await mainStore.post(`order/shipped/${orderId}`, {
@@ -99,6 +105,7 @@ const sendCustomerTrackingNumber = async (orderId) => {
         icon: "success",
         toast: true,
         position: "top-right",
+        allowOutsideClick: false,
       });
     } else {
       Swal.fire({
@@ -107,6 +114,7 @@ const sendCustomerTrackingNumber = async (orderId) => {
         icon: "error",
         toast: true,
         position: "top-right",
+        allowOutsideClick: false,
       });
     }
   }

@@ -33,6 +33,11 @@ const registerPlan = () => {
         title: "Wait",
         text: "Please waiting for confirmation",
         icon: "success",
+        allowOutsideClick: false,
+      }).then((t) => {
+        if (t.isConfirmed) {
+          window.location.reload();
+        }
       });
     })
     .catch((error) => {
@@ -41,6 +46,11 @@ const registerPlan = () => {
         title: "Error",
         text: error.message,
         icon: "error",
+        allowOutsideClick: false,
+      }).then((t) => {
+        if (t.isConfirmed) {
+          window.location.reload();
+        }
       });
     });
 };
@@ -74,7 +84,7 @@ const registerPlan = () => {
                   <span class="mr-5"
                     >Expire At
                     {{
-                      new Date(plan.startDatePlan).toLocaleDateString("th-TH", {
+                      new Date(plan.endDatePlan).toLocaleDateString("th-TH", {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
